@@ -116,7 +116,7 @@
                 return priceTWD;
             };
 
-            // 商品資料庫 (已修正 logoImg 路徑，加上 images/ 前綴)
+            // 商品資料庫 (已根據用戶提供的最新檔名，修正 logoImg 路徑和副檔名)
             const allProducts = [
                 { 
                     id: 'edcafe_pro', 
@@ -145,7 +145,7 @@
                     brandColor: 'bg-white', 
                     logoImg: 'images/edcafe_Primary Logo-black (10).png', // 修正路徑
                     country: '新加坡 🇸🇬 / 台灣獨家代理',
-                    badge: '年度熱銷',
+      在               badge: '年度熱銷',
                     hasTutorial: true,
                     hasNotion: true,
                     videoUrl: 'https://youtu.be/5UBQLFchuYA?si=iwNkISOAWIND-ueS',
@@ -427,7 +427,7 @@
             const Logo = ({ className = "h-12 w-auto" }) => (
                 <div className={`relative group ${className} inline-block`}>
                     <img 
-                        src="./images/Gemini_Generated_Image_ad6imzad6imzad6i.jpg" // 修正路徑
+                        src="./images/Gemini_Generated_Image_ad6imzad6imzad6i.png" // 修正 Logo 路徑與副檔名
                         alt="Future Knowledge Logo" 
                         className="rounded-lg shadow-xl"
                     />
@@ -499,7 +499,7 @@
                                 </React.Fragment>
                             ))}
                         </div>
-                    </div>
+                        </div>
                 );
             };
 
@@ -689,8 +689,8 @@
                                                             <QuantityControl productId={product.id} compact={true} />
                                                         </div>
                                                     </div>
-                                                    <div className={`h-[2px] w-full transition-all duration-300 ${cart[product.id] > 0 ? 'bg-gradient-to-r from-cyan-500 to-blue-500' : 'bg-transparent'}`}></div>
                                                 </div>
+                                                <div className={`h-[2px] w-full transition-all duration-300 ${cart[product.id] > 0 ? 'bg-gradient-to-r from-cyan-500 to-blue-500' : 'bg-transparent'}`}></div>
                                             </div>
                                         ))}
                                     </div>
@@ -700,7 +700,7 @@
 
                         {showPriceMatchModal && (
                             <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200" onClick={() => setShowPriceMatchModal(false)}>
-      　                         <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 max-w-md w-full shadow-2xl relative" onClick={e => e.stopPropagation()}>
+                                <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 max-w-md w-full shadow-2xl relative" onClick={e => e.stopPropagation()}>
                                     <button onClick={() => setShowPriceMatchModal(false)} className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"><X size={24} /></button>
                                     <div className="text-center">
                                         <div className="bg-rose-500/20 p-4 rounded-full inline-flex mb-4"><ShieldCheck size={40} className="text-rose-400" /></div>
@@ -935,9 +935,6 @@
                                         </div>
                                         <div className="text-right text-xs font-medium text-slate-400 uppercase tracking-wider">(含稅金額)</div>
                                     </div>
-                                    
-                                    
-                                    
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-12 border-t border-slate-200 pt-8 print:break-inside-avoid">
