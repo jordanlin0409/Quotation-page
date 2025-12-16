@@ -136,7 +136,7 @@
                     brandColor: 'bg-white',
                     logoImg: 'images/edcafe-logo.png',
                     country: '新加坡 🇸🇬 / 台灣獨家代理',
-                    badge: '年銷3000萬', // 已修改
+                    badge: '年銷3000萬',
                     hasTutorial: true,
                     hasNotion: true,
                     videoUrl: 'https://youtu.be/5UBQLFchuYA?si=iwNkISOAWIND-ueS',
@@ -155,7 +155,7 @@
                     brandColor: 'bg-white', 
                     logoImg: 'images/edcafe-logo.png',
                     country: '新加坡 🇸🇬 / 台灣獨家代理',
-                    badge: '促銷價', // 已修改
+                    badge: '促銷價',
                     hasTutorial: true,
                     hasNotion: true,
                     videoUrl: 'https://youtu.be/5UBQLFchuYA?si=iwNkISOAWIND-ueS',
@@ -164,7 +164,7 @@
                 },
                 { 
                     id: 'kahoot', 
-                    name: 'Kahoot EDU Standard 教師版', // 已修改
+                    name: 'Kahoot EDU Standard 教師版',
                     price: 4500, 
                     desc: '全球最受歡迎的遊戲化學習平台',
                     category: 'other',
@@ -193,7 +193,7 @@
                 },
                 { 
                     id: 'wordwall_std', 
-                    name: 'WordWall Standard 標準版', // 已修改
+                    name: 'WordWall Standard 標準版',
                     price: 1600,
                     priceHKD: 420, // 指定 HKD 價格
                     desc: '輕鬆建立互動遊戲與測驗',
@@ -208,9 +208,9 @@
                 },
                 { 
                     id: 'wordwall_pro', 
-                    name: 'WordWall Pro 專業版', // 已修改
+                    name: 'WordWall Pro 專業版',
                     price: 2500, 
-                    priceHKD: 420, // 指定 HKD 價格 (依照指示)
+                    priceHKD: 630, // 已修改：指定 HKD 價格為 630
                     desc: '更多樣板、無限制建立與列印功能',
                     category: 'other',
                     section: 'standard',
@@ -223,7 +223,7 @@
                 },
                 { 
                     id: 'quizlet', 
-                    name: 'QuizletPlus 教師版', // 已修改
+                    name: 'QuizletPlus 教師版',
                     price: 1550,
                     priceHKD: 280, // 指定 HKD 價格
                     desc: '最強大的單字卡與學習集工具',
@@ -245,7 +245,7 @@
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-[#5D3FD3]', 
-                    logoImg: 'images/kami-logo.png', // 已加入 Kami Logo
+                    logoImg: 'images/kami-logo.png',
                     country: '紐西蘭 🇳🇿',
                     hasTutorial: true,
                     videoUrl: 'https://youtube.com/playlist?list=PL1baeQN2oomhs0vYaxzjI0Y9XrJMMTpvC&si=c3o70CKVhezqh3jX',
@@ -458,14 +458,8 @@
             };
 
             // --- UI Components ---
-            const Logo = ({ className = "h-10 w-auto" }) => (
-                <img 
-                    src="./images/logo.png" 
-                    alt="Future Knowledge Logo" 
-                    className={`${className} object-contain hover:opacity-90 transition-opacity`}
-                />
-            );
-
+            
+            // 已修改：重新設計 BrandBadge，統一為較寬的固定尺寸，移除傾斜效果，增加美觀背景
             const BrandBadge = ({ text, colorClass, logoImg }) => {
                 return (
                     <div className={`px-4 py-2 rounded-lg shadow-sm inline-flex items-center justify-center min-w-[140px] h-[60px] bg-white/95 backdrop-blur-sm border border-slate-200/50 transition-transform hover:scale-105`}>
@@ -534,12 +528,12 @@
                 );
             };
 
+            // 已修改：移除圖片 Logo，改為純文字樣式
             const Header = () => (
                 <header className="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800 shadow-lg print:hidden">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
                         <div className="flex items-center gap-6">
-                            <Logo className="h-12 w-auto hidden md:block" />
-                            <div className="flex flex-col justify-center">
+                            <div className="flex flex-col justify-center select-none">
                                 <div className="flex items-baseline gap-3">
                                     <h1 className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 tracking-tight" style={{ fontFamily: 'Arial Black, sans-serif' }}>Future Knowledge</h1>
                                     <p className="text-[10px] text-slate-400 tracking-[0.2em] uppercase font-bold">AI Education Solutions</p>
@@ -913,7 +907,13 @@
                             <div>
                                 <div className="flex justify-between items-start border-b-2 border-slate-800 pb-6 mb-8">
                                     <div className="flex flex-col justify-between h-full">
-                                        <Logo className="h-24 w-auto mb-4 -ml-2" />
+                                        {/* 已修改：使用純文字 Logo (深色適合列印) */}
+                                        <div className="mb-4 -ml-1 select-none">
+                                            <div className="flex items-baseline gap-3">
+                                                <h1 className="text-3xl font-black text-slate-800 print:text-black tracking-tight" style={{ fontFamily: 'Arial Black, sans-serif' }}>Future Knowledge</h1>
+                                                <p className="text-xs text-slate-500 print:text-slate-600 tracking-[0.2em] uppercase font-bold">AI Education Solutions</p>
+                                            </div>
+                                        </div>
                                         <div className="text-sm text-slate-500 space-y-1 leading-relaxed">
                                             <p className="font-bold text-slate-700">經典人文教育股份有限公司</p>
                                             <p>統編：89187632</p>
