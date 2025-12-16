@@ -55,7 +55,7 @@
             Stamp, KeyRound, Flag, Rocket, AlertCircle, ExternalLink, Send,
             X, Coins, ArrowRightCircle, ShieldCheck, Info, Loader2, Gift,
             PenTool, Video, FileText as NoteIcon, FileSignature, ChevronDown,
-            ChevronUp, Percent, AlertTriangle, TrendingUp
+            ChevronUp, Percent, AlertTriangle, TrendingUp, Megaphone
         } from 'lucide-react';
 
         const QuotationSystem = () => {
@@ -245,7 +245,7 @@
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-[#5D3FD3]', 
-                    logoImg: 'images/kami-logo.png',
+                    logoImg: 'images/kami-logo.png', // 已加入 Kami Logo
                     country: '紐西蘭 🇳🇿',
                     hasTutorial: true,
                     videoUrl: 'https://youtube.com/playlist?list=PL1baeQN2oomhs0vYaxzjI0Y9XrJMMTpvC&si=c3o70CKVhezqh3jX',
@@ -319,10 +319,7 @@
                 let ruleDescription = '';
                 let nextTierPrompt = null; 
 
-                // 第二步：處理折扣 (折扣邏輯主要基於 TWD 金額，這裡我們需要做一點轉換或維持原邏輯)
-                // 為了簡化，我們假設甜心卡折扣金額在 HKD 模式下也會按比例轉換，或者您有指定的 HKD 折扣表？
-                // 目前邏輯：將 discountTiers 的 sweet (TWD) 轉換為當前貨幣
-
+                // 第二步：處理折扣
                 if (edcafeCount > 0) {
                     const applicableTier = [...discountTiers].reverse().find(tier => edcafeCount >= tier.qty);
                     
@@ -459,7 +456,7 @@
 
             // --- UI Components ---
             
-            // 已修改：重新設計 BrandBadge，統一為較寬的固定尺寸，移除傾斜效果，增加美觀背景
+            // 已修改：重新設計 BrandBadge
             const BrandBadge = ({ text, colorClass, logoImg }) => {
                 return (
                     <div className={`px-4 py-2 rounded-lg shadow-sm inline-flex items-center justify-center min-w-[140px] h-[60px] bg-white/95 backdrop-blur-sm border border-slate-200/50 transition-transform hover:scale-105`}>
@@ -804,8 +801,8 @@
                                         </div>
                                         
                                         {totals.nextTierPrompt && (
-                                            <div className="hidden md:flex items-center gap-2 text-xs font-bold text-yellow-300 bg-yellow-400/10 px-3 py-1.5 rounded-full border border-yellow-400/30 animate-pulse">
-                                                <TrendingUp size={14} /> {totals.nextTierPrompt}
+                                            <div className="hidden md:flex items-center gap-2 text-xs font-bold text-white bg-gradient-to-r from-orange-500 to-red-600 px-4 py-2 rounded-full shadow-lg border border-orange-400/50 animate-bounce">
+                                                <Megaphone size={16} className="animate-pulse" /> {totals.nextTierPrompt}
                                             </div>
                                         )}
 
@@ -907,7 +904,6 @@
                             <div>
                                 <div className="flex justify-between items-start border-b-2 border-slate-800 pb-6 mb-8">
                                     <div className="flex flex-col justify-between h-full">
-                                        {/* 已修改：使用純文字 Logo (深色適合列印) */}
                                         <div className="mb-4 -ml-1 select-none">
                                             <div className="flex items-baseline gap-3">
                                                 <h1 className="text-3xl font-black text-slate-800 print:text-black tracking-tight" style={{ fontFamily: 'Arial Black, sans-serif' }}>Future Knowledge</h1>
