@@ -129,7 +129,7 @@
                     name: 'Edcafe AI Pro 入門版', 
                     price: 3300,
                     priceHKD: 750, // 指定 HKD 價格
-                    desc: '教育版 ChatGPT - 課前、課中、課後一站式解決', 
+                    desc: '最簡易操作教育版 ChatGPT - 課前、課中、課後一站式解決', // 已修改
                     subDesc: '個人化學習Chatbot，測驗，中英文批改，唯一軟體教師可監控，視覺化數據分析',
                     category: 'edcafe',
                     section: 'hero',
@@ -148,7 +148,7 @@
                     name: 'Edcafe AI Premium 進階版', 
                     price: 6500,
                     priceHKD: 1400, // 指定 HKD 價格
-                    desc: '教育版 ChatGPT (解鎖無限額度) - 課前、課中、課後一站式解決',
+                    desc: '最簡易操作教育版 ChatGPT (解鎖無限額度) - 課前、課中、課後一站式解決', // 已修改
                     subDesc: '個人化學習Chatbot，測驗，中英文批改，唯一軟體教師可監控，視覺化數據分析',
                     category: 'edcafe',
                     section: 'hero',
@@ -166,7 +166,8 @@
                     id: 'kahoot', 
                     name: 'Kahoot EDU Standard 教師版',
                     price: 4500, 
-                    desc: '全球最受歡迎的遊戲化學習平台',
+                    desc: '全球最受歡迎的遊戲化學習平台', // 已修改
+                    subDesc: '遊戲化學習、即時互動、支援多載具', // 已新增
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
@@ -180,7 +181,7 @@
                     id: 'padlet', 
                     name: 'Padlet 學校版', 
                     price: 3000, 
-                    desc: '全球最受歡迎 創意協作數位布告欄',
+                    desc: '全球最受歡迎創意協作數位布告欄，擁有豐富版型', // 已修改
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
@@ -196,7 +197,8 @@
                     name: 'WordWall Standard 標準版',
                     price: 1600,
                     priceHKD: 420, // 指定 HKD 價格
-                    desc: '輕鬆建立互動遊戲與測驗',
+                    desc: '輕鬆建立互動遊戲與測驗', // 已修改
+                    subDesc: '多元題型、自由共享', // 已新增
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
@@ -210,8 +212,9 @@
                     id: 'wordwall_pro', 
                     name: 'WordWall Pro 專業版',
                     price: 2500, 
-                    priceHKD: 630, // 已修改：指定 HKD 價格為 630
-                    desc: '更多樣板、無限制建立與列印功能',
+                    priceHKD: 630, // 指定 HKD 價格
+                    desc: '更多樣板、無限制建立與列印功能', // 已修改
+                    subDesc: '多元題型、自由共享', // 已新增 (使用相同描述)
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
@@ -256,7 +259,8 @@
                     name: 'Google AI pro for Education',
                     price: 8500, 
                     priceHKD: 1865, // 指定 HKD 價格
-                    desc: '整合 Google 最先進 AI 模型',
+                    desc: 'Gemini AI Pro + NotebookLM AI Pro', // 已修改
+                    subDesc: 'Gemini in workspace', // 已新增
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
@@ -525,7 +529,7 @@
                 );
             };
 
-            // 已修改：移除圖片 Logo，改為純文字 "Future Knowledge"，移除 AI Solutions 副標
+            // Header Component - Removed Image Logo, simplified text
             const Header = () => (
                 <header className="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800 shadow-lg print:hidden">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
@@ -683,9 +687,9 @@
                                                     </div>
                                                     <div className="flex-1 mb-2">
                                                         <h3 className="text-2xl font-bold text-white mb-2 tracking-tight">{product.name}</h3>
-                                                        <p className="text-slate-400 mb-3 text-sm leading-relaxed border-l-2 border-slate-700 pl-3">
+                                                        <p className="text-cyan-200 mb-3 text-sm leading-relaxed border-l-2 border-slate-700 pl-3">
                                                             {product.desc}
-                                                            {product.subDesc && <><br /><span className="text-cyan-200 text-xs mt-1 block">{product.subDesc}</span></>}
+                                                            {product.subDesc && <><br /><span className="text-cyan-100 text-xs mt-1 block">{product.subDesc}</span></>}
                                                         </p>
                                                     </div>
                                                     <div className="mt-auto">
@@ -722,7 +726,10 @@
                                                     </div>
                                                     <div className="flex-1 pt-2 mb-4">
                                                         <h3 className="font-bold text-slate-100 text-lg mb-2 pr-20">{product.name}</h3>
-                                                        <p className="text-xs text-slate-400 leading-relaxed mb-2">{product.desc}</p>
+                                                        <p className="text-cyan-200 text-xs leading-relaxed mb-2">
+                                                            {product.desc}
+                                                            {product.subDesc && <><br />{product.subDesc}</>}
+                                                        </p>
                                                     </div>
                                                     <div className="mt-auto">
                                                         <div className="mb-1 pt-1 border-t border-slate-800/50 flex items-center gap-1 text-xs text-cyan-200 font-mono font-bold"><Flag size={12} /> 技術來源：{product.country}</div>
@@ -894,7 +901,7 @@
                                     </div>
                                     <div className="space-y-4">
                                         {currency === 'TWD' && (<a href="https://lin.ee/luo4Dgq" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3 bg-[#06c755] hover:bg-[#05b34c] text-white py-4 rounded-xl font-bold transition-transform hover:scale-105 shadow-lg"><MessageCircle size={24} /> 傳送至 LINE 客服</a>)}
-                                        {currency === 'HKD' && (<><a href="https://wa.me/message/OOAOI3R5DAQVJ1" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#20bd5a] text-white py-4 rounded-xl font-bold transition-transform hover:scale-105 shadow-lg"><Phone size={24} /> 傳送至 WhatsApp</a><div className="mt-6 pt-6 border-t border-slate-700"><p className="text-slate-400 text-sm mb-3 text-center">或選擇線上付款：</p><a href={AIRWALLEX_LINK || "#"} target="_blank" rel="noopener noreferrer" onClick={(e) => !AIRWALLEX_LINK && e.preventDefault()} className={`flex items-center justify-center gap-3 bg-indigo-600 hover:bg-indigo-500 text-white py-4 rounded-xl font-bold transition-transform hover:scale-105 shadow-lg border border-indigo-400/30 ${!AIRWALLEX_LINK && 'opacity-50 cursor-not-allowed'}`}><div className="flex gap-2 items-center"><CreditCard size={24} /> <span>立即線上付款</span></div></a></div></>)}
+                                        {currency === 'HKD' && (<><a href="https://wa.me/message/OOAOI3R5DAQVJ1" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#20bd5a] text-white py-4 rounded-xl font-bold transition-transform hover:scale-105 shadow-lg"><Phone size={24} /> 傳送至 WhatsApp</a><div className="mt-6 pt-6 border-t border-slate-700"><p className="text-slate-400 text-sm mb-3 text-center">或選擇線上付款：</p>{/* Removed Online Payment Button for HKD as requested */}</div></>)}
                                     </div>
                                     <div className="mt-6 text-center text-xs text-slate-500">專人將於收到文件後協助您開通授權</div>
                                 </div>
