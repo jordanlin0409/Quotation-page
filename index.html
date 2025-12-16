@@ -27,6 +27,7 @@
             .print\:p-0 { padding: 0 !important; }
             .print\:bg-white { background-color: white !important; }
             .print\:break-inside-avoid { break-inside: avoid; }
+            .print\:text-black { color: black !important; }
         }
     </style>
 
@@ -54,7 +55,7 @@
             Stamp, KeyRound, Flag, Rocket, AlertCircle, ExternalLink, Send,
             X, Coins, ArrowRightCircle, ShieldCheck, Info, Loader2, Gift,
             PenTool, Video, FileText as NoteIcon, FileSignature, ChevronDown,
-            ChevronUp, Percent, AlertTriangle
+            ChevronUp, Percent, AlertTriangle, TrendingUp
         } from 'lucide-react';
 
         const QuotationSystem = () => {
@@ -101,19 +102,24 @@
 
             const EXCHANGE_RATE = 0.25;
 
-            const formatPrice = (priceTWD) => {
+            // 取得產品當前價格 (處理 HKD 指定價格)
+            const getProductPrice = (product) => {
                 if (currency === 'HKD') {
-                    const priceHKD = Math.round(priceTWD * EXCHANGE_RATE);
-                    return `HK$ ${priceHKD.toLocaleString()}`;
+                    // 如果有指定 HKD 價格，優先使用
+                    if (product.priceHKD) {
+                        return product.priceHKD;
+                    }
+                    // 否則使用匯率計算
+                    return Math.round(product.price * EXCHANGE_RATE);
                 }
-                return `NT$ ${priceTWD.toLocaleString()}`;
-            };
+                return product.price;
+            }
 
-            const getPriceValue = (priceTWD) => {
+            const formatPrice = (price) => {
                 if (currency === 'HKD') {
-                    return Math.round(priceTWD * EXCHANGE_RATE);
+                    return `HK$ ${price.toLocaleString()}`;
                 }
-                return priceTWD;
+                return `NT$ ${price.toLocaleString()}`;
             };
 
             // 商品資料庫
@@ -121,14 +127,16 @@
                 { 
                     id: 'edcafe_pro', 
                     name: 'Edcafe AI Pro 入門版', 
-                    price: 3300, 
+                    price: 3300,
+                    priceHKD: 750, // 指定 HKD 價格
                     desc: '教育版 ChatGPT - 課前、課中、課後一站式解決', 
+                    subDesc: '個人化學習Chatbot，測驗，中英文批改，唯一軟體教師可監控，視覺化數據分析',
                     category: 'edcafe',
                     section: 'hero',
                     brandColor: 'bg-white',
                     logoImg: 'images/edcafe-logo.png',
                     country: '新加坡 🇸🇬 / 台灣獨家代理',
-                    badge: '🔥 最推薦',
+                    badge: '年銷3000萬', // 已修改
                     hasTutorial: true,
                     hasNotion: true,
                     videoUrl: 'https://youtu.be/5UBQLFchuYA?si=iwNkISOAWIND-ueS',
@@ -138,14 +146,16 @@
                 { 
                     id: 'edcafe_premium', 
                     name: 'Edcafe AI Premium 進階版', 
-                    price: 6500, 
+                    price: 6500,
+                    priceHKD: 1400, // 指定 HKD 價格
                     desc: '教育版 ChatGPT (解鎖無限額度) - 課前、課中、課後一站式解決',
+                    subDesc: '個人化學習Chatbot，測驗，中英文批改，唯一軟體教師可監控，視覺化數據分析',
                     category: 'edcafe',
                     section: 'hero',
                     brandColor: 'bg-white', 
                     logoImg: 'images/edcafe-logo.png',
                     country: '新加坡 🇸🇬 / 台灣獨家代理',
-                    badge: '年度熱銷',
+                    badge: '促銷價', // 已修改
                     hasTutorial: true,
                     hasNotion: true,
                     videoUrl: 'https://youtu.be/5UBQLFchuYA?si=iwNkISOAWIND-ueS',
@@ -154,7 +164,7 @@
                 },
                 { 
                     id: 'kahoot', 
-                    name: 'Kahoot! 教師版', 
+                    name: 'Kahoot EDU Standard 教師版', // 已修改
                     price: 4500, 
                     desc: '全球最受歡迎的遊戲化學習平台',
                     category: 'other',
@@ -183,8 +193,9 @@
                 },
                 { 
                     id: 'wordwall_std', 
-                    name: 'WordWall (標準版)', 
-                    price: 1600, 
+                    name: 'WordWall Standard 標準版', // 已修改
+                    price: 1600,
+                    priceHKD: 420, // 指定 HKD 價格
                     desc: '輕鬆建立互動遊戲與測驗',
                     category: 'other',
                     section: 'standard',
@@ -197,8 +208,9 @@
                 },
                 { 
                     id: 'wordwall_pro', 
-                    name: 'WordWall (專業版)', 
+                    name: 'WordWall Pro 專業版', // 已修改
                     price: 2500, 
+                    priceHKD: 420, // 指定 HKD 價格 (依照指示)
                     desc: '更多樣板、無限制建立與列印功能',
                     category: 'other',
                     section: 'standard',
@@ -211,8 +223,9 @@
                 },
                 { 
                     id: 'quizlet', 
-                    name: 'Quizlet 教師版', 
-                    price: 1550, 
+                    name: 'QuizletPlus 教師版', // 已修改
+                    price: 1550,
+                    priceHKD: 280, // 指定 HKD 價格
                     desc: '最強大的單字卡與學習集工具',
                     category: 'other',
                     section: 'standard',
@@ -227,11 +240,12 @@
                     id: 'kami', 
                     name: 'Kami 教師版', 
                     price: 5100, 
+                    priceHKD: 1200, // 指定 HKD 價格
                     desc: '最強大的 PDF 編輯與協作工具', 
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-[#5D3FD3]', 
-                    brandLogo: 'Kami', 
+                    logoImg: 'images/kami-logo.png', // 已加入 Kami Logo
                     country: '紐西蘭 🇳🇿',
                     hasTutorial: true,
                     videoUrl: 'https://youtube.com/playlist?list=PL1baeQN2oomhs0vYaxzjI0Y9XrJMMTpvC&si=c3o70CKVhezqh3jX',
@@ -241,6 +255,7 @@
                     id: 'gemini_pro', 
                     name: 'Google AI pro for Education',
                     price: 8500, 
+                    priceHKD: 1865, // 指定 HKD 價格
                     desc: '整合 Google 最先進 AI 模型',
                     category: 'other',
                     section: 'standard',
@@ -278,72 +293,92 @@
             };
 
             const calculateTotals = () => {
-                let subtotalTWD = 0;
+                let subtotal = 0;
                 let edcafeCount = 0;
                 let itemCount = 0;
-                let otherSoftwareSubtotalTWD = 0; 
+                let otherSoftwareSubtotal = 0; 
 
+                // 第一步：計算總金額 (根據當前貨幣)
                 products.forEach(p => {
                     const qty = cart[p.id];
-                    const amountTWD = p.price * qty;
-                    subtotalTWD += amountTWD;
+                    const unitPrice = getProductPrice(p); // 使用新的價格獲取邏輯
+                    const amount = unitPrice * qty;
+                    subtotal += amount;
                     itemCount += qty;
                     
                     if (p.category === 'edcafe') {
                         edcafeCount += qty;
                     } else if (p.id !== 'gemini_pro') {
-                        otherSoftwareSubtotalTWD += amountTWD;
+                        otherSoftwareSubtotal += amount;
                     }
                 });
 
-                let discountTWD = 0;
+                let discount = 0;
                 let appliedRule = null;
-                let potentialDiscountTWD = 0;
+                let potentialDiscount = 0; // 這個值是 TWD 基準，需要轉換
                 let ruleDescription = '';
+                let nextTierPrompt = null; 
+
+                // 第二步：處理折扣 (折扣邏輯主要基於 TWD 金額，這裡我們需要做一點轉換或維持原邏輯)
+                // 為了簡化，我們假設甜心卡折扣金額在 HKD 模式下也會按比例轉換，或者您有指定的 HKD 折扣表？
+                // 目前邏輯：將 discountTiers 的 sweet (TWD) 轉換為當前貨幣
 
                 if (edcafeCount > 0) {
                     const applicableTier = [...discountTiers].reverse().find(tier => edcafeCount >= tier.qty);
                     
                     if (applicableTier) {
                         if (referralCode.trim() === 'Edcafe 甜心卡') {
-                            potentialDiscountTWD = applicableTier.sweet;
+                            // 計算折扣金額 (TWD)
+                            let discountTWD = applicableTier.sweet;
+                            
+                            // 轉換為當前貨幣
+                            potentialDiscount = currency === 'HKD' 
+                                ? Math.round(discountTWD * EXCHANGE_RATE) 
+                                : discountTWD;
+
                             let bonusText = "";
                             if (edcafeCount >= 40) {
                                 bonusText = " + 加贈學校專屬研習";
                             }
-                            ruleDescription = `甜心卡滿 ${applicableTier.qty} 套優惠 (現折 $${applicableTier.sweet})${bonusText}`;
-                        } else {
-                            potentialDiscountTWD = 0;
+                            // 顯示文字保持用 $ 符號
+                            ruleDescription = `甜心卡滿 ${applicableTier.qty} 套優惠 (現折 $${potentialDiscount.toLocaleString()})${bonusText}`;
+                        }
+                    }
+
+                    if (referralCode.trim() === 'Edcafe 甜心卡') {
+                        const nextTier = discountTiers.find(tier => tier.qty > edcafeCount);
+                        if (nextTier) {
+                            const needed = nextTier.qty - edcafeCount;
+                             nextTierPrompt = `再買 ${needed} 套 Edcafe，即可享有滿 ${nextTier.qty} 套優惠！`;
                         }
                     }
                 }
 
-                if (potentialDiscountTWD > 0) {
-                    if (otherSoftwareSubtotalTWD > 0) {
-                        if (potentialDiscountTWD >= otherSoftwareSubtotalTWD) {
-                            discountTWD = otherSoftwareSubtotalTWD;
+                if (potentialDiscount > 0) {
+                    if (otherSoftwareSubtotal > 0) {
+                        if (potentialDiscount >= otherSoftwareSubtotal) {
+                            discount = otherSoftwareSubtotal;
                             appliedRule = `${ruleDescription} (已達折抵上限)`;
                         } else {
-                            discountTWD = potentialDiscountTWD;
+                            discount = potentialDiscount;
                             appliedRule = `${ruleDescription}`;
                         }
                     } else {
                         appliedRule = `${ruleDescription} - 僅適用於折抵「其他教學軟體」費用`;
-                        discountTWD = 0;
+                        discount = 0;
                     }
                 }
 
-                const subtotal = getPriceValue(subtotalTWD);
-                const discount = getPriceValue(discountTWD);
                 const total = Math.max(0, subtotal - discount);
 
                 return {
-                    subtotal: subtotal,
-                    discount: discount,
+                    subtotal,
+                    discount,
                     total,
                     edcafeCount,
                     itemCount,
-                    appliedRule
+                    appliedRule,
+                    nextTierPrompt
                 };
             };
 
@@ -367,9 +402,8 @@
                 products.forEach(p => {
                     const qty = cart[p.id];
                     if (qty > 0) {
-                        const itemTotalPrice = currency === 'HKD' 
-                            ? `HK$ ${(formatPrice(p.price * qty)).replace('HK$ ', '')}` 
-                            : `NT$ ${(formatPrice(p.price * qty)).replace('NT$ ', '')}`;
+                        const unitPrice = getProductPrice(p);
+                        const itemTotalPrice = formatPrice(unitPrice * qty).replace(/HK\$ |NT\$ /g, '');
                             
                         itemsPayload.push({
                             name: `${p.name} x ${qty}`,
@@ -387,8 +421,8 @@
                     note: formData.note,
                     referralCode: referralCode,
                     currency: currency,
-                    subtotal: currency === 'HKD' ? `HK$ ${totals.subtotal.toLocaleString()}` : `NT$ ${totals.subtotal.toLocaleString()}`,
-                    totalAmount: currency === 'HKD' ? `HK$ ${totals.total.toLocaleString()}` : `NT$ ${totals.total.toLocaleString()}`,
+                    subtotal: formatPrice(totals.subtotal),
+                    totalAmount: formatPrice(totals.total),
                     discountAmount: totals.discount,
                     items: itemsPayload
                 };
@@ -424,7 +458,6 @@
             };
 
             // --- UI Components ---
-            // 已修改：移除背景和陰影，設置為透明去背模式，並調整大小
             const Logo = ({ className = "h-10 w-auto" }) => (
                 <img 
                     src="./images/logo.png" 
@@ -433,7 +466,6 @@
                 />
             );
 
-            // 已修改：重新設計 BrandBadge，統一為較寬的固定尺寸，移除傾斜效果，增加美觀背景
             const BrandBadge = ({ text, colorClass, logoImg }) => {
                 return (
                     <div className={`px-4 py-2 rounded-lg shadow-sm inline-flex items-center justify-center min-w-[140px] h-[60px] bg-white/95 backdrop-blur-sm border border-slate-200/50 transition-transform hover:scale-105`}>
@@ -502,27 +534,26 @@
                 );
             };
 
-            // 已修改：重新佈局 Header，將 Logo 移至右側，左側保留標題和連結
             const Header = () => (
                 <header className="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800 shadow-lg print:hidden">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-                        {/* 左側：標題與聲明書連結 */}
-                        <div className="flex flex-col justify-center">
-                            <div className="flex items-baseline gap-3">
-                                <h1 className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 tracking-tight" style={{ fontFamily: 'Arial Black, sans-serif' }}>Future Knowledge</h1>
-                                <p className="text-[10px] text-slate-400 tracking-[0.2em] uppercase font-bold">AI Education Solutions</p>
+                        <div className="flex items-center gap-6">
+                            <Logo className="h-12 w-auto hidden md:block" />
+                            <div className="flex flex-col justify-center">
+                                <div className="flex items-baseline gap-3">
+                                    <h1 className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 tracking-tight" style={{ fontFamily: 'Arial Black, sans-serif' }}>Future Knowledge</h1>
+                                    <p className="text-[10px] text-slate-400 tracking-[0.2em] uppercase font-bold">AI Education Solutions</p>
+                                </div>
                             </div>
-                            <div className="mt-1 hidden md:block">
-                                <a href={STATEMENT_LINK} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-bold text-yellow-400 hover:text-yellow-300 transition-colors">
-                                    <FileSignature size={14} /> 聲明切結書
+                            <div className="hidden md:block h-8 w-px bg-slate-800/50 mx-2"></div>
+                            <div className="hidden md:block">
+                                <a href={STATEMENT_LINK} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-bold text-yellow-400 hover:text-yellow-300 transition-colors bg-yellow-400/10 px-3 py-1.5 rounded-md border border-yellow-400/20">
+                                    <FileSignature size={16} /> 聲明切結書
                                 </a>
                             </div>
                         </div>
                         
-                        {/* 右側：Logo、貨幣、客服 */}
                         <div className="flex items-center gap-6">
-                            <Logo className="h-12 w-auto hidden md:block" /> {/* Logo 移到這裡 */}
-                            
                             <div className="flex flex-col items-end gap-1">
                                 <div className="flex items-center gap-2 mb-1">
                                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
@@ -550,7 +581,7 @@
                 const standardProducts = products.filter(p => p.section === 'standard');
 
                 return (
-                    <div className="min-h-screen bg-slate-950 font-sans text-slate-200 pb-32 selection:bg-cyan-500 selection:text-black">
+                    <div className="min-h-screen bg-slate-950 font-sans text-slate-200 pb-36 selection:bg-cyan-500 selection:text-black">
                         <div className="fixed top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-indigo-900/20 to-transparent pointer-events-none"></div>
                         <div className="fixed bottom-0 right-0 w-[500px] h-[500px] bg-cyan-900/10 rounded-full blur-[100px] pointer-events-none"></div>
 
@@ -588,6 +619,17 @@
                                         {totals.discount > 0 ? '優惠已啟動' : '未套用折扣'}
                                     </div>
                                 </div>
+
+                                {referralCode !== 'Edcafe 甜心卡' && (
+                                    <div className="mt-3 flex justify-center animate-bounce">
+                                        <button onClick={() => setReferralCode('Edcafe 甜心卡')} className="group relative inline-flex items-center justify-center overflow-hidden rounded-full p-0.5 font-bold focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 focus:ring-offset-slate-900">
+                                            <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
+                                            <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-4 py-2 text-sm font-medium text-pink-300 backdrop-blur-3xl transition-all group-hover:bg-slate-900 group-hover:text-pink-200 gap-2">
+                                                <Gift size={16} className="animate-pulse" /> 點此快速套用「Edcafe 甜心卡」優惠
+                                            </span>
+                                        </button>
+                                    </div>
+                                )}
 
                                 <div className="mt-2 flex justify-center">
                                     <button onClick={() => setShowDiscountRules(!showDiscountRules)} className="text-[11px] text-cyan-400 hover:text-cyan-300 font-bold inline-flex items-center gap-1 transition-colors bg-cyan-950/30 px-3 py-1 rounded-full hover:bg-cyan-950/50">
@@ -634,7 +676,6 @@
                                                 <div className="bg-slate-900 rounded-2xl h-full p-6 flex flex-col relative overflow-hidden min-h-[360px]">
                                                     <div className="absolute right-0 top-0 w-32 h-32 bg-gradient-to-br from-white/5 to-transparent rounded-bl-full pointer-events-none"></div>
                                                     <div className="flex justify-between items-center mb-6">
-                                                        {/* 使用新的 BrandBadge */}
                                                         <BrandBadge text={product.brandLogo} logoImg={product.logoImg} />
                                                         
                                                         <div className="flex flex-col items-end gap-2 z-10">
@@ -650,14 +691,17 @@
                                                     </div>
                                                     <div className="flex-1 mb-2">
                                                         <h3 className="text-2xl font-bold text-white mb-2 tracking-tight">{product.name}</h3>
-                                                        <p className="text-slate-400 mb-3 text-sm leading-relaxed border-l-2 border-slate-700 pl-3">{product.desc}</p>
+                                                        <p className="text-slate-400 mb-3 text-sm leading-relaxed border-l-2 border-slate-700 pl-3">
+                                                            {product.desc}
+                                                            {product.subDesc && <><br /><span className="text-cyan-200 text-xs mt-1 block">{product.subDesc}</span></>}
+                                                        </p>
                                                     </div>
                                                     <div className="mt-auto">
                                                         <div className="text-sm text-cyan-200 font-mono flex items-center gap-1 font-bold mb-1"><Flag size={14} /> 技術來源：{product.country}</div>
                                                         <div className="flex items-end justify-between bg-slate-800/50 p-4 rounded-xl border border-slate-700/50 backdrop-blur-sm">
                                                             <div>
                                                                 <div className="text-[10px] text-slate-500 uppercase tracking-widest mb-1">年費</div>
-                                                                <div className="text-3xl font-bold text-white tracking-tight flex items-baseline gap-1">{formatPrice(product.price)}</div>
+                                                                <div className="text-3xl font-bold text-white tracking-tight flex items-baseline gap-1">{formatPrice(getProductPrice(product))}</div>
                                                             </div>
                                                             <QuantityControl productId={product.id} />
                                                         </div>
@@ -681,7 +725,6 @@
                                                 </div>
                                                 <div className="p-6 flex flex-col h-full">
                                                     <div className="flex items-center justify-between mb-6">
-                                                         {/* 使用新的 BrandBadge */}
                                                         <BrandBadge text={product.brandLogo} logoImg={product.logoImg} />
                                                         {cart[product.id] > 0 && <div className="bg-cyan-500/10 p-1.5 rounded-full mr-20"><Check size={16} className="text-cyan-400" /></div>}
                                                     </div>
@@ -692,7 +735,7 @@
                                                     <div className="mt-auto">
                                                         <div className="mb-1 pt-1 border-t border-slate-800/50 flex items-center gap-1 text-xs text-cyan-200 font-mono font-bold"><Flag size={12} /> 技術來源：{product.country}</div>
                                                         <div className="flex items-center justify-between">
-                                                            <div className="text-slate-300 font-bold text-lg">{formatPrice(product.price)}</div>
+                                                            <div className="text-slate-300 font-bold text-lg">{formatPrice(getProductPrice(product))}</div>
                                                             <QuantityControl productId={product.id} compact={true} />
                                                         </div>
                                                     </div>
@@ -729,7 +772,6 @@
                                         <button onClick={() => setActiveDetailProduct(null)} className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"><X size={24} /></button>
                                         <div className="mb-6">
                                             <div className="flex items-center gap-3 mb-2">
-                                                {/* 使用新的 BrandBadge */}
                                                 <BrandBadge text={activeDetailProduct.brandLogo} logoImg={activeDetailProduct.logoImg} />
                                                 <span className="text-slate-400 text-xs font-mono border border-slate-700 px-2 py-0.5 rounded">{activeDetailProduct.country}</span>
                                             </div>
@@ -752,21 +794,33 @@
                             </div>
                         )}
 
-                        <div className="fixed bottom-0 left-0 right-0 bg-slate-900/90 backdrop-blur-xl border-t border-slate-800 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.5)] z-40 p-4">
+                        <div className="fixed bottom-0 left-0 right-0 bg-slate-950/95 backdrop-blur-xl border-t border-slate-800 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.5)] z-40 p-4 px-8">
                             <div className="max-w-7xl mx-auto flex items-center justify-between">
                                 <div className="flex items-center gap-8">
-                                    <div><div className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-1">已選項目</div><div className="font-bold text-white text-xl font-mono">{totals.itemCount} <span className="text-sm text-slate-500 font-sans">項</span></div></div>
-                                    <div className="hidden sm:block h-8 w-px bg-slate-700"></div>
-                                    <div className="hidden sm:block">
-                                        <div className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-1">總金額 (含稅)</div>
-                                        <div className="font-bold text-cyan-400 text-2xl font-mono">{currency === 'HKD' ? `HK$ ${totals.total.toLocaleString()}` : `NT$ ${totals.total.toLocaleString()}`}</div>
+                                    <div className="flex items-center gap-3">
+                                        <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">已選項目</div>
+                                        <div className="font-bold text-white text-xl font-mono bg-slate-800 px-3 py-1 rounded-lg border border-slate-700">{totals.itemCount} <span className="text-sm text-slate-400 font-sans">項</span></div>
                                     </div>
-                                    {totals.discount > 0 && (
-                                        <div className="hidden md:flex flex-col items-start bg-green-900/20 px-4 py-1.5 rounded border border-green-500/20">
-                                            <div className="flex items-center gap-1 text-green-400 text-xs font-bold uppercase tracking-wider"><Check size={12} /> 已套用折扣 (其他軟體免費)</div>
-                                            <div className="text-xs text-green-500 font-mono">-{currency === 'HKD' ? `HK$ ${totals.discount.toLocaleString()}` : `NT$ ${totals.discount.toLocaleString()}`}</div>
+                                    <div className="hidden sm:block h-8 w-px bg-slate-800"></div>
+                                    
+                                    <div className="flex items-center gap-4">
+                                        <div className="flex items-baseline gap-2">
+                                            <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">總金額 (含稅)</span>
+                                            <span className="font-bold text-cyan-400 text-2xl font-mono tracking-tight">{formatPrice(totals.total)}</span>
                                         </div>
-                                    )}
+                                        
+                                        {totals.nextTierPrompt && (
+                                            <div className="hidden md:flex items-center gap-2 text-xs font-bold text-yellow-300 bg-yellow-400/10 px-3 py-1.5 rounded-full border border-yellow-400/30 animate-pulse">
+                                                <TrendingUp size={14} /> {totals.nextTierPrompt}
+                                            </div>
+                                        )}
+
+                                        {totals.discount > 0 && !totals.nextTierPrompt && (
+                                            <div className="hidden md:flex items-center gap-1 text-green-400 text-xs font-bold uppercase tracking-wider bg-green-900/20 px-3 py-1.5 rounded-full border border-green-500/20">
+                                                <Check size={12} /> 已套用折扣 (省下 {formatPrice(totals.discount).replace(/HK\$ |NT\$ /g, '')})
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                                 <button onClick={() => setStep(2)} disabled={totals.total === 0} className={`flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg ${totals.total > 0 ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:scale-105 active:scale-95' : 'bg-slate-800 text-slate-600 cursor-not-allowed border border-slate-700'}`}>下一步：填寫資料 <ArrowRight size={20} /></button>
                             </div>
@@ -859,14 +913,14 @@
                             <div>
                                 <div className="flex justify-between items-start border-b-2 border-slate-800 pb-6 mb-8">
                                     <div className="flex flex-col justify-between h-full">
-                                        <Logo className="h-24 w-auto mb-4 -ml-2" /> {/* 調整報價單上的 Logo 大小和位置 */}
+                                        <Logo className="h-24 w-auto mb-4 -ml-2" />
                                         <div className="text-sm text-slate-500 space-y-1 leading-relaxed">
                                             <p className="font-bold text-slate-700">經典人文教育股份有限公司</p>
                                             <p>統編：89187632</p>
                                         </div>
                                     </div>
                                     <div className="text-right">
-                                        <h1 className="text-5xl font-extrabold text-slate-800 tracking-tight mb-2">報價單</h1>
+                                        <h1 className="text-5xl font-extrabold text-slate-800 tracking-tight mb-2 print:text-black">報價單</h1>
                                         <div className="space-y-1 mt-4">
                                             <p className="text-slate-500 text-sm font-medium">報價單號：<span className="text-slate-800">{`QT-${generateOrderId()}`}</span></p>
                                             <p className="text-slate-500 text-sm font-medium">開立日期：<span className="text-slate-800">{new Date().toLocaleDateString()}</span></p>
@@ -879,7 +933,7 @@
                                     <div>
                                         <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 pb-1 border-b border-slate-100">客戶資訊 (Bill To)</h3>
                                         <div className="space-y-2">
-                                            <p className="font-bold text-xl text-slate-800">{formData.title}</p>
+                                            <p className="font-bold text-xl text-slate-800 print:text-black">{formData.title}</p>
                                             <p className="text-slate-600">聯絡人：{formData.name}</p>
                                             <p className="text-slate-600">Email：{formData.email}</p>
                                             <p className="text-slate-600">統編：{formData.taxId}</p>
@@ -897,7 +951,7 @@
                                                 <span className="font-medium text-slate-800">報價後 14 天內有效</span>
                                             </div>
                                             {referralCode && (
-                                                <div className="flex justify-between bg-blue-50 p-2 roundedLine text-blue-800">
+                                                <div className="flex justify-between bg-blue-50 p-2 roundedLine text-blue-800 print:text-black print:bg-slate-100">
                                                     <span className="flex items-center gap-1 font-medium"><Tag size={14} /> 推薦代碼：</span>
                                                     <span className="font-bold">{referralCode}</span>
                                                 </div>
@@ -908,66 +962,66 @@
 
                                 <table className="w-full mb-8 border-collapse">
                                     <thead>
-                                            <tr className="bg-slate-800 text-white text-sm uppercase tracking-wider">
+                                            <tr className="bg-slate-800 text-white text-sm uppercase tracking-wider print:bg-slate-900 print:text-white">
                                                 <th className="py-3 px-4 text-left first:rounded-tl-md">項目說明</th><th className="py-3 px-4 text-center w-32">品牌</th><th className="py-3 px-4 text-center w-28">單價</th><th className="py-3 px-4 text-center w-20">數量</th><th className="py-3 px-4 text-right last:rounded-tr-md w-36">金額</th>
                                             </tr>
                                     </thead>
                                     <tbody className="text-sm">
                                             {products.filter(p => cart[p.id] > 0).map((product, idx) => (
                                                 <tr key={product.id} className={`border-b border-slate-100 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}`}>
-                                                    <td className="py-4 px-4"><div><div className="font-bold text-slate-800 text-base">{product.name}</div><div className="text-xs text-slate-500 mt-0.5">{product.desc}</div><div className="text-[10px] text-slate-400 mt-0.5">技術來源：{product.country}</div></div></td>
+                                                    <td className="py-4 px-4"><div><div className="font-bold text-slate-800 text-base print:text-black">{product.name}</div><div className="text-xs text-slate-500 mt-0.5">{product.desc}</div><div className="text-[10px] text-slate-400 mt-0.5">技術來源：{product.country}</div></div></td>
                                                     <td className="py-4 px-4 text-center">
-                                                        {/* 報價單上使用較小的 BrandBadge */}
-                                                        <div className="inline-flex items-center justify-center h-[40px] w-[100px] bg-white border border-slate-200 rounded-md">
+                                                        <div className="inline-flex items-center justify-center h-[40px] w-[100px] bg-white border border-slate-200 rounded-md print:border-slate-300">
                                                             <img src={product.logoImg} alt={product.brandLogo} className="h-8 w-auto max-w-[90px] object-contain" />
                                                         </div>
                                                     </td>
-                                                    <td className="py-4 px-4 text-center text-slate-600 font-medium">{formatPrice(product.price)}</td>
+                                                    <td className="py-4 px-4 text-center text-slate-600 font-medium">{formatPrice(getProductPrice(product))}</td>
                                                     <td className="py-4 px-4 text-center font-bold text-slate-800">{cart[product.id]}</td>
-                                                    <td className="py-4 px-4 text-right font-bold text-slate-800">{formatPrice(product.price * cart[product.id])}</td>
+                                                    <td className="py-4 px-4 text-right font-bold text-slate-800">{formatPrice(getProductPrice(product) * cart[product.id])}</td>
                                                 </tr>
                                             ))}
                                     </tbody>
                                 </table>
 
                                 <div className="flex justify-end mb-12">
-                                    <div className="w-80 space-y-3">
-                                            <div className="flex justify-between text-slate-600 text-sm font-medium">
+                                    <div className="w-96 space-y-3">
+                                            <div className="flex justify-between text-slate-600 text-sm font-medium px-2">
                                                 <span>小計 Subtotal</span>
-                                                <span>{currency === 'HKD' ? `HK$ ${totals.subtotal.toLocaleString()}` : `NT$ ${totals.subtotal.toLocaleString()}`}</span>
+                                                <span>{formatPrice(totals.subtotal)}</span>
                                             </div>
                                             {totals.discount > 0 && (
-                                                <div className="flex justify-between text-green-700 text-sm font-bold bg-green-50 py-2 px-3 rounded border border-green-100">
+                                                <div className="flex justify-between text-green-700 text-sm font-bold bg-green-50 py-2 px-3 rounded border border-green-100 print:text-black print:bg-slate-100 print:border-slate-200">
                                                     <span className="flex items-center gap-1"><Check size={14}/> 折扣 (Discount)</span>
-                                                    <span>-{currency === 'HKD' ? `HK$ ${totals.discount.toLocaleString()}` : `NT$ ${totals.discount.toLocaleString()}`}</span>
+                                                    <span>-{formatPrice(totals.discount)}</span>
                                                 </div>
                                             )}
-                                            <div className="flex justify-between text-3xl font-extrabold text-slate-900 pt-4 border-t-2 border-slate-800 mt-4">
-                                                <span>總計 Total</span>
-                                                <span>{currency === 'HKD' ? `HK$ ${totals.total.toLocaleString()}` : `NT$ ${totals.total.toLocaleString()}`}</span>
+                                            {/* 已修改：單行顯示總計，字體放大，更簡潔 */}
+                                            <div className="flex justify-end items-baseline gap-4 pt-4 border-t-2 border-slate-800 mt-4 px-2">
+                                                <span className="text-xl font-bold text-slate-800 print:text-black">總計 Total:</span>
+                                                <span className="text-4xl font-extrabold text-slate-900 print:text-black tracking-tight">{formatPrice(totals.total)}</span>
                                             </div>
-                                            <div className="text-right text-xs font-medium text-slate-400 uppercase tracking-wider">(含稅金額)</div>
+                                            <div className="text-right text-xs font-medium text-slate-400 uppercase tracking-wider px-2">(含稅金額)</div>
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-12 border-t border-slate-200 pt-8 print:break-inside-avoid">
                                     <div>
                                             <h4 className="font-bold text-sm text-slate-800 mb-3 uppercase tracking-wider">備註事項 (Notes)</h4>
-                                            <ul className="text-xs text-slate-600 space-y-2 list-disc list-inside bg-slate-50 p-4 rounded-lg border border-slate-100">
+                                            <ul className="text-xs text-slate-600 space-y-2 list-disc list-inside bg-slate-50 p-4 rounded-lg border border-slate-100 print:bg-white print:border-slate-200">
                                                 {formData.note && <li className="font-medium text-slate-800">客戶備註：{formData.note}</li>}
-                                                {totals.appliedRule && <li className="text-green-700 font-bold">{totals.appliedRule}</li>}
+                                                {totals.appliedRule && <li className="text-green-700 font-bold print:text-black">{totals.appliedRule}</li>}
                                                 {referralCode && !totals.appliedRule && <li className="text-slate-800 font-medium">指定推薦代碼：{referralCode}</li>}
-                                                <li className="text-red-600 font-bold text-sm mt-2">匯款請在備註欄上填寫貴校大名以利對帳 謝謝</li>
+                                                <li className="text-red-600 font-bold text-sm mt-2 print:text-black">匯款請在備註欄上填寫貴校大名以利對帳 謝謝</li>
                                                 {currency === 'TWD' ? (
                                                     <>
-                                                        <li className="mt-1 pt-1 border-t border-slate-200 text-slate-600 font-bold">經典人文教育股份有限公司</li>
+                                                        <li className="mt-1 pt-1 border-t border-slate-200 text-slate-600 font-bold print:text-black">經典人文教育股份有限公司</li>
                                                         <li className="text-slate-600">013 國泰銀行 市政分行</li>
                                                         <li className="text-slate-600">帳號：234035015109</li>
-                                                        <li><a href="https://drive.google.com/file/d/1KzCNoW6X4UT_0o-fjniSq4p3KjPiWpYJ/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800 flex items-center gap-1"><ExternalLink size={12} /> Edcafe AI 台幣銀行存摺</a></li>
+                                                        <li className="print:hidden"><a href="https://drive.google.com/file/d/1KzCNoW6X4UT_0o-fjniSq4p3KjPiWpYJ/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800 flex items-center gap-1"><ExternalLink size={12} /> Edcafe AI 台幣銀行存摺</a></li>
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <li className="mt-1 pt-1 border-t border-slate-200 text-slate-800 font-bold">Airwallex 全球收款账户信息</li>
+                                                        <li className="mt-1 pt-1 border-t border-slate-200 text-slate-800 font-bold print:text-black">Airwallex 全球收款账户信息</li>
                                                         <li className="text-slate-600 text-[10px]">帳戶名稱: JING DIAN REN WEN JIAO YU GU FEN YOU XIAN GONG SI</li>
                                                         <li className="text-slate-600">收款帳號: 7950144805</li>
                                                         <li className="text-slate-600">銀行名稱: DBS Bank (Hong Kong) Limited (016)</li>
@@ -979,19 +1033,19 @@
                                     </div>
                                     <div>
                                             <h4 className="font-bold text-sm text-slate-800 mb-3 uppercase tracking-wider">簽署確認 (Signature)</h4>
-                                            <div className="h-32 border-2 border-dashed border-slate-300 rounded-lg bg-slate-50/50 mt-2 relative flex items-end justify-center pb-4">
-                                                <span className="text-xs text-slate-400 font-medium uppercase tracking-wider">請在此處用印或簽名回傳</span>
+                                            <div className="h-32 border-2 border-dashed border-slate-300 rounded-lg bg-slate-50/50 mt-2 relative flex items-end justify-center pb-4 print:bg-white print:border-slate-400">
+                                                <span className="text-xs text-slate-400 font-medium uppercase tracking-wider print:text-slate-600">請在此處用印或簽名回傳</span>
                                             </div>
                                             <p className="text-[10px] text-slate-400 mt-3 text-center">簽署後請回傳至 sales@futureknowledge.ai 以完成訂單程序。<br/>本報價單內容具商業機密，請勿外流。</p>
                                     </div>
                                 </div>
                             </div>
                             <div className="mt-8 border-t border-slate-200 pt-4 flex items-center justify-center text-slate-400 gap-8 print:flex hidden">
-                                <div className="flex items-center gap-2"><div className="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold">1</div><span className="text-xs">產出報價單</span></div>
+                                <div className="flex items-center gap-2"><div className="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold print:bg-slate-800 print:text-white">1</div><span className="text-xs">產出報價單</span></div>
                                 <ArrowRightCircle size={14} />
-                                <div className="flex items-center gap-2"><div className="w-6 h-6 rounded-full bg-slate-800 text-white flex items-center justify-center text-xs font-bold">2</div><span className="text-xs font-bold text-slate-800">用印回傳真人客服</span></div>
+                                <div className="flex items-center gap-2"><div className="w-6 h-6 rounded-full bg-slate-800 text-white flex items-center justify-center text-xs font-bold print:bg-slate-200 print:text-slate-800">2</div><span className="text-xs font-bold text-slate-800">用印回傳真人客服</span></div>
                                 <ArrowRightCircle size={14} />
-                                <div className="flex items-center gap-2"><div className="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold">3</div><span className="text-xs">真人客服授權開通</span></div>
+                                <div className="flex items-center gap-2"><div className="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold print:bg-slate-800 print:text-white">3</div><span className="text-xs">真人客服授權開通</span></div>
                             </div>
                             <div className="absolute bottom-0 left-0 right-0 h-3 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 print:block"></div>
                         </div>
