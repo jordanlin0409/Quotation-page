@@ -102,14 +102,32 @@
 
             const EXCHANGE_RATE = 0.25;
 
-            // 取得產品當前價格 (處理 HKD 指定價格)
-            const getProductPrice = (product) => {
-                if (currency === 'HKD') {
-                    // 如果有指定 HKD 價格，優先使用
-                    if (product.priceHKD) {
-                        return product.priceHKD;
+            // 取得產品當前價格 (處理 HKD 指定價格與 WordWall 階梯價)
+            const getProductPrice = (product, qty = 1) => {
+                // WordWall 階梯定價邏輯
+                if (product.id === 'wordwall_std' || product.id === 'wordwall_pro') {
+                    const isPro = product.id === 'wordwall_pro';
+                    let priceTable;
+                    
+                    if (currency === 'TWD') {
+                        priceTable = isPro 
+                            ? { 1: 2500, 5: 2000, 10: 1500, 20: 1200, 50: 972 }
+                            : { 1: 1600, 5: 1300, 10: 1000, 20: 800, 50: 650 };
+                    } else {
+                        priceTable = isPro
+                            ? { 1: 630, 5: 505, 10: 380, 20: 315, 50: 250 }
+                            : { 1: 420, 5: 340, 10: 250, 20: 210, 50: 170 };
                     }
-                    // 否則使用匯率計算
+
+                    if (qty >= 50) return priceTable[50];
+                    if (qty >= 20) return priceTable[20];
+                    if (qty >= 10) return priceTable[10];
+                    if (qty >= 5) return priceTable[5];
+                    return priceTable[1];
+                }
+
+                if (currency === 'HKD') {
+                    if (product.priceHKD) return product.priceHKD;
                     return Math.round(product.price * EXCHANGE_RATE);
                 }
                 return product.price;
@@ -122,14 +140,14 @@
                 return `NT$ ${price.toLocaleString()}`;
             };
 
-            // 商品資料庫
+            // 商品資料庫 (已移除 Quizlet 並重新排序)
             const allProducts = [
                 { 
                     id: 'edcafe_pro', 
                     name: 'Edcafe AI Pro 入門版', 
                     price: 3300,
-                    priceHKD: 750, // 指定 HKD 價格
-                    desc: '最簡易操作教育版 ChatGPT - 課前、課中、課後一站式解決', // 已修改
+                    priceHKD: 750,
+                    desc: '最簡易操作教育版 ChatGPT - 課前、課中、課後一站式解決',
                     subDesc: '個人化學習Chatbot，測驗，中英文批改，唯一軟體教師可監控，視覺化數據分析',
                     category: 'edcafe',
                     section: 'hero',
@@ -147,8 +165,8 @@
                     id: 'edcafe_premium', 
                     name: 'Edcafe AI Premium 進階版', 
                     price: 6500,
-                    priceHKD: 1400, // 指定 HKD 價格
-                    desc: '最簡易操作教育版 ChatGPT (解鎖無限額度) - 課前、課中、課後一站式解決', // 已修改
+                    priceHKD: 1400,
+                    desc: '最簡易操作教育版 ChatGPT (解鎖無限額度) - 課前、課中、課後一站式解決',
                     subDesc: '個人化學習Chatbot，測驗，中英文批改，唯一軟體教師可監控，視覺化數據分析',
                     category: 'edcafe',
                     section: 'hero',
@@ -166,8 +184,8 @@
                     id: 'kahoot', 
                     name: 'Kahoot EDU Standard 教師版',
                     price: 4500, 
-                    desc: '全球最受歡迎的遊戲化學習平台', // 已修改
-                    subDesc: '遊戲化學習、即時互動、支援多載具', // 已新增
+                    desc: '全球最受歡迎的遊戲化學習平台',
+                    subDesc: '遊戲化學習、即時互動、支援多載具',
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
@@ -181,7 +199,7 @@
                     id: 'padlet', 
                     name: 'Padlet 學校版', 
                     price: 3000, 
-                    desc: '全球最受歡迎創意協作數位布告欄，擁有豐富版型', // 已修改
+                    desc: '全球最受歡迎創意協作數位布告欄，擁有豐富版型',
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
@@ -195,10 +213,9 @@
                 { 
                     id: 'wordwall_std', 
                     name: 'WordWall Standard 標準版',
-                    price: 1600,
-                    priceHKD: 420, // 指定 HKD 價格
-                    desc: '輕鬆建立互動遊戲與測驗', // 已修改
-                    subDesc: '多元題型、自由共享', // 已新增
+                    price: 1600, // 初始顯示 1-4 組價格
+                    desc: '輕鬆建立互動遊戲與測驗',
+                    subDesc: '多元題型、自由共享',
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
@@ -211,10 +228,9 @@
                 { 
                     id: 'wordwall_pro', 
                     name: 'WordWall Pro 專業版',
-                    price: 2500, 
-                    priceHKD: 630, // 指定 HKD 價格
-                    desc: '更多樣板、無限制建立與列印功能', // 已修改
-                    subDesc: '多元題型、自由共享', // 已新增 (使用相同描述)
+                    price: 2500, // 初始顯示 1-4 組價格
+                    desc: '更多樣板、無限制建立與列印功能',
+                    subDesc: '多元題型、自由共享',
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
@@ -225,42 +241,12 @@
                     details: ['包含所有標準版功能', '22 種專業範本', '搶先體驗新範本', 'AI 內容產生器', '列印活動', '無限活動', '無限制社區搜尋']
                 },
                 { 
-                    id: 'quizlet', 
-                    name: 'QuizletPlus 教師版',
-                    price: 1550,
-                    priceHKD: 280, // 指定 HKD 價格
-                    desc: '最強大的單字卡與學習集工具',
-                    category: 'other',
-                    section: 'standard',
-                    brandColor: 'bg-white', 
-                    logoImg: 'images/quizlet-logo.jpg',
-                    country: '美國 🇺🇸',
-                    hasTutorial: true,
-                    videoUrl: 'https://youtube.com/playlist?list=PLU-8o76TOvQVdelwqXT8mhl5hc8FFiPOH&si=_GX5i2hi5IpJ6W7i',
-                    details: ['主持課堂遊戲活動', '深入了解學生表現（Analytics）', '自訂 Quizlet Live', '個人化練習題', '自訂測試模式', '無廣告體驗']
-                },
-                { 
-                    id: 'kami', 
-                    name: 'Kami 教師版', 
-                    price: 5100, 
-                    priceHKD: 1200, // 指定 HKD 價格
-                    desc: '最強大的 PDF 編輯與協作工具', 
-                    category: 'other',
-                    section: 'standard',
-                    brandColor: 'bg-[#5D3FD3]', 
-                    logoImg: 'images/kami-logo.png',
-                    country: '紐西蘭 🇳🇿',
-                    hasTutorial: true,
-                    videoUrl: 'https://youtube.com/playlist?list=PL1baeQN2oomhs0vYaxzjI0Y9XrJMMTpvC&si=c3o70CKVhezqh3jX',
-                    details: ['PDF 註記、編輯與協作', '整合 Google Classroom', '支援語音輸入', '文字轉語音', '離線編輯功能', '無限制檔案大小']
-                },
-                { 
                     id: 'gemini_pro', 
                     name: 'Google AI pro for Education',
                     price: 8500, 
-                    priceHKD: 1865, // 指定 HKD 價格
-                    desc: 'Gemini AI Pro + NotebookLM AI Pro', // 已修改
-                    subDesc: 'Gemini in workspace', // 已新增
+                    priceHKD: 1865,
+                    desc: 'Gemini AI Pro + NotebookLM AI Pro',
+                    subDesc: 'Gemini in workspace',
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
@@ -270,6 +256,21 @@
                     videoUrl: 'https://youtu.be/2fTqduml_CY?si=HuF6qDplNq0yQFSf',
                     details: ['AI 文本生成加值功能', '可與 Edcafe 系統整合', '適合進階教師與創作者', '提升教材產出效率與批改品質']
                 },
+                { 
+                    id: 'kami', 
+                    name: 'Kami 教師版', 
+                    price: 5100, 
+                    priceHKD: 1200,
+                    desc: '最強大的 PDF 編輯與協作工具', 
+                    category: 'other',
+                    section: 'standard',
+                    brandColor: 'bg-[#5D3FD3]', 
+                    logoImg: 'images/kami-logo.png',
+                    country: '紐西蘭 🇳🇿',
+                    hasTutorial: true,
+                    videoUrl: 'https://youtube.com/playlist?list=PL1baeQN2oomhs0vYaxzjI0Y9XrJMMTpvC&si=c3o70CKVhezqh3jX',
+                    details: ['PDF 註記、編輯與協作', '整合 Google Classroom', '支援語音輸入', '文字轉語音', '離線編輯功能', '無限制檔案大小']
+                }
             ];
 
             const products = allProducts.filter(p => !(currency === 'HKD' && p.id === 'padlet'));
@@ -302,10 +303,9 @@
                 let itemCount = 0;
                 let otherSoftwareSubtotal = 0; 
 
-                // 第一步：計算總金額 (根據當前貨幣)
                 products.forEach(p => {
                     const qty = cart[p.id];
-                    const unitPrice = getProductPrice(p); // 使用新的價格獲取邏輯
+                    const unitPrice = getProductPrice(p, qty); 
                     const amount = unitPrice * qty;
                     subtotal += amount;
                     itemCount += qty;
@@ -319,27 +319,22 @@
 
                 let discount = 0;
                 let appliedRule = null;
-                let potentialDiscount = 0; // 這個值是 TWD 基準，需要轉換
+                let potentialDiscount = 0; 
                 let ruleDescription = '';
                 let nextTierPrompt = null; 
 
-                // 第二步：處理折扣 (香港不支援甜心卡)
                 if (edcafeCount > 0) {
                     const applicableTier = [...discountTiers].reverse().find(tier => edcafeCount >= tier.qty);
                     
                     if (applicableTier) {
                         if (referralCode.trim() === 'Edcafe 甜心卡' && currency !== 'HKD') {
-                            // 計算折扣金額 (TWD)
                             let discountTWD = applicableTier.sweet;
-                            
-                            // 轉換為當前貨幣
                             potentialDiscount = discountTWD;
 
                             let bonusText = "";
                             if (edcafeCount >= 40) {
                                 bonusText = " + 加贈學校專屬研習";
                             }
-                            // 顯示文字保持用 $ 符號
                             ruleDescription = `甜心卡滿 ${applicableTier.qty} 套優惠 (現折 $${potentialDiscount.toLocaleString()})${bonusText}`;
                         }
                     }
@@ -401,7 +396,7 @@
                 products.forEach(p => {
                     const qty = cart[p.id];
                     if (qty > 0) {
-                        const unitPrice = getProductPrice(p);
+                        const unitPrice = getProductPrice(p, qty);
                         const itemTotalPrice = formatPrice(unitPrice * qty).replace(/HK\$ |NT\$ /g, '');
                             
                         itemsPayload.push({
@@ -458,7 +453,6 @@
 
             // --- UI Components ---
             
-            // BrandBadge Component
             const BrandBadge = ({ text, colorClass, logoImg }) => {
                 return (
                     <div className={`px-4 py-2 rounded-lg shadow-sm inline-flex items-center justify-center min-w-[140px] h-[60px] bg-white/95 backdrop-blur-sm border border-slate-200/50 transition-transform hover:scale-105`}>
@@ -527,7 +521,6 @@
                 );
             };
 
-            // Header Component - Removed Image Logo, simplified text
             const Header = () => (
                 <header className="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800 shadow-lg print:hidden">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
@@ -625,11 +618,13 @@
                                     </div>
                                 )}
 
-                                <div className="mt-2 flex justify-center">
-                                    <button onClick={() => setShowDiscountRules(!showDiscountRules)} className="text-[11px] text-cyan-400 hover:text-cyan-300 font-bold inline-flex items-center gap-1 transition-colors bg-cyan-950/30 px-3 py-1 rounded-full hover:bg-cyan-950/50">
-                                        <Percent size={12} /> 查看 Edcafe 採購優惠級距 {showDiscountRules ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-                                    </button>
-                                </div>
+                                {currency !== 'HKD' && (
+                                    <div className="mt-2 flex justify-center">
+                                        <button onClick={() => setShowDiscountRules(!showDiscountRules)} className="text-[11px] text-cyan-400 hover:text-cyan-300 font-bold inline-flex items-center gap-1 transition-colors bg-cyan-950/30 px-3 py-1 rounded-full hover:bg-cyan-950/50">
+                                            <Percent size={12} /> 查看 Edcafe 採購優惠級距 {showDiscountRules ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                                        </button>
+                                    </div>
+                                )}
 
                                 <div className={`overflow-hidden transition-all duration-300 ease-in-out ${showDiscountRules ? 'max-h-96 opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
                                     <div className="bg-slate-900/90 backdrop-blur-md border border-slate-700 rounded-xl p-4 shadow-xl text-sm">
@@ -656,7 +651,7 @@
                                 </div>
 
                                 {totals.appliedRule && <div className="text-center mt-3 text-sm text-green-400 font-bold animate-pulse flex items-center justify-center gap-2"><Sparkles size={14}/> {totals.appliedRule}</div>}
-                                {totals.discount === 0 && totals.edcafeCount > 0 && <div className="text-center mt-2 text-xs text-yellow-500 flex items-center justify-center gap-1"><AlertCircle size={12}/> 注意：折扣僅適用於「其他教學軟體」 (不含 Edcafe/Google AI)</div>}
+                                {totals.discount === 0 && totals.edcafeCount > 0 && currency !== 'HKD' && <div className="text-center mt-2 text-xs text-yellow-500 flex items-center justify-center gap-1"><AlertCircle size={12}/> 注意：折扣僅適用於「其他教學軟體」 (不含 Edcafe/Google AI)</div>}
                             </div>
 
                             <div className="space-y-16">
@@ -695,7 +690,7 @@
                                                         <div className="flex items-end justify-between bg-slate-800/50 p-4 rounded-xl border border-slate-700/50 backdrop-blur-sm">
                                                             <div>
                                                                 <div className="text-[10px] text-slate-500 uppercase tracking-widest mb-1">年費</div>
-                                                                <div className="text-3xl font-bold text-white tracking-tight flex items-baseline gap-1">{formatPrice(getProductPrice(product))}</div>
+                                                                <div className="text-3xl font-bold text-white tracking-tight flex items-baseline gap-1">{formatPrice(getProductPrice(product, cart[product.id]))}</div>
                                                             </div>
                                                             <QuantityControl productId={product.id} />
                                                         </div>
@@ -732,7 +727,7 @@
                                                     <div className="mt-auto">
                                                         <div className="mb-1 pt-1 border-t border-slate-800/50 flex items-center gap-1 text-xs text-cyan-200 font-mono font-bold"><Flag size={12} /> 技術來源：{product.country}</div>
                                                         <div className="flex items-center justify-between">
-                                                            <div className="text-slate-300 font-bold text-lg">{formatPrice(getProductPrice(product))}</div>
+                                                            <div className="text-slate-300 font-bold text-lg">{formatPrice(getProductPrice(product, cart[product.id]))}</div>
                                                             <QuantityControl productId={product.id} compact={true} />
                                                         </div>
                                                     </div>
@@ -899,7 +894,7 @@
                                     </div>
                                     <div className="space-y-4">
                                         {currency === 'TWD' && (<a href="https://lin.ee/luo4Dgq" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3 bg-[#06c755] hover:bg-[#05b34c] text-white py-4 rounded-xl font-bold transition-transform hover:scale-105 shadow-lg"><MessageCircle size={24} /> 傳送至 LINE 客服</a>)}
-                                        {currency === 'HKD' && (<><a href="https://wa.me/message/OOAOI3R5DAQVJ1" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#20bd5a] text-white py-4 rounded-xl font-bold transition-transform hover:scale-105 shadow-lg"><Phone size={24} /> 傳送至 WhatsApp</a><div className="mt-6 pt-6 border-t border-slate-700"><p className="text-slate-400 text-sm mb-3 text-center">或選擇線上付款：</p>{/* Removed Online Payment Button for HKD as requested */}</div></>)}
+                                        {currency === 'HKD' && (<><a href="https://wa.me/message/OOAOI3R5DAQVJ1" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#20bd5a] text-white py-4 rounded-xl font-bold transition-transform hover:scale-105 shadow-lg"><Phone size={24} /> 傳送至 WhatsApp</a><div className="mt-6 pt-6 border-t border-slate-700"><p className="text-slate-400 text-sm mb-3 text-center">或選擇線上付款：</p></div></>)}
                                     </div>
                                     <div className="mt-6 text-center text-xs text-slate-500">專人將於收到文件後協助您開通授權</div>
                                 </div>
@@ -949,9 +944,9 @@
                                                 <span className="text-slate-500">期望啟用日：</span>
                                                 <span className="font-medium text-slate-800">{formData.date}</span>
                                             </div>
-                                            <div className="flex justify-between">
-                                                <span className="text-slate-500">有效期限：</span>
-                                                <span className="font-medium text-slate-800">報價後 14 天內有效</span>
+                                            <div className="flex flex-col text-right">
+                                                <p className="font-medium text-slate-800">有效期限：報價後 14 天內有效</p>
+                                                <p className="text-xs text-rose-600 font-bold mt-1 leading-tight">報價單需與我們真人客戶做最後確認<br/>並用印後才開始生效</p>
                                             </div>
                                             {referralCode && (
                                                 <div className="flex justify-between bg-blue-50 p-2 roundedLine text-blue-800 print:text-black print:bg-slate-100">
@@ -970,19 +965,23 @@
                                             </tr>
                                     </thead>
                                     <tbody className="text-sm">
-                                            {products.filter(p => cart[p.id] > 0).map((product, idx) => (
-                                                <tr key={product.id} className={`border-b border-slate-100 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}`}>
-                                                    <td className="py-4 px-4"><div><div className="font-bold text-slate-800 text-base print:text-black">{product.name}</div><div className="text-xs text-slate-500 mt-0.5">{product.desc}</div><div className="text-[10px] text-slate-400 mt-0.5">技術來源：{product.country}</div></div></td>
-                                                    <td className="py-4 px-4 text-center">
-                                                        <div className="inline-flex items-center justify-center h-[40px] w-[100px] bg-white border border-slate-200 rounded-md print:border-slate-300">
-                                                            <img src={product.logoImg} alt={product.brandLogo} className="h-8 w-auto max-w-[90px] object-contain" />
-                                                        </div>
-                                                    </td>
-                                                    <td className="py-4 px-4 text-center text-slate-600 font-medium">{formatPrice(getProductPrice(product))}</td>
-                                                    <td className="py-4 px-4 text-center font-bold text-slate-800">{cart[product.id]}</td>
-                                                    <td className="py-4 px-4 text-right font-bold text-slate-800">{formatPrice(getProductPrice(product) * cart[product.id])}</td>
-                                                </tr>
-                                            ))}
+                                            {products.filter(p => cart[p.id] > 0).map((product, idx) => {
+                                                const currentQty = cart[product.id];
+                                                const unitPrice = getProductPrice(product, currentQty);
+                                                return (
+                                                    <tr key={product.id} className={`border-b border-slate-100 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}`}>
+                                                        <td className="py-4 px-4"><div><div className="font-bold text-slate-800 text-base print:text-black">{product.name}</div><div className="text-xs text-slate-500 mt-0.5">{product.desc}</div><div className="text-[10px] text-slate-400 mt-0.5">技術來源：{product.country}</div></div></td>
+                                                        <td className="py-4 px-4 text-center">
+                                                            <div className="inline-flex items-center justify-center h-[40px] w-[100px] bg-white border border-slate-200 rounded-md print:border-slate-300">
+                                                                <img src={product.logoImg} alt={product.brandLogo} className="h-8 w-auto max-w-[90px] object-contain" />
+                                                            </div>
+                                                        </td>
+                                                        <td className="py-4 px-4 text-center text-slate-600 font-medium">{formatPrice(unitPrice)}</td>
+                                                        <td className="py-4 px-4 text-center font-bold text-slate-800">{currentQty}</td>
+                                                        <td className="py-4 px-4 text-right font-bold text-slate-800">{formatPrice(unitPrice * currentQty)}</td>
+                                                    </tr>
+                                                );
+                                            })}
                                     </tbody>
                                 </table>
 
