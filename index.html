@@ -102,9 +102,39 @@
 
             const EXCHANGE_RATE = 0.25;
 
-            // 取得產品當前價格 (處理 HKD 指定價格與 WordWall 階梯價)
+            // 取得產品當前價格 (處理經銷商價格與 WordWall 階梯價)
             const getProductPrice = (product, qty = 1) => {
-                // WordWall 階梯定價邏輯
+                const code = referralCode.trim();
+                const groupA = ['長峰資訊2616', '宏寶6842', 'Beesoft2637', '全華圖書3318', '潤采數位5988', '經典經銷2183'];
+                const groupB = ['宏菖文教4317'];
+                const isDealerA = groupA.includes(code);
+                const isDealerB = groupB.includes(code);
+
+                // 如果是台灣幣別且輸入經銷商代碼
+                if (currency === 'TWD' && (isDealerA || isDealerB)) {
+                    if (product.id === 'edcafe_pro') return isDealerB ? 2475 : 2640;
+                    if (product.id === 'edcafe_premium') return isDealerB ? 4875 : 5200;
+                    if (product.id === 'kahoot') return 3600;
+                    if (product.id === 'padlet') return 2500;
+                    if (product.id === 'gemini_pro') return 7820;
+                    
+                    if (product.id === 'wordwall_std') {
+                        if (qty >= 50) return 555;
+                        if (qty >= 20) return 680;
+                        if (qty >= 10) return 850;
+                        if (qty >= 5) return 1105;
+                        return 1360;
+                    }
+                    if (product.id === 'wordwall_pro') {
+                        if (qty >= 50) return 835;
+                        if (qty >= 20) return 1020;
+                        if (qty >= 10) return 1275;
+                        if (qty >= 5) return 1700;
+                        return 2125;
+                    }
+                }
+
+                // --- 以下為原始預設售價邏輯 ---
                 if (product.id === 'wordwall_std' || product.id === 'wordwall_pro') {
                     const isPro = product.id === 'wordwall_pro';
                     let priceTable;
@@ -140,7 +170,7 @@
                 return `NT$ ${price.toLocaleString()}`;
             };
 
-            // 商品資料庫 (已移除 Quizlet 並重新排序)
+            // 商品資料庫 (已移除 Kami)
             const allProducts = [
                 { 
                     id: 'edcafe_pro', 
@@ -213,7 +243,7 @@
                 { 
                     id: 'wordwall_std', 
                     name: 'WordWall Standard 標準版',
-                    price: 1600, // 初始顯示 1-4 組價格
+                    price: 1600, 
                     desc: '輕鬆建立互動遊戲與測驗',
                     subDesc: '多元題型、自由共享',
                     category: 'other',
@@ -228,7 +258,7 @@
                 { 
                     id: 'wordwall_pro', 
                     name: 'WordWall Pro 專業版',
-                    price: 2500, // 初始顯示 1-4 組價格
+                    price: 2500, 
                     desc: '更多樣板、無限制建立與列印功能',
                     subDesc: '多元題型、自由共享',
                     category: 'other',
@@ -255,21 +285,6 @@
                     hasTutorial: true,
                     videoUrl: 'https://youtu.be/2fTqduml_CY?si=HuF6qDplNq0yQFSf',
                     details: ['AI 文本生成加值功能', '可與 Edcafe 系統整合', '適合進階教師與創作者', '提升教材產出效率與批改品質']
-                },
-                { 
-                    id: 'kami', 
-                    name: 'Kami 教師版', 
-                    price: 5100, 
-                    priceHKD: 1200,
-                    desc: '最強大的 PDF 編輯與協作工具', 
-                    category: 'other',
-                    section: 'standard',
-                    brandColor: 'bg-[#5D3FD3]', 
-                    logoImg: 'images/kami-logo.png',
-                    country: '紐西蘭 🇳🇿',
-                    hasTutorial: true,
-                    videoUrl: 'https://youtube.com/playlist?list=PL1baeQN2oomhs0vYaxzjI0Y9XrJMMTpvC&si=c3o70CKVhezqh3jX',
-                    details: ['PDF 註記、編輯與協作', '整合 Google Classroom', '支援語音輸入', '文字轉語音', '離線編輯功能', '無限制檔案大小']
                 }
             ];
 
