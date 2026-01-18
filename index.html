@@ -106,7 +106,7 @@
             const getProductPrice = (product, qty = 1) => {
                 const code = referralCode.trim();
 
-                // 推薦人 A 群組 (入門 2640 / 進階 5200)
+                // 推薦人群組 A (更新為您提供的23間廠商)
                 const groupA = [
                     '勁園351#', '麗文$581', '台奇資訊3351', '先鋒教育4710', '智域國際3510', 
                     '仕揚科技2850', '國眾電腦%480', '新叡文教-+12', '校園文化8103', '宥林數位4824', 
@@ -115,20 +115,19 @@
                     '炳昌企業8842', '泰溥科技9852', '晶盛科技9977'
                 ];
                 
-                // 推薦人 B 群組 (入門 2475 / 進階 4875)
+                // 推薦人群組 B (更新為您提供的2間廠商)
                 const groupB = ['承揚5810', '富動科技1582'];
                 
                 const isDealerA = groupA.includes(code);
                 const isDealerB = groupB.includes(code);
 
-                // --- 處理晶盛科技香港定價 ---
+                // --- 處理香港價格 (晶盛科技9977 特價) ---
                 if (currency === 'HKD' && code === '晶盛科技9977') {
                     if (product.id === 'edcafe_pro') return 525;
                     if (product.id === 'edcafe_premium') return 980;
-                    // 其他軟體無折扣，按照標準換算
                 }
 
-                // --- 台灣幣別且輸入經銷商代碼 ---
+                // --- 台灣幣別經銷價格 ---
                 if (currency === 'TWD' && (isDealerA || isDealerB)) {
                     if (product.id === 'edcafe_pro') return isDealerB ? 2475 : 2640;
                     if (product.id === 'edcafe_premium') return isDealerB ? 4875 : 5200;
@@ -152,7 +151,7 @@
                     }
                 }
 
-                // --- 以下為原始預設售價邏輯 ---
+                // --- 原始預設售價邏輯 ---
                 if (product.id === 'wordwall_std' || product.id === 'wordwall_pro') {
                     const isPro = product.id === 'wordwall_pro';
                     let priceTable;
@@ -188,7 +187,7 @@
                 return `NT$ ${price.toLocaleString()}`;
             };
 
-            // 商品資料庫 (路徑還原為 images/)
+            // 商品資料庫 (確保圖片路徑還原為 images/)
             const allProducts = [
                 { 
                     id: 'edcafe_pro', 
@@ -594,9 +593,8 @@
             );
 
             // ==========================================
-            // 以下省略部分 UI 渲染邏輯 (與您原始代碼一致)
+            // Step 1: 選購方案
             // ==========================================
-            
             if (step === 1) {
                 const heroProducts = products.filter(p => p.section === 'hero');
                 const standardProducts = products.filter(p => p.section === 'standard');
@@ -685,6 +683,7 @@
                                 </div>
 
                                 {totals.appliedRule && <div className="text-center mt-3 text-sm text-green-400 font-bold animate-pulse flex items-center justify-center gap-2"><Sparkles size={14}/> {totals.appliedRule}</div>}
+                                {totals.discount === 0 && totals.edcafeCount > 0 && currency !== 'HKD' && <div className="text-center mt-2 text-xs text-yellow-500 flex items-center justify-center gap-1"><AlertCircle size={12}/> 注意：折扣僅適用於「其他教學軟體」 (不含 Edcafe/Google AI)</div>}
                             </div>
 
                             <div className="space-y-16">
@@ -773,6 +772,52 @@
                             </div>
                         </main>
 
+                        {showPriceMatchModal && (
+                            <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200" onClick={() => setShowPriceMatchModal(false)}>
+                                <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 max-w-md w-full shadow-2xl relative" onClick={e => e.stopPropagation()}>
+                                    <button onClick={() => setShowPriceMatchModal(false)} className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"><X size={24} /></button>
+                                    <div className="text-center">
+                                        <div className="bg-rose-500/20 p-4 rounded-full inline-flex mb-4"><ShieldCheck size={40} className="text-rose-400" /></div>
+                                        <h3 className="text-xl font-bold text-white mb-4">買貴退差價政策說明</h3>
+                                        <div className="text-left bg-slate-800/50 p-4 rounded-lg border border-slate-700 text-slate-300 text-sm leading-relaxed mb-6">
+                                            <div className="flex items-start gap-2"><AlertTriangle className="text-yellow-500 shrink-0 mt-0.5" size={16} /><p>退還的差價最高以該商品的『本公司原始進貨成本價』為限。</p></div>
+                                        </div>
+                                        <button onClick={() => setShowPriceMatchModal(false)} className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-bold border border-slate-600 transition-colors">了解</button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        
+                        {activeDetailProduct && (
+                            <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200" onClick={() => setActiveDetailProduct(null)}>
+                                <div className="bg-slate-900 border border-slate-700 rounded-2xl p-0 max-w-lg w-full shadow-2xl relative overflow-hidden" onClick={e => e.stopPropagation()}>
+                                    <div className={`h-2 w-full bg-gradient-to-r ${activeDetailProduct.section === 'hero' ? 'from-cyan-500 to-blue-500' : 'from-purple-500 to-pink-500'}`}></div>
+                                    <div className="p-6">
+                                        <button onClick={() => setActiveDetailProduct(null)} className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"><X size={24} /></button>
+                                        <div className="mb-6">
+                                            <div className="flex items-center gap-3 mb-2">
+                                                <BrandBadge text={activeDetailProduct.brandLogo} logoImg={activeDetailProduct.logoImg} />
+                                                <span className="text-slate-400 text-xs font-mono border border-slate-700 px-2 py-0.5 rounded">{activeDetailProduct.country}</span>
+                                            </div>
+                                            <h3 className="text-2xl font-bold text-white">{activeDetailProduct.name}</h3>
+                                            <p className="text-slate-400 text-sm mt-1">{activeDetailProduct.desc}</p>
+                                        </div>
+                                        <div className="bg-slate-800/50 rounded-xl p-5 border border-slate-700 max-h-[60vh] overflow-y-auto custom-scrollbar">
+                                            <h4 className="font-bold text-slate-200 mb-4 flex items-center gap-2 border-b border-slate-700 pb-2"><Sparkles size={16} className="text-yellow-400" /> 詳細規格功能</h4>
+                                            <ul className="space-y-3">
+                                                {activeDetailProduct.details.map((detail, index) => (
+                                                    <li key={index} className="flex items-start gap-3 text-sm text-slate-300"><div className="mt-1 min-w-[16px]"><Check size={16} className="text-green-400" /></div><span className="leading-relaxed">{detail}</span></li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                        <div className="mt-6 flex justify-end">
+                                            <button onClick={() => setActiveDetailProduct(null)} className="px-6 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-medium transition-colors border border-slate-600">關閉</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                         <div className="fixed bottom-0 left-0 right-0 bg-slate-950/95 backdrop-blur-xl border-t border-slate-800 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.5)] z-40 p-4 px-8">
                             <div className="max-w-7xl mx-auto flex items-center justify-between">
                                 <div className="flex items-center gap-8">
@@ -787,6 +832,18 @@
                                             <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">總金額 (含稅)</span>
                                             <span className="font-bold text-cyan-400 text-2xl font-mono tracking-tight">{formatPrice(totals.total)}</span>
                                         </div>
+                                        
+                                        {totals.nextTierPrompt && (
+                                            <div className="hidden md:flex items-center gap-2 text-xs font-bold text-yellow-300 bg-yellow-400/10 px-3 py-1.5 rounded-full border border-yellow-400/30 animate-pulse">
+                                                <TrendingUp size={14} /> {totals.nextTierPrompt}
+                                            </div>
+                                        )}
+
+                                        {totals.discount > 0 && !totals.nextTierPrompt && (
+                                            <div className="hidden md:flex items-center gap-1 text-green-400 text-xs font-bold uppercase tracking-wider bg-green-900/20 px-3 py-1.5 rounded-full border border-green-500/20">
+                                                <Check size={12} /> 已套用折扣 (省下 {formatPrice(totals.discount).replace(/HK\$ |NT\$ /g, '')})
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                                 <button onClick={() => setStep(2)} disabled={totals.total === 0} className={`flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg ${totals.total > 0 ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:scale-105 active:scale-95' : 'bg-slate-800 text-slate-600 cursor-not-allowed border border-slate-700'}`}>下一步：填寫資料 <ArrowRight size={20} /></button>
@@ -796,7 +853,9 @@
                 );
             }
 
-            // 之後的 Step 2, Step 3 結構與原始代碼完全一致，故簡化呈現確保不出錯
+            // ==========================================
+            // Step 2: 填寫資料
+            // ==========================================
             if (step === 2) {
                 return (
                     <div className="min-h-screen bg-slate-950 font-sans text-slate-200 pb-20">
@@ -805,23 +864,60 @@
                             <ProgressBar />
                             <div className="bg-slate-900 rounded-3xl shadow-2xl border border-slate-800 overflow-hidden relative">
                                 <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500"></div>
+                                <div className="bg-slate-900/50 p-8 border-b border-slate-800 flex items-center gap-4">
+                                    <div className="bg-slate-800 p-3 rounded-full text-cyan-400 border border-slate-700 shadow-lg"><FileText size={24} /></div>
+                                    <div><h2 className="text-2xl font-bold text-white">客戶資料填寫</h2><p className="text-slate-500 text-sm mt-1">請輸入報價單所需的相關資訊</p></div>
+                                </div>
                                 <div className="p-8 space-y-8">
                                     <div className="space-y-6">
-                                        <h3 className="text-lg font-bold text-cyan-400">聯絡人資訊</h3>
+                                        <h3 className="text-lg font-bold text-cyan-400 flex items-center gap-2"><span className="w-1 h-6 bg-cyan-500 rounded-full"></span>聯絡人資訊</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <input type="text" name="name" value={formData.name} onChange={handleInputChange} className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl" placeholder="聯絡人名稱" />
-                                            <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl" placeholder="電子郵件" />
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">聯絡人名稱 <span className="text-red-500">*</span></label>
+                                                <div className="relative group">
+                                                    <User className="absolute left-3 top-3.5 text-slate-500 w-5 h-5 group-focus-within:text-cyan-400 transition-colors" />
+                                                    <input type="text" name="name" value={formData.name} onChange={handleInputChange} className="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 outline-none transition-all text-white placeholder:text-slate-600" placeholder="請輸入姓名" />
+                                                </div>
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">電子郵件 <span className="text-red-500">*</span></label>
+                                                <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 outline-none transition-all text-white placeholder:text-slate-600" placeholder="name@school.edu" />
+                                            </div>
                                         </div>
-                                        <h3 className="text-lg font-bold text-purple-400">開立對象</h3>
+                                    </div>
+                                    <div className="space-y-6">
+                                        <h3 className="text-lg font-bold text-purple-400 flex items-center gap-2"><span className="w-1 h-6 bg-purple-500 rounded-full"></span>開立對象 (抬頭/統編)</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <input type="text" name="title" value={formData.title} onChange={handleInputChange} className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl" placeholder="抬頭" />
-                                            <input type="text" name="taxId" value={formData.taxId} onChange={handleInputChange} className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl" placeholder="統一編號" />
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">公司/學校抬頭 <span className="text-red-500">*</span></label>
+                                                <input type="text" name="title" value={formData.title} onChange={handleInputChange} className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 outline-none transition-all text-white placeholder:text-slate-600" placeholder="例如：國立臺灣大學" />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">統一編號 <span className="text-red-500">*</span></label>
+                                                <div className="relative group">
+                                                    <CreditCard className="absolute left-3 top-3.5 text-slate-500 w-5 h-5 group-focus-within:text-purple-400 transition-colors" />
+                                                    <input type="text" name="taxId" value={formData.taxId} onChange={handleInputChange} className="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 outline-none transition-all text-white placeholder:text-slate-600" placeholder="8碼統編" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-6">
+                                        <h3 className="text-lg font-bold text-green-400 flex items-center gap-2"><span className="w-1 h-6 bg-green-500 rounded-full"></span>訂單設定</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">期望啟用日期</label>
+                                                <input type="date" name="date" value={formData.date} onChange={handleInputChange} className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-green-500/50 focus:border-green-500 outline-none transition-all text-white scheme-dark" />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">備註事項</label>
+                                                <textarea name="note" value={formData.note} onChange={handleInputChange} rows="1" className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-green-500/50 focus:border-green-500 outline-none transition-all resize-none text-white placeholder:text-slate-600" placeholder=""></textarea>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="bg-slate-900 p-8 border-t border-slate-800 flex items-center justify-between">
-                                    <button onClick={() => setStep(1)} className="text-slate-400 font-bold">上一步</button>
-                                    <button onClick={() => setStep(3)} disabled={!isFormValid()} className="px-8 py-4 rounded-xl font-bold bg-cyan-600 text-white">前往下一步</button>
+                                    <button onClick={() => setStep(1)} className="flex items-center gap-2 text-slate-400 hover:text-white font-bold px-6 py-3 rounded-xl hover:bg-slate-800 transition-colors"><ArrowLeft size={20} /> 上一步</button>
+                                    <button onClick={() => setStep(3)} disabled={!isFormValid()} className={`flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-lg shadow-lg transition-all ${isFormValid() ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:scale-105 active:scale-95' : 'bg-slate-800 text-slate-600 cursor-not-allowed border border-slate-700'}`}>前往下一步 (預覽報價單) <ArrowRightCircle size={20} /></button>
                                 </div>
                             </div>
                         </main>
@@ -829,43 +925,176 @@
                 );
             }
 
+            // ==========================================
+            // Step 3: 產出報價單
+            // ==========================================
             if (step === 3) {
-                // 這裡會渲染報價單預覽與最終確認送出 (保持原樣)
-                // 由於篇幅限制，後續代碼邏輯皆與您的原始 HTML 一模一樣，並已合併路徑還原。
                 return (
                     <div className="min-h-screen bg-slate-900 py-8 print:bg-white print:p-0">
                         <Header />
+                        <div className="max-w-[210mm] mx-auto mb-2 print:hidden"><ProgressBar /></div>
                         <div className="max-w-[210mm] mx-auto mb-6 flex justify-between items-center print:hidden px-4">
-                            <button onClick={() => setStep(2)} className="text-slate-400 font-bold">返回修改</button>
-                            <button onClick={handleConfirmOrder} className="px-6 py-2 bg-green-600 text-white rounded-lg font-bold">確認訂購</button>
-                        </div>
-                        {/* 報價單主體 */}
-                        <div className="max-w-[210mm] mx-auto bg-white min-h-[297mm] p-[15mm] relative text-slate-900 rounded-sm">
-                            <div className="flex justify-between items-start border-b-2 border-slate-800 pb-6 mb-8">
-                                <div><h1 className="text-4xl font-black">Future Knowledge</h1></div>
-                                <div className="text-right"><h1 className="text-5xl font-extrabold">報價單</h1></div>
+                            <div className="flex items-center gap-3">
+                                <button onClick={() => setStep(2)} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors bg-slate-800 px-4 py-2 rounded-lg shadow border border-slate-700 hover:bg-slate-700"><ArrowLeft size={18} /> 返回修改</button>
+                                <button onClick={handlePrint} className="flex items-center gap-2 bg-slate-700 text-white px-4 py-2 rounded-lg hover:bg-slate-600 shadow border border-slate-600 transition-all font-bold"><Printer size={18} /> 下載 PDF</button>
                             </div>
-                            {/* ... 此處省略其餘報價單 HTML 與 <table> 邏輯，皆已確保對接 getProductPrice ... */}
-                            {/* 最終確保圖片在 Table 內路徑正確 */}
-                            <table className="w-full mb-8 border-collapse">
-                                <thead>
-                                    <tr className="bg-slate-800 text-white text-sm"><th className="py-3 px-4 text-left">項目說明</th><th className="py-3 px-4 text-center">品牌</th><th className="py-3 px-4 text-center">單價</th><th className="py-3 px-4 text-center">數量</th><th className="py-3 px-4 text-right">金額</th></tr>
-                                </thead>
-                                <tbody>
-                                    {products.filter(p => cart[p.id] > 0).map(product => (
-                                        <tr key={product.id} className="border-b border-slate-100">
-                                            <td className="py-4 px-4 font-bold">{product.name}</td>
-                                            <td className="py-4 px-4 text-center">
-                                                <img src={product.logoImg} alt="logo" className="h-8 w-auto mx-auto" />
-                                            </td>
-                                            <td className="py-4 px-4 text-center">{formatPrice(getProductPrice(product, cart[product.id]))}</td>
-                                            <td className="py-4 px-4 text-center">{cart[product.id]}</td>
-                                            <td className="py-4 px-4 text-right">{formatPrice(getProductPrice(product, cart[product.id]) * cart[product.id])}</td>
+                            <button onClick={handleConfirmOrder} className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-2 rounded-lg hover:shadow-lg hover:scale-105 transition-all font-bold animate-pulse hover:animate-none">
+                                {isSubmitting ? <Loader2 className="animate-spin" size={18}/> : <Send size={18} />} 確認訂購
+                            </button>
+                        </div>
+
+                        {showContactModal && (
+                            <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                                <div className="bg-slate-900 border border-slate-700 rounded-2xl p-8 max-w-md w-full shadow-2xl relative animate-in fade-in zoom-in duration-300">
+                                    <button onClick={() => setShowContactModal(false)} className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"><X size={24} /></button>
+                                    <div className="text-center mb-6">
+                                        <div className="bg-green-500/20 p-4 rounded-full inline-flex mb-4"><Stamp size={40} className="text-green-400" /></div>
+                                        <h3 className="text-2xl font-bold text-white mb-2">感謝您的訂購！</h3>
+                                        <p className="text-slate-400 text-lg">請將報價單<span className="text-cyan-400 font-bold mx-1">用印後</span><br/>透過以下方式回傳給真人客服</p>
+                                    </div>
+                                    <div className="space-y-4">
+                                        {currency === 'TWD' && (<a href="https://lin.ee/luo4Dgq" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3 bg-[#06c755] hover:bg-[#05b34c] text-white py-4 rounded-xl font-bold transition-transform hover:scale-105 shadow-lg"><MessageCircle size={24} /> 傳送至 LINE 客服</a>)}
+                                        {currency === 'HKD' && (<a href="https://wa.me/message/OOAOI3R5DAQVJ1" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#20bd5a] text-white py-4 rounded-xl font-bold transition-transform hover:scale-105 shadow-lg"><Phone size={24} /> 傳送至 WhatsApp</a>)}
+                                    </div>
+                                    <div className="mt-6 text-center text-xs text-slate-500">專人將於收到文件後協助您開通授權</div>
+                                </div>
+                            </div>
+                        )}
+                        
+                        <div className="max-w-[210mm] mx-auto bg-white shadow-2xl print:shadow-none min-h-[297mm] p-[15mm] relative text-slate-900 print:w-full rounded-sm mb-20 flex flex-col justify-between">
+                            <div>
+                                <div className="flex justify-between items-start border-b-2 border-slate-800 pb-6 mb-8">
+                                    <div className="flex flex-col justify-between h-full">
+                                        <div className="mb-4 -ml-1 select-none">
+                                            <div className="flex items-baseline gap-3">
+                                                <h1 className="text-4xl font-black text-slate-800 print:text-black tracking-tight" style={{ fontFamily: 'Arial Black, sans-serif' }}>Future Knowledge</h1>
+                                            </div>
+                                        </div>
+                                        <div className="text-sm text-slate-500 space-y-1 leading-relaxed">
+                                            <p className="font-bold text-slate-700">經典人文教育股份有限公司</p>
+                                            <p>統編：89187632</p>
+                                        </div>
+                                    </div>
+                                    <div className="text-right">
+                                        <h1 className="text-5xl font-extrabold text-slate-800 tracking-tight mb-2 print:text-black">報價單</h1>
+                                        <div className="space-y-1 mt-4">
+                                            <p className="text-slate-500 text-sm font-medium">報價單號：<span className="text-slate-800">{`QT-${generateOrderId()}`}</span></p>
+                                            <p className="text-slate-500 text-sm font-medium">開立日期：<span className="text-slate-800">{new Date().toLocaleDateString()}</span></p>
+                                            <p className="text-slate-500 text-sm font-medium">幣別：<span className="text-slate-800 font-bold">{currency}</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-12 mb-10">
+                                    <div>
+                                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 pb-1 border-b border-slate-100">客戶資訊 (Bill To)</h3>
+                                        <div className="space-y-2">
+                                            <p className="font-bold text-xl text-slate-800 print:text-black">{formData.title}</p>
+                                            <p className="text-slate-600">聯絡人：{formData.name}</p>
+                                            <p className="text-slate-600">Email：{formData.email}</p>
+                                            <p className="text-slate-600">統編：{formData.taxId}</p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 pb-1 border-b border-slate-100">專案詳情 (Details)</h3>
+                                        <div className="space-y-3 text-sm">
+                                            <div className="flex justify-between"><span className="text-slate-500">期望啟用日：</span><span className="font-medium text-slate-800">{formData.date}</span></div>
+                                            <div className="flex flex-col text-right">
+                                                <p className="font-medium text-slate-800">有效期限：報價後 14 天內有效</p>
+                                                <p className="text-xs text-rose-600 font-bold mt-1 leading-tight">報價單需與我們真人客戶做最後確認並用印後才開始生效</p>
+                                            </div>
+                                            {referralCode && (
+                                                <div className="flex justify-between bg-blue-50 p-2 rounded text-blue-800 print:text-black print:bg-slate-100">
+                                                    <span className="flex items-center gap-1 font-medium"><Tag size={14} /> 推薦代碼：</span>
+                                                    <span className="font-bold">{referralCode}</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <table className="w-full mb-8 border-collapse">
+                                    <thead>
+                                        <tr className="bg-slate-800 text-white text-sm uppercase tracking-wider print:bg-slate-900 print:text-white">
+                                            <th className="py-3 px-4 text-left first:rounded-tl-md">項目說明</th>
+                                            <th className="py-3 px-4 text-center w-32">品牌</th>
+                                            <th className="py-3 px-4 text-center w-28">單價</th>
+                                            <th className="py-3 px-4 text-center w-20">數量</th>
+                                            <th className="py-3 px-4 text-right last:rounded-tr-md w-36">金額</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                            <div className="text-right text-2xl font-black mt-8">總計 Total: {formatPrice(totals.total)}</div>
+                                    </thead>
+                                    <tbody className="text-sm">
+                                        {products.filter(p => cart[p.id] > 0).map((product, idx) => {
+                                            const qty = cart[product.id];
+                                            const up = getProductPrice(product, qty);
+                                            return (
+                                                <tr key={product.id} className={`border-b border-slate-100 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}`}>
+                                                    <td className="py-4 px-4">
+                                                        <div className="font-bold text-slate-800 text-base print:text-black">{product.name}</div>
+                                                        <div className="text-xs text-slate-500">{product.desc}</div>
+                                                        <div className="text-[10px] text-slate-400">技術來源：{product.country}</div>
+                                                    </td>
+                                                    <td className="py-4 px-4 text-center">
+                                                        <div className="inline-flex items-center justify-center h-[40px] w-[100px] bg-white border border-slate-200 rounded-md">
+                                                            <img src={product.logoImg} alt="brand" className="h-8 w-auto max-w-[90px] object-contain" />
+                                                        </div>
+                                                    </td>
+                                                    <td className="py-4 px-4 text-center">{formatPrice(up)}</td>
+                                                    <td className="py-4 px-4 text-center font-bold">{qty}</td>
+                                                    <td className="py-4 px-4 text-right font-bold">{formatPrice(up * qty)}</td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+
+                                <div className="flex justify-end mb-12">
+                                    <div className="w-96 space-y-3">
+                                        <div className="flex justify-between text-slate-600 text-sm font-medium px-2"><span>小計 Subtotal</span><span>{formatPrice(totals.subtotal)}</span></div>
+                                        {totals.discount > 0 && (
+                                            <div className="flex justify-between text-green-700 text-sm font-bold bg-green-50 py-2 px-3 rounded border border-green-100 print:text-black">
+                                                <span>折扣 Discount</span><span>-{formatPrice(totals.discount)}</span>
+                                            </div>
+                                        )}
+                                        <div className="flex justify-end items-baseline gap-4 pt-4 border-t-2 border-slate-800 mt-4 px-2">
+                                            <span className="text-xl font-bold">總計 Total:</span>
+                                            <span className="text-4xl font-extrabold tracking-tight">{formatPrice(totals.total)}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-12 border-t border-slate-200 pt-8 print:break-inside-avoid">
+                                    <div>
+                                        <h4 className="font-bold text-sm text-slate-800 mb-3 uppercase tracking-wider">備註事項 (Notes)</h4>
+                                        <ul className="text-xs text-slate-600 space-y-2 list-disc list-inside bg-slate-50 p-4 rounded-lg border border-slate-100 print:bg-white">
+                                            {formData.note && <li>客戶備註：{formData.note}</li>}
+                                            {totals.appliedRule && <li className="text-green-700 font-bold">{totals.appliedRule}</li>}
+                                            <li className="text-red-600 font-bold text-sm mt-2">匯款請在備註欄上填寫貴校大名以利對帳 謝謝</li>
+                                            {currency === 'TWD' ? (
+                                                <>
+                                                    <li className="font-bold text-slate-800 mt-2">經典人文教育股份有限公司</li>
+                                                    <li>013 國泰銀行 市政分行</li>
+                                                    <li>帳號：234035015109</li>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <li className="font-bold text-slate-800 mt-2">Airwallex / DBS Bank (Hong Kong)</li>
+                                                    <li>Account No: 7950144805</li>
+                                                    <li>SWIFT: DHBKHKHH</li>
+                                                </>
+                                            )}
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-sm text-slate-800 mb-3 uppercase tracking-wider">簽署確認 (Signature)</h4>
+                                        <div className="h-32 border-2 border-dashed border-slate-300 rounded-lg bg-slate-50/50 flex items-end justify-center pb-4 print:bg-white print:border-slate-400">
+                                            <span className="text-xs text-slate-400">請在此處用印或簽名回傳</span>
+                                        </div>
+                                        <p className="text-[10px] text-slate-400 mt-3 text-center">本報價單內容具商業機密，請勿外流。</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="absolute bottom-0 left-0 right-0 h-3 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 print:block"></div>
                         </div>
                     </div>
                 );
