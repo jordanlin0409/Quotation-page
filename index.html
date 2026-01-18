@@ -29,6 +29,15 @@
             .print\:break-inside-avoid { break-inside: avoid; }
             .print\:text-black { color: black !important; }
         }
+        
+        /* 增加底部欄位的動畫效果 */
+        .bottom-panel-enter {
+            transform: translateY(100%);
+        }
+        .bottom-panel-enter-active {
+            transform: translateY(0);
+            transition: transform 300ms ease-out;
+        }
     </style>
 
     <script type="importmap">
@@ -55,7 +64,7 @@
             Stamp, KeyRound, Flag, Rocket, AlertCircle, ExternalLink, Send,
             X, Coins, ArrowRightCircle, ShieldCheck, Info, Loader2, Gift,
             PenTool, Video, FileText as NoteIcon, FileSignature, ChevronDown,
-            ChevronUp, Percent, AlertTriangle, TrendingUp, Megaphone, Award, Trash2
+            ChevronUp, Percent, AlertTriangle, TrendingUp, Megaphone, Trash2, Award
         } from 'lucide-react';
 
         const QuotationSystem = () => {
@@ -82,13 +91,14 @@
             const STATEMENT_LINK = "https://drive.google.com/file/d/1FilXl5as_biAy8Y4swmqW9SLNpD0Idc0/view?usp=sharing";
             const AGENCY_LINK = "https://65cba177-0604-4c48-be0d-e242b10e175a.filesusr.com/ugd/f58c1e_84d0ea46e14544e887cccdf5218eda7a.pdf";
 
+            // 優惠級距定義
             const discountTiers = [
                 { qty: 3, sweet: 300 },
                 { qty: 5, sweet: 700 },
                 { qty: 10, sweet: 2000 },
                 { qty: 20, sweet: 5000 },
                 { qty: 30, sweet: 10000 },
-                { qty: 40, sweet: 10000, gift: true },
+                { qty: 40, sweet: 10000, gift: true }
             ];
 
             const generateOrderId = () => {
@@ -180,61 +190,118 @@
             // 商品資料庫 (Kami 已移除)
             const allProducts = [
                 { 
-                    id: 'edcafe_pro', name: 'Edcafe AI Pro 入門版', price: 3300, priceHKD: 750,
+                    id: 'edcafe_pro', 
+                    name: 'Edcafe AI Pro 入門版', 
+                    price: 3300, 
+                    priceHKD: 750,
                     desc: '最簡易操作教育版 ChatGPT - 課前、課中、課後一站式解決',
                     subDesc: '個人化學習Chatbot，測驗，中英文批改，唯一軟體教師可監控，視覺化數據分析',
-                    category: 'edcafe', section: 'hero', brandColor: 'bg-white', logoImg: 'images/edcafe-logo.png',
-                    country: '新加坡 🇸🇬 / 台灣獨家代理', badge: '年銷3000萬',
-                    hasTutorial: true, hasNotion: true,
+                    category: 'edcafe', 
+                    section: 'hero', 
+                    brandColor: 'bg-white', 
+                    logoImg: 'images/edcafe-logo.png',
+                    country: '新加坡 🇸🇬 / 台灣獨家代理', 
+                    badge: '年銷3000萬',
+                    hasTutorial: true, 
+                    hasNotion: true,
                     videoUrl: 'https://youtu.be/5UBQLFchuYA?si=iwNkISOAWIND-ueS',
                     notionUrl: 'https://www.notion.so/azt156/20251129-ChatGPT-Edcafe-AI-2b99ae758af38069a431d5e3cbae6039?source=copy_link',
                     details: ['全功能解鎖', '每月提供 1000 次 AI 生成', '測驗產生器', '聊天機器人產生器', '作業評分助手', '200 名參與者', '20 個客製化聊天機器人', '20 個作業評分助手']
                 },
                 { 
-                    id: 'edcafe_premium', name: 'Edcafe AI Premium 進階版', price: 6500, priceHKD: 1400,
+                    id: 'edcafe_premium', 
+                    name: 'Edcafe AI Premium 進階版', 
+                    price: 6500, 
+                    priceHKD: 1400,
                     desc: '最簡易操作教育版 ChatGPT (解鎖無限額度) - 課前、課中、課後一站式解決',
                     subDesc: '個人化學習Chatbot，測驗，中英文批改，唯一軟體教師可監控，視覺化數據分析',
-                    category: 'edcafe', section: 'hero', brandColor: 'bg-white', logoImg: 'images/edcafe-logo.png',
-                    country: '新加坡 🇸🇬 / 台灣獨家代理', badge: '促銷價',
-                    hasTutorial: true, hasNotion: true,
+                    category: 'edcafe', 
+                    section: 'hero', 
+                    brandColor: 'bg-white', 
+                    logoImg: 'images/edcafe-logo.png',
+                    country: '新加坡 🇸🇬 / 台灣獨家代理', 
+                    badge: '促銷價',
+                    hasTutorial: true, 
+                    hasNotion: true,
                     videoUrl: 'https://youtu.be/5UBQLFchuYA?si=iwNkISOAWIND-ueS',
                     notionUrl: 'https://www.notion.so/azt156/20251129-ChatGPT-Edcafe-AI-2b99ae758af38069a431d5e3cbae6039?source=copy_link',
                     details: ['全功能解鎖', '無限次 AI 生成', '測驗產生器', '聊天機器人產生器', '作業評分器', '不限參與人數', '無限客製化聊天機器人', '無限作業評分助手']
                 },
                 { 
-                    id: 'kahoot', name: 'Kahoot EDU Standard 教師版', price: 4500, 
-                    desc: '全球最受歡迎的遊戲化學習平台', subDesc: '遊戲化學習、即時互動、支援多載具',
-                    category: 'other', section: 'standard', brandColor: 'bg-white', logoImg: 'images/kahoot-logo.png', country: '挪威 🇳🇴',
-                    hasTutorial: true, videoUrl: 'https://youtu.be/7ndLUhJlsBU?si=XLGih3Q9jg0PVF_6',
+                    id: 'kahoot', 
+                    name: 'Kahoot EDU Standard 教師版', 
+                    price: 4500, 
+                    desc: '全球最受歡迎的遊戲化學習平台', 
+                    subDesc: '遊戲化學習、即時互動、支援多載具',
+                    category: 'other', 
+                    section: 'standard', 
+                    brandColor: 'bg-white', 
+                    logoImg: 'images/kahoot-logo.png', 
+                    country: '挪威 🇳🇴',
+                    hasTutorial: true, 
+                    videoUrl: 'https://youtu.be/7ndLUhJlsBU?si=XLGih3Q9jg0PVF_6',
                     details: ['適合所有教師與學生', 'AI Kahoot! Generator 一鍵產生講義', '匯入並同步 Google 與 Microsoft Slides', '多種互動模式', 'Word clouds, polls', '100 位學生 pass', '強化課堂互動']
                 },
                 { 
-                    id: 'padlet', name: 'Padlet 學校版', price: 3000, 
+                    id: 'padlet', 
+                    name: 'Padlet 學校版', 
+                    price: 3000, 
                     desc: '全球最受歡迎創意協作數位布告欄，擁有豐富版型',
-                    category: 'other', section: 'standard', brandColor: 'bg-white', logoImg: 'images/padlet-logo.png', country: '美國 🇺🇸',
-                    minQty: 10, hasTutorial: true, videoUrl: 'https://youtube.com/playlist?list=PLU-8o76TOvQXBLq544ntgx1pimWwfiuSS&si=tqDRR6F8gxmSFxZb',
+                    category: 'other', 
+                    section: 'standard', 
+                    brandColor: 'bg-white', 
+                    logoImg: 'images/padlet-logo.png', 
+                    country: '美國 🇺🇸',
+                    minQty: 10, 
+                    hasTutorial: true, 
+                    videoUrl: 'https://youtube.com/playlist?list=PLU-8o76TOvQXBLq544ntgx1pimWwfiuSS&si=tqDRR6F8gxmSFxZb',
                     details: ['無限個 Padlets', '1GB 檔案上傳', '無限學生', '30 分鐘影片錄製', 'API 存取權限', '基於角色的權限管理', '使用者管理', '分析控制面板', '內容安全功能', 'LMS 整合', 'SSO 支援']
                 },
                 { 
-                    id: 'wordwall_std', name: 'WordWall Standard 標準版', price: 1600, 
-                    desc: '輕鬆建立互動遊戲與測驗', subDesc: '多元題型、自由共享',
-                    category: 'other', section: 'standard', brandColor: 'bg-white', logoImg: 'images/wordwall-logo.png', country: '英國 🇬🇧',
-                    hasTutorial: true, videoUrl: 'https://youtube.com/playlist?list=PLU-8o76TOvQX7dKPKPDDDTEiVqaLRfOgs&si=yTUE9EFc5UkEJvCq',
+                    id: 'wordwall_std', 
+                    name: 'WordWall Standard 標準版', 
+                    price: 1600, 
+                    desc: '輕鬆建立互動遊戲與測驗', 
+                    subDesc: '多元題型、自由共享',
+                    category: 'other', 
+                    section: 'standard', 
+                    brandColor: 'bg-white', 
+                    logoImg: 'images/wordwall-logo.png', 
+                    country: '英國 🇬🇧',
+                    hasTutorial: true, 
+                    videoUrl: 'https://youtube.com/playlist?list=PLU-8o76TOvQX7dKPKPDDDTEiVqaLRfOgs&si=yTUE9EFc5UkEJvCq',
                     details: ['創建與編輯 無限活動', '編輯活動選項', '無限制社區搜尋', '列印活動', 'AI 內容產生器', '12 種標準範本']
                 },
                 { 
-                    id: 'wordwall_pro', name: 'WordWall Pro 專業版', price: 2500, 
-                    desc: '更多樣板、無限制建立與列印功能', subDesc: '多元題型、自由共享',
-                    category: 'other', section: 'standard', brandColor: 'bg-white', logoImg: 'images/wordwall-logo.png', country: '英國 🇬🇧',
-                    hasTutorial: true, videoUrl: 'https://youtube.com/playlist?list=PLU-8o76TOvQX7dKPKPDDDTEiVqaLRfOgs&si=yTUE9EFc5UkEJvCq',
+                    id: 'wordwall_pro', 
+                    name: 'WordWall Pro 專業版', 
+                    price: 2500, 
+                    desc: '更多樣板、無限制建立與列印功能', 
+                    subDesc: '多元題型、自由共享',
+                    category: 'other', 
+                    section: 'standard', 
+                    brandColor: 'bg-white', 
+                    logoImg: 'images/wordwall-logo.png', 
+                    country: '英國 🇬🇧',
+                    hasTutorial: true, 
+                    videoUrl: 'https://youtube.com/playlist?list=PLU-8o76TOvQX7dKPKPDDDTEiVqaLRfOgs&si=yTUE9EFc5UkEJvCq',
                     details: ['包含所有標準版功能', '22 種專業範本', '搶先體驗新範本', 'AI 內容產生器', '列印活動', '無限活動', '無限制社區搜尋']
                 },
                 { 
-                    id: 'gemini_pro', name: 'Google AI pro for Education', price: 8500, priceHKD: 2000, 
-                    desc: 'Gemini AI Pro + NotebookLM AI Pro', subDesc: 'Gemini in workspace',
-                    category: 'other', section: 'standard', brandColor: 'bg-white', logoImg: 'images/gemini-logo.png', country: '美國 🇺🇸',
-                    hasTutorial: true, videoUrl: 'https://youtu.be/2fTqduml_CY?si=HuF6qDplNq0yQFSf',
-                    details: ['AI 文本生成加值功能', '可與 Edcafe 系統整合', '提升教材產出效率與批改品質']
+                    id: 'gemini_pro', 
+                    name: 'Google AI pro for Education', 
+                    price: 8500, 
+                    priceHKD: 2000, 
+                    desc: 'Gemini AI Pro + NotebookLM AI Pro', 
+                    subDesc: 'Gemini in workspace',
+                    category: 'other', 
+                    section: 'standard', 
+                    brandColor: 'bg-white', 
+                    logoImg: 'images/gemini-logo.png', 
+                    country: '美國 🇺🇸',
+                    hasTutorial: true, 
+                    videoUrl: 'https://youtu.be/2fTqduml_CY?si=HuF6qDplNq0yQFSf',
+                    details: ['AI 文本生成加值功能', '可與 Edcafe 系統整合', '適合進階教師與創作者', '提升教材產出效率與批改品質']
                 }
             ];
 
@@ -322,6 +389,11 @@
                 setShowContactModal(true);
             };
 
+            const openDetails = (product, e) => {
+                e.stopPropagation();
+                setActiveDetailProduct(product);
+            };
+
             const BrandBadge = ({ text, logoImg }) => (
                 <div className="px-4 py-2 rounded-lg shadow-sm inline-flex items-center justify-center min-w-[140px] h-[60px] bg-white border border-slate-200/50 transition-transform hover:scale-105">
                     <img src={logoImg} alt={text} className="h-10 w-auto max-w-[120px] object-contain" />
@@ -336,30 +408,55 @@
                 </div>
             );
 
+            const SocialButton = ({ type, href, label }) => {
+                const styles = {
+                    line: "bg-[#06c755] hover:bg-[#05b34c]",
+                    whatsapp: "bg-[#25D366] hover:bg-[#20bd5a]"
+                };
+                return (
+                    <a href={href} target="_blank" rel="noopener noreferrer" className={`${styles[type]} text-white px-3 py-1.5 rounded-full transition-all hover:scale-105 hover:shadow-[0_0_15px_rgba(37,211,102,0.5)] flex items-center gap-2 shadow-lg border border-white/10`} >
+                        {type === 'line' ? <MessageCircle size={16} fill="white" /> : <Phone size={16} fill="white" />}
+                        <span className="text-xs font-bold">{label}</span>
+                    </a>
+                );
+            };
+
             const Header = () => (
                 <header className="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800 shadow-lg print:hidden">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
                         <div className="flex items-center gap-6">
-                            <h1 className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 tracking-tight whitespace-nowrap">Future Knowledge</h1>
+                            <div className="flex flex-col justify-center select-none">
+                                <div className="flex items-baseline gap-3">
+                                    <h1 className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 tracking-tight whitespace-nowrap" style={{ fontFamily: 'Arial Black, sans-serif' }}>
+                                        Future Knowledge
+                                    </h1>
+                                </div>
+                            </div>
+                            <div className="hidden md:block h-8 w-px bg-slate-800/50 mx-2"></div>
                             <div className="hidden md:flex items-center gap-3">
-                                <a href={STATEMENT_LINK} target="_blank" className="text-[10px] font-bold text-yellow-400 hover:text-yellow-300 transition-colors bg-yellow-400/10 px-3 py-1.5 rounded-md border border-yellow-400/20 flex items-center gap-1">
-                                    <FileSignature size={14} /> 聲明切結書
+                                <a href={STATEMENT_LINK} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-bold text-yellow-400 hover:text-yellow-300 transition-colors bg-yellow-400/10 px-3 py-1.5 rounded-md border border-yellow-400/20">
+                                    <FileSignature size={16} /> 聲明切結書
                                 </a>
-                                <a href={AGENCY_LINK} target="_blank" className="text-[10px] font-bold text-cyan-400 hover:text-cyan-300 transition-colors bg-cyan-400/10 px-3 py-1.5 rounded-md border border-cyan-400/20 flex items-center gap-1">
-                                    <Award size={14} /> 獨家代理證明
+                                <a href={AGENCY_LINK} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-bold text-cyan-400 hover:text-cyan-300 transition-colors bg-cyan-400/10 px-3 py-1.5 rounded-md border border-cyan-400/20">
+                                    <Award size={16} /> 獨家代理證明
                                 </a>
                             </div>
                         </div>
+                        
                         <div className="flex items-center gap-6">
-                            <button onClick={() => setCurrency(c => c === 'TWD' ? 'HKD' : 'TWD')} className="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-cyan-400 text-[10px] font-bold px-3 py-1 rounded transition-colors uppercase">
-                                {currency}
-                            </button>
-                            <div className="flex items-center gap-2">
-                                {currency === 'TWD' ? (
-                                    <a href="https://lin.ee/luo4Dgq" target="_blank" className="bg-[#06c755] text-white px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 shadow-lg hover:scale-105 transition-all"><MessageCircle size={16}/> LINE</a>
-                                ) : (
-                                    <a href="https://wa.me/message/OOAOI3R5DAQVJ1" target="_blank" className="bg-[#25D366] text-white px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 shadow-lg hover:scale-105 transition-all"><Phone size={16}/> WhatsApp</a>
-                                )}
+                            <div className="flex flex-col items-end gap-1">
+                                <div className="flex items-center gap-2 mb-1">
+                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                                        <span className="w-2 h-2 rounded-full bg-green-500 animate-ping"></span> 真人客服
+                                    </span>
+                                    <button onClick={() => setCurrency(c => c === 'TWD' ? 'HKD' : 'TWD')} className="flex items-center gap-1 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-cyan-400 text-[10px] font-bold px-2 py-0.5 rounded transition-colors">
+                                        <Coins size={10} /> {currency}
+                                    </button>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    {currency === 'TWD' && <SocialButton type="line" href="https://lin.ee/luo4Dgq" label="LINE" />}
+                                    {currency === 'HKD' && <SocialButton type="whatsapp" href="https://wa.me/message/OOAOI3R5DAQVJ1" label="WhatsApp" />}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -411,8 +508,8 @@
                                     <Tag className="text-cyan-500" />
                                     <input 
                                         type="text" value={referralCode} onChange={(e) => setReferralCode(e.target.value)}
-                                        placeholder="輸入推薦代碼 (例如：Edcafe AI 甜心卡)" 
-                                        className="flex-1 bg-transparent border-none outline-none text-white font-medium placeholder:text-slate-500"
+                                        placeholder="例如：Edcafe AI 甜心卡" 
+                                        className="flex-1 bg-transparent border-none outline-none text-white font-medium"
                                     />
                                     <div className={`px-4 py-1.5 rounded-full text-xs font-bold ${referralCode ? 'bg-cyan-500 text-white' : 'bg-slate-800 text-slate-500'}`}>
                                         {referralCode ? '已套用' : '未套用'}
@@ -447,7 +544,7 @@
                                                     <p className="text-slate-400 text-xs mb-8 border-l-2 border-slate-700 pl-4 leading-relaxed">{product.subDesc}</p>
                                                     <div className="mt-auto">
                                                         <div className="text-[11px] text-cyan-400 font-mono mb-3 flex items-center gap-1 uppercase tracking-widest"><Flag size={12}/> 技術來源：{product.country}</div>
-                                                        <div className="flex items-end justify-between bg-slate-800/50 p-6 rounded-2xl border border-slate-700/50 backdrop-blur-sm text-slate-100">
+                                                        <div className="flex items-end justify-between bg-slate-800/50 p-6 rounded-2xl border border-slate-700/50 backdrop-blur-sm">
                                                             <div><div className="text-[10px] text-slate-500 uppercase tracking-widest mb-1">年度授權費用</div><div className="text-3xl font-bold text-white tracking-tight">{formatPrice(getProductPrice(product, cart[product.id]))}</div></div>
                                                             <QuantityControl productId={product.id} />
                                                         </div>
@@ -626,7 +723,7 @@
                                     <tbody className="text-sm">{products.filter(p => cart[p.id] > 0).map(p => (
                                         <tr key={p.id} className="border-b border-slate-100">
                                             <td className="py-5 px-2"><div className="font-bold text-base">{p.name}</div><div className="text-[10px] text-slate-500 mt-1">{p.desc}</div></td>
-                                            <td className="py-5 text-center text-slate-900 font-bold text-xs">{p.category === 'edcafe' ? 'Edcafe' : p.name.split(' ')[0]}</td>
+                                            <td className="py-5 text-center"><img src={p.logoImg} className="h-6 w-auto mx-auto" alt="logo" /></td>
                                             <td className="py-5 text-center font-mono">{formatPrice(getProductPrice(p, cart[p.id]))}</td>
                                             <td className="py-5 text-center font-bold text-lg">{cart[p.id]}</td>
                                             <td className="py-5 text-right px-2 font-mono font-bold">{formatPrice(getProductPrice(p, cart[p.id]) * cart[p.id])}</td>
@@ -654,7 +751,6 @@
             }
             return null;
         };
-
         const root = createRoot(document.getElementById('root'));
         root.render(<QuotationSystem />);
     </script>
