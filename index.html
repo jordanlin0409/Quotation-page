@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Future Knowledge - 自動報價系統</title>
     
-    <script>
-        window.process = { env: { NODE_ENV: 'production' } };
-    </script>
-
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -49,7 +45,7 @@
 
     <div id="root"></div>
 
-    <script type="text/babel" data-type="module" data-presets="react">
+    <script type="text/babel" data-type="module">
         import React, { useState, useEffect } from 'react';
         import { createRoot } from 'react-dom/client';
         import { 
@@ -99,28 +95,20 @@
 
             // --- 推薦人資料庫 ---
             const agentGroups = {
-                // 一般經銷商 (全品項折扣: Edcafe, Kahoot, Padlet, Wordwall, Google)
+                // 一般經銷商 (List 1)
                 groupA: [
-                    '勁園351#', '麗文$581', '台奇資訊3351', '仕揚科技2850', '國眾電腦%480', 
-                    '新叡文教-+12', '校園文化8103', '宥林數位4824', '奧斯丁國際6850', '旭恩科技5555', 
-                    '先志2258', '葉興資訊6841', '吉邦數位8750', '開駿實業6971', '智識家1573', 
-                    '首羿國際6840', '神奕教育5816', '極電資訊8710', '炳昌企業8842', '泰溥科技9852',
-                    // 新增名單
-                    '長峰資訊2616', '宏寶6842', '全華圖書3318', '宏菖文教4317', '潤采數位5988'
+                    '勁園351#', '麗文$581', '台奇資訊3351', '先鋒教育4710', '智域國際3510', 
+                    '仕揚科技2850', '國眾電腦%480', '新叡文教-+12', '校園文化8103', '宥林數位4824', 
+                    '奧斯丁國際6850', '旭恩科技5555', '先志2258', '葉興資訊6841', '吉邦數位8750', 
+                    '開駿實業6971', '智識家1573', '首羿國際6840', '神奕教育5816', '極電資訊8710', 
+                    '炳昌企業8842', '泰溥科技9852'
                 ],
-                // 特殊經銷商 1 (敦煌: 自定義價格)
-                groupC: ['敦煌書局9520'],
-                // 特殊經銷商 2 (承揚, 富動: 自定義價格 + 完整折扣)
+                // 特殊經銷商 1 (List 2: 承揚, 富動)
                 groupB: ['承揚5810', '富動科技1582'],
-                // 香港特殊經銷商
-                groupD: ['晶盛科技9977'],
-                
-                // --- 新增群組 ---
-                // 超級優惠群組 (鴻綸: 破盤價)
-                groupSuper: ['鴻綸科技867831'],
-                
-                // 限制折扣群組 (無 Padlet/Wordwall 折扣)
-                groupRestricted: ['Beesoft2637', '先鋒教育4710', '智域國際3510']
+                // 特殊經銷商 2 (List 3: 敦煌)
+                groupC: ['敦煌書局9520'],
+                // 香港特殊經銷商 (List 4: 晶盛)
+                groupD: ['晶盛科技9977']
             };
 
             const generateOrderId = () => {
@@ -137,8 +125,6 @@
             const getAgentGroup = (code) => {
                 const cleanCode = code.trim();
                 if (agentGroups.groupA.includes(cleanCode)) return 'A';
-                if (agentGroups.groupSuper.includes(cleanCode)) return 'Super';
-                if (agentGroups.groupRestricted.includes(cleanCode)) return 'Restricted';
                 if (agentGroups.groupB.includes(cleanCode)) return 'B';
                 if (agentGroups.groupC.includes(cleanCode)) return 'C';
                 if (agentGroups.groupD.includes(cleanCode)) return 'D';
@@ -149,69 +135,59 @@
             const getProductPrice = (product, qty = 1) => {
                 const group = getAgentGroup(referralCode);
 
-                // --- 1. 處理特殊經銷商 (Group D: 晶盛 - 香港) ---
+                // --- 1. 處理特殊經銷商 (Group D: 晶盛) ---
                 if (group === 'D') {
                     if (currency === 'HKD') {
                         if (product.id === 'edcafe_pro') return 525;
                         if (product.id === 'edcafe_premium') return 980;
+                        // 其他軟體沒有折扣 (走預設邏輯)
                     } else {
+                        // 台灣價格
                         if (product.id === 'edcafe_pro') return 2640;
                         if (product.id === 'edcafe_premium') return 5200;
+                        // 其他軟體沒有折扣 (走預設邏輯)
                     }
                 }
 
-                // --- 2. 處理超級經銷商 (Group Super: 鴻綸) ---
-                if (group === 'Super' && currency === 'TWD') {
-                     if (product.id === 'edcafe_pro') return 1690;
-                     if (product.id === 'edcafe_premium') return 3168;
-                     if (product.id === 'kahoot') return 2464;
-                     // 其他產品未指定，維持原價
-                }
-
-                // --- 3. 處理一般經銷商 (Group A, B, C, Restricted) ---
-                if (['A', 'B', 'C', 'Restricted'].includes(group) && currency === 'TWD') {
-                    
+                // --- 2. 處理台灣經銷商 (Group A, B, C) ---
+                if (['A', 'B', 'C'].includes(group)) {
                     // Edcafe 價格差異
                     if (product.id === 'edcafe_pro') {
                         if (group === 'C') return 2310; // 敦煌
                         if (group === 'B') return 2475; // 承揚/富動
-                        return 2640; // A & Restricted (長峰, 先鋒等)
+                        return 2640; // 勁園等一般經銷
                     }
                     if (product.id === 'edcafe_premium') {
                         if (group === 'C') return 4550; // 敦煌
                         if (group === 'B') return 4875; // 承揚/富動
-                        return 5200; // A & Restricted (長峰, 先鋒等)
+                        return 5200; // 勁園等一般經銷
                     }
 
-                    // Kahoot & Google 統一優惠 (所有經銷組別)
+                    // 其他軟體統一價格 (Group B & C 跟上面一樣 = 跟 Group A 一樣)
                     if (product.id === 'kahoot') return 3600;
+                    if (product.id === 'padlet') return 2500;
                     if (product.id === 'gemini_pro') return 7820;
 
-                    // Padlet & Wordwall 差異 (Restricted 組別無折扣)
-                    if (group !== 'Restricted') {
-                        if (product.id === 'padlet') return 2500;
-                        
-                        // WordWall 特殊階梯價 (經銷商專用表)
-                        if (product.id === 'wordwall_std') {
-                             if (qty >= 50) return 555;
-                             if (qty >= 20) return 680;
-                             if (qty >= 10) return 850;
-                             if (qty >= 5) return 1105;
-                             return 1360; // 1-4人
-                        }
-                        if (product.id === 'wordwall_pro') {
-                             if (qty >= 50) return 835;
-                             if (qty >= 20) return 1020;
-                             if (qty >= 10) return 1275;
-                             if (qty >= 5) return 1700;
-                             return 2125; // 1-4人
-                        }
+                    // WordWall 特殊階梯價 (經銷商專用表)
+                    if (product.id === 'wordwall_std') {
+                         if (qty >= 50) return 555;
+                         if (qty >= 20) return 680;
+                         if (qty >= 10) return 850;
+                         if (qty >= 5) return 1105;
+                         return 1360; // 1-4人
+                    }
+                    if (product.id === 'wordwall_pro') {
+                         if (qty >= 50) return 835;
+                         if (qty >= 20) return 1020;
+                         if (qty >= 10) return 1275;
+                         if (qty >= 5) return 1700;
+                         return 2125; // 1-4人
                     }
                 }
 
-                // --- 4. 預設邏輯 (無有效推薦碼 / Restricted組別的Padlet,Wordwall / 非折扣商品) ---
+                // --- 3. 預設邏輯 (無有效推薦碼 或 無特殊規則商品) ---
                 
-                // WordWall 預設階梯定價 (非經銷商價格 / 或經銷商走回原價)
+                // WordWall 預設階梯定價 (非經銷商價格)
                 if (product.id === 'wordwall_std' || product.id === 'wordwall_pro') {
                     const isPro = product.id === 'wordwall_pro';
                     let priceTable;
@@ -813,8 +789,8 @@
                                     </div>
                                 </div>
 
-                                {/* 修改處：只在非 HKD 且 (推薦碼為空 或 為甜心卡) 時顯示甜心卡進度 */}
-                                {currency !== 'HKD' && (!referralCode.trim() || referralCode.trim() === 'Edcafe 甜心卡') && <SweetheartProgress />}
+                                {/* 修改處：只在非 HKD 時顯示甜心卡進度 */}
+                                {currency !== 'HKD' && <SweetheartProgress />}
 
                                 {referralCode !== 'Edcafe 甜心卡' && currency !== 'HKD' && !getAgentGroup(referralCode) && (
                                     <div className="mt-3 flex justify-center animate-bounce">
@@ -1271,3 +1247,5 @@
     </script>
 </body>
 </html>
+
+
