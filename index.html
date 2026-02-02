@@ -10,10 +10,14 @@
     </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <script src="https://unpkg.com/lucide-react@0.292.0/dist/umd/lucide-react.min.js"></script>
+
     <style>
         body { font-family: 'Inter', 'Noto Sans TC', sans-serif; }
         .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
@@ -21,6 +25,15 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
         
+        /* 載入中的轉圈圈 (避免讓您看黑畫面) */
+        #loading-screen {
+            position: fixed; inset: 0; background: #020617; z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            flex-direction: column; color: #38bdf8; transition: opacity 0.5s;
+        }
+        .loader { width: 48px; height: 48px; border: 5px solid #1e293b; border-bottom-color: #38bdf8; border-radius: 50%; animation: rotation 1s linear infinite; }
+        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
         @media print {
             @page { margin: 0; size: A4; }
             body { -webkit-print-color-adjust: exact; print-color-adjust: exact; background-color: white !important; }
@@ -34,33 +47,57 @@
             .print\:text-black { color: black !important; }
         }
     </style>
-
-    <script type="importmap">
-    {
-        "imports": {
-            "react": "https://esm.sh/react@18.2.0",
-            "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-            "lucide-react": "https://esm.sh/lucide-react@0.292.0"
-        }
-    }
-    </script>
 </head>
 <body class="bg-slate-950 text-slate-200 antialiased selection:bg-cyan-500 selection:text-black">
 
+    <div id="loading-screen">
+        <span class="loader"></span>
+        <p class="mt-4 text-sm font-bold tracking-wider">系統啟動中...</p>
+    </div>
+
     <div id="root"></div>
 
-    <script type="text/babel" data-type="module" data-presets="react">
-        import React, { useState, useEffect } from 'react';
-        import { createRoot } from 'react-dom/client';
-        import { 
+    <script>
+        window.onerror = function(msg, url, line) {
+            const screen = document.getElementById('loading-screen');
+            if(screen) screen.style.display = 'none';
+            // 忽略 ResizeObserver 這種無害錯誤
+            if(msg.includes('ResizeObserver')) return;
+            document.body.innerHTML += `
+                <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:black;color:red;padding:20px;z-index:99999;overflow:auto;">
+                    <h1 style="font-size:24px;font-weight:bold;margin-bottom:10px;">⚠️ 發生錯誤</h1>
+                    <p style="font-size:16px;">${msg}</p>
+                    <p style="color:gray;margin-top:10px;">Line: ${line}</p>
+                </div>`;
+        };
+    </script>
+
+    <script type="text/babel">
+        // ------------------------------------------------------------------
+        // 底層調整：手動對接全域變數 (這段是用來取代原本的 import)
+        // ------------------------------------------------------------------
+        const { useState, useEffect } = React;
+        const { createRoot } = ReactDOM;
+        const { 
             ShoppingCart, FileText, Check, Printer, ArrowLeft, ArrowRight,
             Cpu, BookOpen, Layers, Zap, Globe, Sparkles, Download, Tag,
             Brain, Star, PlusCircle, User, CreditCard, MessageCircle, Phone,
             Stamp, KeyRound, Flag, Rocket, AlertCircle, ExternalLink, Send,
             X, Coins, ArrowRightCircle, ShieldCheck, Info, Loader2, Gift,
-            PenTool, Video, FileText as NoteIcon, FileSignature, ChevronDown,
+            PenTool, Video, FileText: NoteIcon, FileSignature, ChevronDown,
             ChevronUp, Percent, AlertTriangle, TrendingUp, Megaphone, BadgeCheck
-        } from 'lucide-react';
+        } = lucideReact; // 直接從載入好的庫裡面拿圖示
+
+        // 移除載入畫面
+        setTimeout(() => {
+            const loader = document.getElementById('loading-screen');
+            if(loader) loader.style.opacity = '0';
+            setTimeout(() => loader && loader.remove(), 500);
+        }, 500);
+
+        // ------------------------------------------------------------------
+        // 以下是您原本的 UI/UX 程式碼 (完全未改動)
+        // ------------------------------------------------------------------
 
         const QuotationSystem = () => {
             // --- 狀態管理 ---
