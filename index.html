@@ -8,6 +8,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
     
+    <script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+    
+    <script src="https://unpkg.com/lucide-react@0.292.0/dist/umd/lucide-react.min.js"></script>
+
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
@@ -53,6 +58,9 @@
             const screen = document.getElementById('loading-screen');
             if(screen) screen.style.display = 'none';
             if(msg.includes('ResizeObserver')) return;
+            // 忽略 Babel 的某些警告
+            if(msg.includes('babel')) return; 
+            
             document.body.innerHTML += `
                 <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:black;color:#ff5555;padding:40px;z-index:99999;overflow:auto;font-family:monospace;">
                     <h1 style="font-size:24px;margin-bottom:20px;">⚠️ 發生錯誤</h1>
@@ -63,26 +71,12 @@
         };
     </script>
 
-    <script type="module">
-        // 補丁：防止 React 18 檢查 process 環境變數時當機
+    <script type="text/babel" data-presets="env,react">
+        
+        // 確保環境變數存在 (React 18 需要)
         window.process = { env: { NODE_ENV: 'production' } };
 
-        import React from 'https://esm.sh/react@18.2.0';
-        import ReactDOM from 'https://esm.sh/react-dom@18.2.0/client';
-        import * as Lucide from 'https://esm.sh/lucide-react@0.292.0';
-
-        // 將庫掛載到全域，讓 Babel 腳本可以存取
-        window.React = React;
-        window.ReactDOM = ReactDOM;
-        window.lucideReact = Lucide;
-
-        // 發送事件通知主程式「庫已經準備好了」
-        window.dispatchEvent(new Event('libraries-ready'));
-    </script>
-
-    <script type="text/babel" data-presets="react">
-        
-        // 等待庫載入完成後再執行
+        // 等待頁面載入後執行
         function startApp() {
             // 移除載入畫面
             const loader = document.getElementById('loading-screen');
@@ -91,10 +85,11 @@
                 setTimeout(() => loader.remove(), 500);
             }
 
-            // 取得全域變數
+            // --- 關鍵修正：直接從全域變數取得 React, ReactDOM, Lucide ---
             const { useState, useEffect } = React;
             const { createRoot } = ReactDOM;
-            // 這裡不再使用 import，直接從已經載好的全域變數拿
+            
+            // Lucide Icons 在 UMD 模式下會掛載在 window.lucideReact
             const { 
                 ShoppingCart, FileText, Check, Printer, ArrowLeft, ArrowRight,
                 Cpu, BookOpen, Layers, Zap, Globe, Sparkles, Download, Tag,
@@ -106,7 +101,7 @@
             } = window.lucideReact;
 
             // =========================================================================
-            // 以下是您的完整業務邏輯，一行未改
+            // 以下是您的完整業務邏輯，保持不變
             // =========================================================================
 
             const QuotationSystem = () => {
@@ -809,9 +804,9 @@
                     </header>
                 );
 
-                // ==========================================
-                // Render Steps
-                // ==========================================
+                // =========================================================================
+                // Render Steps (UI Logic)
+                // =========================================================================
                 if (step === 1) {
                     const heroProducts = products.filter(p => p.section === 'hero');
                     const standardProducts = products.filter(p => p.section === 'standard');
@@ -1317,8 +1312,8 @@
             root.render(<QuotationSystem />);
         }
 
-        // 啟動程式 (會等庫都載好)
-        window.addEventListener('libraries-ready', startApp);
+        // 直接執行
+        startApp();
 
     </script>
 </body>
