@@ -13,18 +13,6 @@
     
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <script>
-        window.Babel = {
-            presets: [
-                ["env", { 
-                    modules: false, // 重要：告訴 Babel 不要把 import 變成 require
-                    targets: { browsers: ["> 1%", "last 2 versions", "not ie <= 8"] } 
-                }],
-                "react"
-            ]
-        };
-    </script>
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', 'Noto Sans TC', sans-serif; }
@@ -61,7 +49,7 @@
 
     <div id="root"></div>
 
-    <script type="text/babel" data-type="module">
+    <script type="text/babel" data-type="module" data-presets="react">
         import React, { useState, useEffect } from 'react';
         import { createRoot } from 'react-dom/client';
         import { 
