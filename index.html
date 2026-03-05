@@ -118,7 +118,15 @@
                 groupSuper: ['鴻綸科技867831'],
                 
                 // 限制折扣群組 (無 Padlet/Wordwall 折扣)
-                groupRestricted: ['Beesoft2637', '先鋒教育4710', '智域國際3510']
+                groupRestricted: ['Beesoft2637', '先鋒教育4710', '智域國際3510'],
+
+                // 新增：折 100 元群組
+                groupInfluencer: [
+                    '翻轉教育', 'Lin', '富動科技', 'Curt', 'Jector', '江老師', '陳世銘校長', 
+                    '龍騰', '盛源', '敦煌', '賴炳樹老師', '學習吧', '呂聰賢老師', '康軒', 
+                    '兔子老師', '陳勇延校長', '吳奇老師', '燕秋老師', '南一', '程瑋翔老師', 
+                    '茶米老師', '許嘉泰老師', 'Puti'
+                ]
             };
 
             const generateOrderId = () => {
@@ -134,6 +142,7 @@
             // 判斷推薦人組別
             const getAgentGroup = (code) => {
                 const cleanCode = code.trim();
+                if (agentGroups.groupInfluencer.includes(cleanCode)) return 'Influencer';
                 if (agentGroups.groupA.includes(cleanCode)) return 'A';
                 if (agentGroups.groupSuper.includes(cleanCode)) return 'Super';
                 if (agentGroups.groupRestricted.includes(cleanCode)) return 'Restricted';
@@ -166,19 +175,19 @@
                      // 其他產品未指定，維持原價
                 }
 
-                // --- 3. 處理一般經銷商 (Group A, B, C, Restricted) ---
-                if (['A', 'B', 'C', 'Restricted'].includes(group) && currency === 'TWD') {
+                // --- 3. 處理一般經銷商 (Group A, B, C, Restricted, Influencer) ---
+                if (['A', 'B', 'C', 'Restricted', 'Influencer'].includes(group) && currency === 'TWD') {
                     
                     // Edcafe 價格差異
                     if (product.id === 'edcafe_pro') {
                         if (group === 'C') return 2310; // 敦煌
                         if (group === 'B') return 2475; // 承揚/富動
-                        return 2640; // A & Restricted (長峰, 先鋒等)
+                        return 2640; // A, Restricted, Influencer
                     }
                     if (product.id === 'edcafe_premium') {
                         if (group === 'C') return 4550; // 敦煌
                         if (group === 'B') return 4875; // 承揚/富動
-                        return 5200; // A & Restricted (長峰, 先鋒等)
+                        return 5200; // A, Restricted, Influencer
                     }
 
                     // Kahoot & Google 統一優惠 (所有經銷組別)
@@ -413,7 +422,12 @@
                 let ruleDescription = '';
                 let nextTierPrompt = null; 
 
-                if (edcafeCount > 0) {
+                // 判斷是否為 Influencer 折扣碼
+                const group = getAgentGroup(referralCode);
+                if (group === 'Influencer' && currency !== 'HKD') {
+                    discount = 100;
+                    appliedRule = "推薦代碼優惠 (現折 $100)";
+                } else if (edcafeCount > 0) {
                     const applicableTier = [...discountTiers].reverse().find(tier => edcafeCount >= tier.qty);
                     
                     if (applicableTier) {
@@ -438,7 +452,8 @@
                     }
                 }
 
-                if (potentialDiscount > 0) {
+                // 甜心卡折抵邏輯 (僅限其他軟體)
+                if (group !== 'Influencer' && potentialDiscount > 0) {
                     if (otherSoftwareSubtotal > 0) {
                         if (potentialDiscount >= otherSoftwareSubtotal) {
                             discount = otherSoftwareSubtotal;
@@ -576,7 +591,6 @@
                 );
             };
 
-            // 新增：右側懸浮購物車
             const FloatingCart = () => {
                 if (totals.itemCount === 0) return null;
 
@@ -618,13 +632,9 @@
                 );
             };
 
-            // 甜心卡進度條組件
             const SweetheartProgress = () => {
                 const count = totals.edcafeCount;
                 const nextTier = discountTiers.find(t => t.qty > count);
-                const currentTier = [...discountTiers].reverse().find(t => t.qty <= count);
-                
-                // 計算進度百分比 (簡單呈現)
                 const maxQty = 40;
                 const percentage = Math.min(100, (count / maxQty) * 100);
 
@@ -636,7 +646,7 @@
                                 <span className="text-slate-400 text-xs">(目前已選 {count} 套)</span>
                             </div>
                             {nextTier ? (
-                                <span className="text-cyan-300 text-xs font-bold animate-pulse">
+                                <span className="text-cyan-300 text-xs font-bold">
                                     再買 {nextTier.qty - count} 套即可享有滿 {nextTier.qty} 套優惠！
                                 </span>
                             ) : (
@@ -651,7 +661,6 @@
                                 className="absolute top-0 left-0 h-full bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 transition-all duration-700 ease-out"
                                 style={{ width: `${percentage}%` }}
                             ></div>
-                            {/* 刻度標記 */}
                             {discountTiers.map(tier => (
                                 <div 
                                     key={tier.qty} 
@@ -675,7 +684,6 @@
                             ))}
                         </div>
                         
-                        {/* 改動：下方文字改為顯示折扣金額 */}
                         <div className="text-center mt-2 text-xs text-pink-400 font-bold">
                              目前折扣金額: {formatPrice(totals.discount)}
                         </div>
@@ -730,11 +738,9 @@
                                 </div>
                             </div>
                             
-                            {/* 分隔線 */}
                             <div className="hidden md:block h-8 w-px bg-slate-800/50 mx-2"></div>
                             
                             <div className="hidden md:flex items-center gap-3">
-                                {/* 修正 4: 新增官方網站連結 */}
                                 <a href="https://www.edcafechinese.com/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-white transition-colors px-2 py-1.5 mr-2">
                                     <Home size={18} /> 官方網站
                                 </a>
@@ -768,9 +774,6 @@
                 </header>
             );
 
-            // ==========================================
-            // Render Steps
-            // ==========================================
             if (step === 1) {
                 const heroProducts = products.filter(p => p.section === 'hero');
                 const standardProducts = products.filter(p => p.section === 'standard');
@@ -781,8 +784,6 @@
                         <div className="fixed bottom-0 right-0 w-[500px] h-[500px] bg-cyan-900/10 rounded-full blur-[100px] pointer-events-none"></div>
 
                         <Header />
-
-                        {/* 改動：插入懸浮購物車 */}
                         <FloatingCart />
                         
                         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 relative z-10">
@@ -790,7 +791,7 @@
                             <ProgressBar />
 
                             <div className="flex justify-center items-center gap-4 mb-8">
-                                <button onClick={() => setShowPriceMatchModal(true)} className="inline-flex items-center gap-2 text-rose-400 font-extrabold text-sm md:text-base bg-rose-950/40 px-4 py-2 rounded-full border border-rose-500/30 shadow-[0_0_20px_rgba(244,63,94,0.2)] animate-pulse cursor-pointer whitespace-nowrap hover:bg-rose-900/60 transition-colors">
+                                <button onClick={() => setShowPriceMatchModal(true)} className="inline-flex items-center gap-2 text-rose-400 font-extrabold text-sm md:text-base bg-rose-950/40 px-4 py-2 rounded-full border border-rose-500/30 shadow-[0_0_20px_rgba(244,63,94,0.2)] cursor-pointer whitespace-nowrap hover:bg-rose-900/60 transition-colors">
                                     <ShieldCheck size={18} /> 買貴退差價
                                 </button>
                                 <div className="bg-slate-900/80 backdrop-blur-md p-1.5 rounded-full border border-slate-700 shadow-xl inline-flex relative">
@@ -800,11 +801,11 @@
                                 </div>
                             </div>
 
-                            <div className="text-center mb-6 animate-fade-in-down">
+                            <div className="text-center mb-6">
                                 <div className="inline-block relative group">
                                     <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-full blur opacity-40 group-hover:opacity-75 transition duration-500"></div>
                                     <span className="relative flex items-center gap-2 px-8 py-3 rounded-full bg-slate-900 border border-slate-700 text-white font-black text-xl md:text-2xl shadow-2xl tracking-wide">
-                                        <Rocket className="text-yellow-400 w-6 h-6 animate-bounce" /> 只要有買 Edcafe，其他軟體我來 Pay！
+                                        只要有買 Edcafe，其他軟體我來 Pay！
                                     </span>
                                 </div>
                             </div>
@@ -812,22 +813,20 @@
                             <div className="max-w-xl mx-auto mb-16 relative">
                                 <div className="bg-slate-900/80 backdrop-blur-md p-1.5 rounded-full shadow-2xl border border-slate-700 flex items-center pl-6 pr-2 transition-all focus-within:ring-2 focus-within:ring-cyan-500/50 focus-within:border-cyan-500">
                                     <Tag className="text-cyan-500 w-5 h-5 mr-3" />
-                                    {/* 改動：修改 placeholder */}
                                     <input type="text" placeholder="輸入推薦代碼 (例如：Edcafe 甜心卡)" className="flex-1 outline-none text-white placeholder:text-slate-500 font-medium bg-transparent tracking-wide" value={referralCode} onChange={(e) => setReferralCode(e.target.value)} />
                                     <div className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-300 ${totals.discount > 0 || getAgentGroup(referralCode) ? 'bg-green-500/20 text-green-400 border border-green-500/30 shadow-[0_0_10px_rgba(74,222,128,0.2)]' : 'bg-slate-800 text-slate-500 border border-slate-700'}`}>
                                         {totals.discount > 0 || getAgentGroup(referralCode) ? '優惠/價格已套用' : '未套用折扣'}
                                     </div>
                                 </div>
 
-                                {/* 修改處：只在非 HKD 且 (推薦碼為空 或 為甜心卡) 時顯示甜心卡進度 */}
                                 {currency !== 'HKD' && (!referralCode.trim() || referralCode.trim() === 'Edcafe 甜心卡') && <SweetheartProgress />}
 
                                 {referralCode !== 'Edcafe 甜心卡' && currency !== 'HKD' && !getAgentGroup(referralCode) && (
-                                    <div className="mt-3 flex justify-center animate-bounce">
+                                    <div className="mt-3 flex justify-center">
                                         <button onClick={() => setReferralCode('Edcafe 甜心卡')} className="group relative inline-flex items-center justify-center overflow-hidden rounded-full p-0.5 font-bold focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 focus:ring-offset-slate-900">
-                                            <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
+                                            <span className="absolute inset-[-1000%] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
                                             <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-4 py-2 text-sm font-medium text-pink-300 backdrop-blur-3xl transition-all group-hover:bg-slate-900 group-hover:text-pink-200 gap-2">
-                                                <Gift size={16} className="animate-pulse" /> 點此快速套用「Edcafe 甜心卡」優惠
+                                                <Gift size={16} /> 點此快速套用「Edcafe 甜心卡」優惠
                                             </span>
                                         </button>
                                     </div>
@@ -857,7 +856,7 @@
                                                     <div className="text-slate-300">{tier.qty} 套以上</div>
                                                     <div className="text-pink-400 font-mono font-bold flex flex-col items-center justify-center">
                                                         <span>${tier.sweet.toLocaleString()}</span>
-                                                        {tier.gift && <span className="text-[10px] leading-tight mt-1 text-yellow-400 font-normal border border-yellow-400/30 rounded px-1 animate-pulse">+ 學校專屬研習</span>}
+                                                        {tier.gift && <span className="text-[10px] leading-tight mt-1 text-yellow-400 font-normal border border-yellow-400/30 rounded px-1">+ 學校專屬研習</span>}
                                                     </div>
                                                 </div>
                                             ))}
@@ -865,7 +864,7 @@
                                     </div>
                                 </div>
 
-                                {totals.appliedRule && <div className="text-center mt-3 text-sm text-green-400 font-bold animate-pulse flex items-center justify-center gap-2"><Sparkles size={14}/> {totals.appliedRule}</div>}
+                                {totals.appliedRule && <div className="text-center mt-3 text-sm text-green-400 font-bold flex items-center justify-center gap-2"><Sparkles size={14}/> {totals.appliedRule}</div>}
                                 {totals.discount === 0 && totals.edcafeCount > 0 && currency !== 'HKD' && !getAgentGroup(referralCode) && <div className="text-center mt-2 text-xs text-yellow-500 flex items-center justify-center gap-1"><AlertCircle size={12}/> 注意：折扣僅適用於「其他教學軟體」 (不含 Edcafe/Google AI)</div>}
                             </div>
 
@@ -884,7 +883,7 @@
                                                         
                                                         <div className="flex flex-col items-end gap-2 z-10">
                                                             <div className="flex flex-wrap justify-end items-center gap-2">
-                                                                {product.badge && <div className={`bg-gradient-to-r ${product.id === 'edcafe_pro' ? 'from-red-600 to-orange-600 border-red-500' : 'from-yellow-500 to-orange-400 border-yellow-300'} border text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-lg animate-pulse`}>{product.badge}</div>}
+                                                                {product.badge && <div className={`bg-gradient-to-r ${product.id === 'edcafe_pro' ? 'from-red-600 to-orange-600 border-red-500' : 'from-yellow-500 to-orange-400 border-yellow-300'} border text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-lg`}>{product.badge}</div>}
                                                                 <button onClick={(e) => openDetails(product, e)} className="bg-cyan-600 hover:bg-cyan-500 text-white shadow-[0_0_10px_rgba(6,182,212,0.6)] px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1"><Info size={14} fill="currentColor" className="text-white" /> 詳細資訊</button>
                                                             </div>
                                                             <div className="flex flex-wrap justify-end items-center gap-2 mt-1">
@@ -1017,7 +1016,7 @@
                                         </div>
                                         
                                         {totals.nextTierPrompt && (
-                                            <div className="hidden md:flex items-center gap-2 text-xs font-bold text-yellow-300 bg-yellow-400/10 px-3 py-1.5 rounded-full border border-yellow-400/30 animate-pulse">
+                                            <div className="hidden md:flex items-center gap-2 text-xs font-bold text-yellow-300 bg-yellow-400/10 px-3 py-1.5 rounded-full border border-yellow-400/30">
                                                 <TrendingUp size={14} /> {totals.nextTierPrompt}
                                             </div>
                                         )}
@@ -1093,7 +1092,7 @@
                                 <button onClick={() => setStep(2)} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors bg-slate-800 px-4 py-2 rounded-lg shadow border border-slate-700 hover:bg-slate-700"><ArrowLeft size={18} /> 返回修改</button>
                                 <button onClick={handlePrint} className="flex items-center gap-2 bg-slate-700 text-white px-4 py-2 rounded-lg hover:bg-slate-600 shadow border border-slate-600 transition-all font-bold"><Printer size={18} /> 下載 PDF</button>
                             </div>
-                            <button onClick={handleConfirmOrder} className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-2 rounded-lg hover:shadow-lg hover:scale-105 transition-all font-bold animate-pulse hover:animate-none">
+                            <button onClick={handleConfirmOrder} className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-2 rounded-lg hover:shadow-lg hover:scale-105 transition-all font-bold hover:animate-none">
                                 {isSubmitting ? <Loader2 className="animate-spin" size={18}/> : <Send size={18} />} 確認訂購
                             </button>
                         </div>
