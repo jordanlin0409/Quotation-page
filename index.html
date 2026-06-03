@@ -120,6 +120,9 @@
                 // 限制折扣群組 (無 Padlet/Wordwall 折扣)
                 groupRestricted: ['Beesoft2637', '先鋒教育4710', '智域國際3510'],
 
+                // 香港 Kahoot 專屬折扣名單
+                groupSenco: ['Senco-Masslink'],
+
                 // 新增：僅折扣 100 元（不享有經銷商特價，以原價計）的名單
                 groupInfluencer: [
                     '翻轉教育', 'Lin', '富動科技', 'Curt', 'Jector', '江老師', '陳世銘校長', 
@@ -150,12 +153,20 @@
                 if (agentGroups.groupB.includes(cleanCode)) return 'B';
                 if (agentGroups.groupC.includes(cleanCode)) return 'C';
                 if (agentGroups.groupD.includes(cleanCode)) return 'D';
+                if (agentGroups.groupSenco.includes(cleanCode)) return 'Senco';
                 return null;
             };
 
             // 取得產品當前價格 (核心定價邏輯)
             const getProductPrice = (product, qty = 1) => {
                 const group = getAgentGroup(referralCode);
+
+                // --- 處理 Senco-Masslink 香港 Kahoot 專屬階梯折扣 (超過25個給予20%折扣，其餘10%折扣) ---
+                if (group === 'Senco' && currency === 'HKD' && product.id === 'kahoot') {
+                    const normalHKD = product.priceHKD || Math.round(product.price * EXCHANGE_RATE);
+                    const discountFactor = qty > 25 ? 0.8 : 0.9;
+                    return Math.round(normalHKD * discountFactor);
+                }
 
                 // 若屬於 Influencer 名單，不套用任何經銷折扣，直接回傳預設價格
                 if (group === 'Influencer') {
@@ -364,7 +375,7 @@
                     id: 'gemini_pro', 
                     name: 'Google AI pro for Education',
                     price: 8500, 
-                    priceHKD: 2000, // 修改為 2000
+                    priceHKD: 2000, 
                     desc: 'Gemini AI Pro + NotebookLM AI Pro',
                     subDesc: 'Gemini in workspace',
                     category: 'other',
@@ -435,7 +446,16 @@
                     discount = 100;
                     appliedRule = "專屬代碼優惠 (現折 $100)";
                 } 
-                // --- 邏輯 B：處理甜心卡優惠 (原有的折抵其他軟體邏輯) ---
+                // --- 邏輯 B：處理 Senco-Masslink 專屬動態提示說明 ---
+                else if (group === 'Senco') {
+                    const kahootQty = cart['kahoot'] || 0;
+                    if (kahootQty > 25) {
+                        appliedRule = "Senco-Masslink 專屬大宗優惠 (香港 Kahoot 享額外 20% 折扣)";
+                    } else {
+                        appliedRule = "Senco-Masslink 專屬優惠 (香港 Kahoot 享額外 10% 折扣)";
+                    }
+                }
+                // --- 邏輯 C：處理甜心卡優惠 (原有的折抵其他軟體邏輯) ---
                 else if (edcafeCount > 0) {
                     const applicableTier = [...discountTiers].reverse().find(tier => edcafeCount >= tier.qty);
                     
@@ -449,6 +469,7 @@
                                 bonusText = " + 加贈學校專屬研習";
                             }
                             ruleDescription = `甜心卡滿 ${applicableTier.qty} 套優惠 (現折 $${potentialDiscount.toLocaleString()})${bonusText}`;
+                            appliedRule = `${ruleDescription}`;
                         }
                     }
 
@@ -462,7 +483,7 @@
                 }
 
                 // 甜心卡專用：判斷是否能折抵其他教學軟體
-                if (group !== 'Influencer' && potentialDiscount > 0) {
+                if (group !== 'Influencer' && group !== 'Senco' && potentialDiscount > 0) {
                     if (otherSoftwareSubtotal > 0) {
                         if (potentialDiscount >= otherSoftwareSubtotal) {
                             discount = otherSoftwareSubtotal;
