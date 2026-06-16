@@ -164,7 +164,7 @@
                 'HK': { code: 'HK', name: '香港', currency: 'HKD', lang: 'zh' },
                 'AU': { code: 'AU', name: 'Australia', currency: 'AUD', lang: 'en' },
                 'UK': { code: 'UK', name: 'United Kingdom', currency: 'GBP', lang: 'en' },
-                'MY': { code: 'MY', name: 'Malaysia', currency: 'USD', lang: 'en' }, // MY 改收美金
+                'MY': { code: 'MY', name: 'Malaysia', currency: 'USD', lang: 'en' },
                 'JP': { code: 'JP', name: 'Japan', currency: 'JPY', lang: 'ja' }
             };
 
@@ -321,7 +321,7 @@
                 if (currency === 'HKD') return `HK$ ${price.toLocaleString()}`;
                 if (currency === 'AUD') return `A$ ${price.toLocaleString()}`;
                 if (currency === 'GBP') return `£ ${price.toLocaleString()}`;
-                if (currency === 'USD') return `US$ ${price.toLocaleString()}`; // 馬來西亞的 USD
+                if (currency === 'USD') return `US$ ${price.toLocaleString()}`; 
                 if (currency === 'JPY') return `¥ ${price.toLocaleString()}`;
                 return `NT$ ${price.toLocaleString()}`;
             };
@@ -337,7 +337,7 @@
                     category: 'edcafe',
                     section: 'hero',
                     brandColor: 'bg-white',
-                    logoImg: 'edcafe-logo.png',
+                    logoImg: 'edcafe-logo.png', // 已修正為 edcafe-logo.png
                     country: t('新加坡 🇸🇬 / 台灣獨家代理', 'Singapore 🇸🇬', 'シンガポール 🇸🇬'),
                     badge: t('年銷3000萬', 'Best Seller', 'ベストセラー'),
                     hasTutorial: true,
@@ -358,7 +358,7 @@
                     category: 'edcafe',
                     section: 'hero',
                     brandColor: 'bg-white', 
-                    logoImg: 'edcafe-logo.png',
+                    logoImg: 'edcafe-logo.png', // 已修正為 edcafe-logo.png
                     country: t('新加坡 🇸🇬 / 台灣獨家代理', 'Singapore 🇸🇬', 'シンガポール 🇸🇬'),
                     badge: t('促銷價', 'Sale', 'セール'),
                     hasTutorial: true,
@@ -931,7 +931,7 @@
                             </h1>
                         </div>
 
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 z-10 max-w-3xl w-full">
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 z-10 max-w-3xl w-full pb-10">
                             {Object.entries(REGION_CONFIG).map(([code, config]) => (
                                 <button 
                                     key={code}
