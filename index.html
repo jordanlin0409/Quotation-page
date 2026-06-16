@@ -48,7 +48,6 @@
     <script type="text/babel" data-type="module" data-presets="react">
         import React, { useState, useEffect } from 'react';
         import { createRoot } from 'react-dom/client';
-        // 修正 3: 加入 Home 圖示
         import { 
             ShoppingCart, FileText, Check, Printer, ArrowLeft, ArrowRight,
             Cpu, BookOpen, Layers, Zap, Globe, Sparkles, Download, Tag,
@@ -62,7 +61,8 @@
 
         const QuotationSystem = () => {
             // --- 狀態管理 ---
-            const [step, setStep] = useState(1);
+            const [step, setStep] = useState(0); // 預設改成 0，先進入選擇國家畫面
+            const [region, setRegion] = useState(''); // 儲存選擇的國家縮寫
             const [referralCode, setReferralCode] = useState('');
             const [showContactModal, setShowContactModal] = useState(false);
             const [showPriceMatchModal, setShowPriceMatchModal] = useState(false);
@@ -79,6 +79,22 @@
                 date: new Date().toISOString().split('T')[0],
                 note: ''
             });
+
+            // --- 國家設定 ---
+            const REGION_CONFIG = {
+                'TW': { name: '台灣', currency: 'TWD', flag: '🇹🇼' },
+                'HK': { name: '香港', currency: 'HKD', flag: '🇭🇰' },
+                'AU': { name: '澳洲 / 紐西蘭', currency: 'AUD', flag: '🇦🇺' },
+                'UK': { name: '英國', currency: 'GBP', flag: '🇬🇧' },
+                'MY': { name: '馬來西亞', currency: 'MYR', flag: '🇲🇾' },
+                'JP': { name: '日本', currency: 'JPY', flag: '🇯🇵' }
+            };
+
+            const handleRegionSelect = (regionCode) => {
+                setRegion(regionCode);
+                setCurrency(REGION_CONFIG[regionCode].currency);
+                setStep(1); // 選完國家，進入報價單畫面
+            };
 
             const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwrz5nz9VtFN93rEHa5s2-biA4qQIVcx0kN5TDoPbPiwoDT8FAVu7632EASD9hV5E64iw/exec"; 
             const AIRWALLEX_LINK = ""; 
@@ -137,7 +153,8 @@
                 const yyyy = now.getFullYear();
                 const mm = String(now.getMonth() + 1).padStart(2, '0');
                 const dd = String(now.getDate()).padStart(2, '0');
-                return `${yyyy}${mm}${dd}XX`; 
+                const suffix = region ? `-${region}` : ''; 
+                return `${yyyy}${mm}${dd}XX${suffix}`; 
             };
 
             const EXCHANGE_RATE = 0.25;
@@ -145,7 +162,6 @@
             // 判斷推薦人組別
             const getAgentGroup = (code) => {
                 const cleanCode = code.trim();
-                // 優先判定 100 元折扣名單
                 if (agentGroups.groupInfluencer.includes(cleanCode)) return 'Influencer';
                 if (agentGroups.groupA.includes(cleanCode)) return 'A';
                 if (agentGroups.groupSuper.includes(cleanCode)) return 'Super';
@@ -157,22 +173,19 @@
                 return null;
             };
 
-            // 取得產品當前價格 (核心定價邏輯)
+            // 取得產品當前價格
             const getProductPrice = (product, qty = 1) => {
                 const group = getAgentGroup(referralCode);
 
-                // --- 處理 Senco-Masslink 香港 Kahoot 專屬階梯折扣 (超過25個給予20%折扣，其餘10%折扣) ---
                 if (group === 'Senco' && currency === 'HKD' && product.id === 'kahoot') {
                     const normalHKD = product.priceHKD || Math.round(product.price * EXCHANGE_RATE);
                     const discountFactor = qty > 25 ? 0.8 : 0.9;
                     return Math.round(normalHKD * discountFactor);
                 }
 
-                // 若屬於 Influencer 名單，不套用任何經銷折扣，直接回傳預設價格
                 if (group === 'Influencer') {
-                    // 跳過經銷價格判斷，直接走後方的預設邏輯
+                    // 跳過經銷價格判斷
                 } else {
-                    // --- 1. 處理特殊經銷商 (Group D: 晶盛 - 香港) ---
                     if (group === 'D') {
                         if (currency === 'HKD') {
                             if (product.id === 'edcafe_pro') return 525;
@@ -183,59 +196,48 @@
                         }
                     }
 
-                    // --- 2. 處理超級經銷商 (Group Super: 鴻綸) ---
                     if (group === 'Super' && currency === 'TWD') {
                          if (product.id === 'edcafe_pro') return 1690;
                          if (product.id === 'edcafe_premium') return 3168;
                          if (product.id === 'kahoot') return 2464;
-                         // 其他產品未指定，維持原價
                     }
 
-                    // --- 3. 處理一般經銷商 (Group A, B, C, Restricted) ---
                     if (['A', 'B', 'C', 'Restricted'].includes(group) && currency === 'TWD') {
-                        
-                        // Edcafe 價格差異
                         if (product.id === 'edcafe_pro') {
-                            if (group === 'C') return 2310; // 敦煌
-                            if (group === 'B') return 2475; // 承揚/富動
-                            return 2640; // A & Restricted (長峰, 先鋒等)
+                            if (group === 'C') return 2310; 
+                            if (group === 'B') return 2475; 
+                            return 2640; 
                         }
                         if (product.id === 'edcafe_premium') {
-                            if (group === 'C') return 4550; // 敦煌
-                            if (group === 'B') return 4875; // 承揚/富動
-                            return 5200; // A & Restricted (長峰, 先鋒等)
+                            if (group === 'C') return 4550; 
+                            if (group === 'B') return 4875; 
+                            return 5200; 
                         }
 
-                        // Kahoot & Google 統一優惠 (所有經銷組別)
                         if (product.id === 'kahoot') return 3600;
                         if (product.id === 'gemini_pro') return 7820;
 
-                        // Padlet & Wordwall 差異 (Restricted 組別無折扣)
                         if (group !== 'Restricted') {
                             if (product.id === 'padlet') return 2500;
                             
-                            // WordWall 特殊階梯價 (經銷商專用表)
                             if (product.id === 'wordwall_std') {
                                  if (qty >= 50) return 555;
                                  if (qty >= 20) return 680;
                                  if (qty >= 10) return 850;
                                  if (qty >= 5) return 1105;
-                                 return 1360; // 1-4人
+                                 return 1360; 
                             }
                             if (product.id === 'wordwall_pro') {
                                  if (qty >= 50) return 835;
                                  if (qty >= 20) return 1020;
                                  if (qty >= 10) return 1275;
                                  if (qty >= 5) return 1700;
-                                 return 2125; // 1-4人
+                                 return 2125; 
                             }
                         }
                     }
                 }
 
-                // --- 4. 預設邏輯 (無有效推薦碼 / Influencer / Restricted組別的Padlet,Wordwall / 非折扣商品) ---
-                
-                // WordWall 預設階梯定價 (非經銷商價格 / 或經銷商走回原價)
                 if (product.id === 'wordwall_std' || product.id === 'wordwall_pro') {
                     const isPro = product.id === 'wordwall_pro';
                     let priceTable;
@@ -265,13 +267,15 @@
             }
 
             const formatPrice = (price) => {
-                if (currency === 'HKD') {
-                    return `HK$ ${price.toLocaleString()}`;
-                }
+                if (currency === 'HKD') return `HK$ ${price.toLocaleString()}`;
+                if (currency === 'AUD') return `A$ ${price.toLocaleString()}`;
+                if (currency === 'GBP') return `£ ${price.toLocaleString()}`;
+                if (currency === 'MYR') return `RM ${price.toLocaleString()}`;
+                if (currency === 'JPY') return `¥ ${price.toLocaleString()}`;
                 return `NT$ ${price.toLocaleString()}`;
             };
 
-            // 商品資料庫 (已移除 Kami)
+            // 商品資料庫
             const allProducts = [
                 { 
                     id: 'edcafe_pro', 
@@ -344,7 +348,7 @@
                 { 
                     id: 'wordwall_std', 
                     name: 'WordWall Standard 標準版',
-                    price: 1600, // 初始顯示 1-4 組價格
+                    price: 1600, 
                     desc: '輕鬆建立互動遊戲與測驗',
                     subDesc: '多元題型、自由共享',
                     category: 'other',
@@ -359,7 +363,7 @@
                 { 
                     id: 'wordwall_pro', 
                     name: 'WordWall Pro 專業版',
-                    price: 2500, // 初始顯示 1-4 組價格
+                    price: 2500, 
                     desc: '更多樣板、無限制建立與列印功能',
                     subDesc: '多元題型、自由共享',
                     category: 'other',
@@ -441,12 +445,10 @@
 
                 const group = getAgentGroup(referralCode);
 
-                // --- 邏輯 A：處理 Influencer 折扣 100 元 ---
                 if (group === 'Influencer' && subtotal > 0) {
                     discount = 100;
                     appliedRule = "專屬代碼優惠 (現折 $100)";
                 } 
-                // --- 邏輯 B：處理 Senco-Masslink 專屬動態提示說明 ---
                 else if (group === 'Senco') {
                     const kahootQty = cart['kahoot'] || 0;
                     if (kahootQty > 25) {
@@ -455,7 +457,6 @@
                         appliedRule = "Senco-Masslink 專屬優惠 (香港 Kahoot 享額外 10% 折扣)";
                     }
                 }
-                // --- 邏輯 C：處理甜心卡優惠 (原有的折抵其他軟體邏輯) ---
                 else if (edcafeCount > 0) {
                     const applicableTier = [...discountTiers].reverse().find(tier => edcafeCount >= tier.qty);
                     
@@ -482,7 +483,6 @@
                     }
                 }
 
-                // 甜心卡專用：判斷是否能折抵其他教學軟體
                 if (group !== 'Influencer' && group !== 'Senco' && potentialDiscount > 0) {
                     if (otherSoftwareSubtotal > 0) {
                         if (potentialDiscount >= otherSoftwareSubtotal) {
@@ -532,7 +532,7 @@
                     const qty = cart[p.id];
                     if (qty > 0) {
                         const unitPrice = getProductPrice(p, qty);
-                        const itemTotalPrice = formatPrice(unitPrice * qty).replace(/HK\$ |NT\$ /g, '');
+                        const itemTotalPrice = formatPrice(unitPrice * qty).replace(/HK\$ |NT\$ |A\$ |£ |RM |¥ /g, '');
                             
                         itemsPayload.push({
                             name: `${p.name} x ${qty}`,
@@ -542,6 +542,8 @@
                 });
 
                 const orderPayload = {
+                    orderId: `QT-${generateOrderId()}`,
+                    region: region,
                     name: formData.name,
                     email: formData.email,
                     title: formData.title,
@@ -637,7 +639,7 @@
                                         <div className="text-xs text-slate-500">x {cart[p.id]}</div>
                                     </div>
                                     <div className="text-slate-200 font-mono">
-                                        {formatPrice(getProductPrice(p, cart[p.id]) * cart[p.id]).replace(/HK\$ |NT\$ /g, '')}
+                                        {formatPrice(getProductPrice(p, cart[p.id]) * cart[p.id]).replace(/HK\$ |NT\$ |A\$ |£ |RM |¥ /g, '')}
                                     </div>
                                 </div>
                             ))}
@@ -645,12 +647,12 @@
                         <div className="border-t border-slate-700 pt-3 space-y-2">
                              <div className="flex justify-between text-xs text-slate-400">
                                 <span>小計</span>
-                                <span>{formatPrice(totals.subtotal).replace(/HK\$ |NT\$ /g, '')}</span>
+                                <span>{formatPrice(totals.subtotal).replace(/HK\$ |NT\$ |A\$ |£ |RM |¥ /g, '')}</span>
                              </div>
                              {totals.discount > 0 && (
                                 <div className="flex justify-between text-xs text-green-400">
                                     <span>折扣</span>
-                                    <span>-{formatPrice(totals.discount).replace(/HK\$ |NT\$ /g, '')}</span>
+                                    <span>-{formatPrice(totals.discount).replace(/HK\$ |NT\$ |A\$ |£ |RM |¥ /g, '')}</span>
                                 </div>
                              )}
                              <div className="flex justify-between text-lg font-bold text-white pt-2 border-t border-slate-700/50">
@@ -792,19 +794,52 @@
                                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
                                         <span className="w-2 h-2 rounded-full bg-green-500 animate-ping"></span> 真人客服
                                     </span>
-                                    <button onClick={() => setCurrency(c => c === 'TWD' ? 'HKD' : 'TWD')} className="flex items-center gap-1 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-cyan-400 text-[10px] font-bold px-2 py-0.5 rounded transition-colors">
+                                    <div className="flex items-center gap-1 bg-slate-800 border border-slate-600 text-cyan-400 text-[10px] font-bold px-2 py-0.5 rounded transition-colors">
                                         <Coins size={10} /> {currency}
-                                    </button>
+                                    </div>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    {currency === 'TWD' && <SocialButton type="line" href="https://lin.ee/luo4Dgq" label="LINE" />}
-                                    {currency === 'HKD' && <SocialButton type="whatsapp" href="https://wa.me/message/OOAOI3R5DAQVJ1" label="WhatsApp" />}
+                                    {currency === 'HKD' ? (
+                                        <SocialButton type="whatsapp" href="https://wa.me/message/OOAOI3R5DAQVJ1" label="WhatsApp" />
+                                    ) : (
+                                        <SocialButton type="line" href="https://lin.ee/luo4Dgq" label="LINE" />
+                                    )}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </header>
             );
+
+            if (step === 0) {
+                return (
+                    <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 relative overflow-hidden font-sans">
+                        <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-cyan-900/20 to-transparent pointer-events-none"></div>
+                        
+                        <div className="z-10 text-center mb-12">
+                            <Globe className="w-16 h-16 text-cyan-400 mx-auto mb-6 animate-pulse" />
+                            <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 mb-4 tracking-tight" style={{ fontFamily: 'Arial Black, sans-serif' }}>
+                                Future Knowledge
+                            </h1>
+                            <p className="text-xl text-cyan-200 font-bold">請選擇您的所在地區</p>
+                        </div>
+
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 z-10 max-w-3xl w-full">
+                            {Object.entries(REGION_CONFIG).map(([code, config]) => (
+                                <button 
+                                    key={code}
+                                    onClick={() => handleRegionSelect(code)}
+                                    className="group bg-slate-900 border border-slate-700 hover:border-cyan-500 rounded-2xl p-6 transition-all duration-300 hover:shadow-[0_0_30px_rgba(6,182,212,0.3)] hover:-translate-y-1 flex flex-col items-center justify-center gap-3"
+                                >
+                                    <span className="text-4xl group-hover:scale-110 transition-transform">{config.flag}</span>
+                                    <span className="text-slate-300 font-bold text-lg group-hover:text-cyan-400">{config.name}</span>
+                                    <span className="text-slate-500 text-xs font-mono bg-slate-800 px-2 py-1 rounded">{config.currency}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                );
+            }
 
             if (step === 1) {
                 const heroProducts = products.filter(p => p.section === 'hero');
@@ -823,22 +858,18 @@
                             <ProgressBar />
 
                             <div className="flex justify-center items-center gap-4 mb-8">
-                                {/* 移除 animate-pulse */}
                                 <button onClick={() => setShowPriceMatchModal(true)} className="inline-flex items-center gap-2 text-rose-400 font-extrabold text-sm md:text-base bg-rose-950/40 px-4 py-2 rounded-full border border-rose-500/30 shadow-[0_0_20px_rgba(244,63,94,0.2)] cursor-pointer whitespace-nowrap hover:bg-rose-900/60 transition-colors">
                                     <ShieldCheck size={18} /> 買貴退差價
                                 </button>
-                                <div className="bg-slate-900/80 backdrop-blur-md p-1.5 rounded-full border border-slate-700 shadow-xl inline-flex relative">
-                                    <div className={`absolute top-1.5 bottom-1.5 w-[50%] bg-cyan-600 rounded-full transition-all duration-300 shadow-lg ${currency === 'HKD' ? 'left-[48%]' : 'left-1.5'}`}></div>
-                                    <button onClick={() => setCurrency('TWD')} className={`relative z-10 px-6 py-1.5 rounded-full text-sm font-bold transition-colors w-24 text-center ${currency === 'TWD' ? 'text-white' : 'text-slate-400 hover:text-white'}`}>TWD</button>
-                                    <button onClick={() => setCurrency('HKD')} className={`relative z-10 px-6 py-1.5 rounded-full text-sm font-bold transition-colors w-24 text-center ${currency === 'HKD' ? 'text-white' : 'text-slate-400 hover:text-white'}`}>HKD</button>
-                                </div>
+                                <button onClick={() => setStep(0)} className="bg-slate-900/80 backdrop-blur-md px-4 py-2 rounded-full border border-slate-700 shadow-xl inline-flex relative text-slate-300 hover:text-white transition-colors text-sm font-bold gap-2 items-center">
+                                    <Globe size={16}/> 重新選擇地區
+                                </button>
                             </div>
 
                             <div className="text-center mb-6 animate-fade-in-down">
                                 <div className="inline-block relative group">
                                     <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-full blur opacity-40 group-hover:opacity-75 transition duration-500"></div>
                                     <span className="relative flex items-center gap-2 px-8 py-3 rounded-full bg-slate-900 border border-slate-700 text-white font-black text-xl md:text-2xl shadow-2xl tracking-wide">
-                                        {/* 移除 Rocket */}
                                         只要有買 Edcafe，其他軟體我來 Pay！
                                     </span>
                                 </div>
@@ -857,7 +888,6 @@
 
                                 {referralCode !== 'Edcafe 甜心卡' && currency !== 'HKD' && !getAgentGroup(referralCode) && (
                                     <div className="mt-3 flex justify-center">
-                                        {/* 移除 animate-bounce */}
                                         <button onClick={() => setReferralCode('Edcafe 甜心卡')} className="group relative inline-flex items-center justify-center overflow-hidden rounded-full p-0.5 font-bold focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 focus:ring-offset-slate-900">
                                             <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
                                             <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-4 py-2 text-sm font-medium text-pink-300 backdrop-blur-3xl transition-all group-hover:bg-slate-900 group-hover:text-pink-200 gap-2">
@@ -1058,7 +1088,7 @@
 
                                         {totals.discount > 0 && !totals.nextTierPrompt && (
                                             <div className="hidden md:flex items-center gap-1 text-green-400 text-xs font-bold uppercase tracking-wider bg-green-900/20 px-3 py-1.5 rounded-full border border-green-500/20">
-                                                <Check size={12} /> 已套用折扣 (省下 {formatPrice(totals.discount).replace(/HK\$ |NT\$ /g, '')})
+                                                <Check size={12} /> 已套用折扣 (省下 {formatPrice(totals.discount).replace(/HK\$ |NT\$ |A\$ |£ |RM |¥ /g, '')})
                                             </div>
                                         )}
                                     </div>
