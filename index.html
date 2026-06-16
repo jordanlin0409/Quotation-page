@@ -133,7 +133,6 @@
         };
 
         const QuotationSystem = () => {
-            // --- 狀態管理 ---
             const [step, setStep] = useState(0); 
             const [region, setRegion] = useState(''); 
             const [referralCode, setReferralCode] = useState('');
@@ -149,7 +148,6 @@
                 date: new Date().toISOString().split('T')[0], note: ''
             });
 
-            // 核心分流判斷
             const isIntl = ['AU', 'UK', 'MY', 'JP'].includes(region);
 
             const t = (tw, en, jp) => {
@@ -158,7 +156,6 @@
                 return tw;
             };
 
-            // --- 國家設定 (改用真實國旗網址，解決 Windows emoji 支援問題) ---
             const REGION_CONFIG = {
                 'TW': { code: 'TW', name: '台灣', currency: 'TWD', lang: 'zh', flagUrl: 'https://flagcdn.com/w80/tw.png' },
                 'HK': { code: 'HK', name: '香港', currency: 'HKD', lang: 'zh', flagUrl: 'https://flagcdn.com/w80/hk.png' },
@@ -323,9 +320,6 @@
                 return `NT$ ${price.toLocaleString()}`;
             };
 
-            // 使用絕對路徑解決破圖問題
-            const BASE_URL = "https://jordanlin0409.github.io/Quotation-page";
-
             const allProducts = [
                 { 
                     id: 'edcafe_pro', 
@@ -337,7 +331,7 @@
                     category: 'edcafe',
                     section: 'hero',
                     brandColor: 'bg-white',
-                    logoImg: `${BASE_URL}/edcafe-logo.png`,
+                    logoImg: 'images/edcafe-logo.png',
                     country: t('新加坡 🇸🇬 / 台灣獨家代理', 'Singapore 🇸🇬', 'シンガポール 🇸🇬'),
                     badge: t('年銷3000萬', 'Best Seller', 'ベストセラー'),
                     hasTutorial: true,
@@ -358,7 +352,7 @@
                     category: 'edcafe',
                     section: 'hero',
                     brandColor: 'bg-white', 
-                    logoImg: `${BASE_URL}/edcafe-logo.png`,
+                    logoImg: 'images/edcafe-logo.png',
                     country: t('新加坡 🇸🇬 / 台灣獨家代理', 'Singapore 🇸🇬', 'シンガポール 🇸🇬'),
                     badge: t('促銷價', 'Sale', 'セール'),
                     hasTutorial: true,
@@ -378,7 +372,7 @@
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
-                    logoImg: `${BASE_URL}/kahoot-logo.png`,
+                    logoImg: 'images/kahoot-logo.png',
                     country: '挪威 🇳🇴',
                     hasTutorial: true,
                     videoUrl: 'https://youtu.be/7ndLUhJlsBU?si=XLGih3Q9jg0PVF_6',
@@ -392,7 +386,7 @@
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
-                    logoImg: `${BASE_URL}/padlet-logo.png`,
+                    logoImg: 'images/padlet-logo.png',
                     country: '美國 🇺🇸',
                     minQty: 10, 
                     hasTutorial: true,
@@ -408,7 +402,7 @@
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
-                    logoImg: `${BASE_URL}/wordwall-logo.png`,
+                    logoImg: 'images/wordwall-logo.png',
                     country: '英國 🇬🇧',
                     hasTutorial: true,
                     videoUrl: 'https://youtube.com/playlist?list=PLU-8o76TOvQX7dKPKPDDDTEiVqaLRfOgs&si=yTUE9EFc5UkEJvCq',
@@ -423,7 +417,7 @@
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
-                    logoImg: `${BASE_URL}/wordwall-logo.png`,
+                    logoImg: 'images/wordwall-logo.png',
                     country: '英國 🇬🇧',
                     hasTutorial: true,
                     videoUrl: 'https://youtube.com/playlist?list=PLU-8o76TOvQX7dKPKPDDDTEiVqaLRfOgs&si=yTUE9EFc5UkEJvCq',
@@ -439,7 +433,7 @@
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
-                    logoImg: `${BASE_URL}/gemini-logo.png`,
+                    logoImg: 'images/gemini-logo.png',
                     country: '美國 🇺🇸',
                     hasTutorial: true,
                     videoUrl: 'https://youtu.be/2fTqduml_CY?si=HuF6qDplNq0yQFSf',
@@ -839,12 +833,12 @@
                                     {isIntl ? (
                                         homeUrl ? (
                                             <a href={homeUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3">
-                                                <img src={`${BASE_URL}/edcafe-logo.png`} alt="Edcafe AI" className="h-8 md:h-10 bg-white/90 p-1 rounded object-contain" />
+                                                <img src="images/edcafe-logo.png" alt="Edcafe AI" className="h-8 md:h-10 bg-white/90 p-1 rounded object-contain" />
                                                 <h1 className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 tracking-tight whitespace-nowrap" style={{ fontFamily: 'Arial Black, sans-serif' }}>Edcafe AI</h1>
                                             </a>
                                         ) : (
                                             <div className="flex items-center gap-3">
-                                                <img src={`${BASE_URL}/edcafe-logo.png`} alt="Edcafe AI" className="h-8 md:h-10 bg-white/90 p-1 rounded object-contain" />
+                                                <img src="images/edcafe-logo.png" alt="Edcafe AI" className="h-8 md:h-10 bg-white/90 p-1 rounded object-contain" />
                                                 <h1 className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 tracking-tight whitespace-nowrap" style={{ fontFamily: 'Arial Black, sans-serif' }}>Edcafe AI</h1>
                                             </div>
                                         )
@@ -925,7 +919,7 @@
                         <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-cyan-900/20 to-transparent pointer-events-none"></div>
                         
                         <div className="z-10 text-center mb-12 mt-8">
-                            <img src={`${BASE_URL}/edcafe-logo.png`} alt="Edcafe AI Logo" className="h-20 md:h-24 bg-white/90 p-2 rounded-xl mx-auto mb-6 object-contain shadow-[0_0_20px_rgba(255,255,255,0.1)]" />
+                            <img src="images/edcafe-logo.png" alt="Edcafe AI Logo" className="h-20 md:h-24 bg-white/90 p-2 rounded-xl mx-auto mb-6 object-contain shadow-[0_0_20px_rgba(255,255,255,0.1)]" />
                             <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 mb-4 tracking-tight" style={{ fontFamily: 'Arial Black, sans-serif' }}>
                                 Welcome to Edcafe AI
                             </h1>
