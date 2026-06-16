@@ -158,14 +158,14 @@
                 return tw;
             };
 
-            // --- 國家設定 (拿掉縮寫顯示，純顯示名字) ---
+            // --- 國家設定 (加入國旗 flag) ---
             const REGION_CONFIG = {
-                'TW': { code: 'TW', name: '台灣', currency: 'TWD', lang: 'zh' },
-                'HK': { code: 'HK', name: '香港', currency: 'HKD', lang: 'zh' },
-                'AU': { code: 'AU', name: 'Australia', currency: 'AUD', lang: 'en' },
-                'UK': { code: 'UK', name: 'United Kingdom', currency: 'GBP', lang: 'en' },
-                'MY': { code: 'MY', name: 'Malaysia', currency: 'USD', lang: 'en' },
-                'JP': { code: 'JP', name: 'Japan', currency: 'JPY', lang: 'ja' }
+                'TW': { code: 'TW', name: '台灣', currency: 'TWD', lang: 'zh', flag: '🇹🇼' },
+                'HK': { code: 'HK', name: '香港', currency: 'HKD', lang: 'zh', flag: '🇭🇰' },
+                'AU': { code: 'AU', name: 'Australia', currency: 'AUD', lang: 'en', flag: '🇦🇺' },
+                'UK': { code: 'UK', name: 'United Kingdom', currency: 'GBP', lang: 'en', flag: '🇬🇧' },
+                'MY': { code: 'MY', name: 'Malaysia', currency: 'USD', lang: 'en', flag: '🇲🇾' },
+                'JP': { code: 'JP', name: 'Japan', currency: 'JPY', lang: 'ja', flag: '🇯🇵' }
             };
 
             const handleRegionSelect = (regionCode) => {
@@ -337,7 +337,7 @@
                     category: 'edcafe',
                     section: 'hero',
                     brandColor: 'bg-white',
-                    logoImg: 'edcafe-logo.png', // 已修正為 edcafe-logo.png
+                    logoImg: 'edcafe-logo.png', // 已修正在根目錄
                     country: t('新加坡 🇸🇬 / 台灣獨家代理', 'Singapore 🇸🇬', 'シンガポール 🇸🇬'),
                     badge: t('年銷3000萬', 'Best Seller', 'ベストセラー'),
                     hasTutorial: true,
@@ -358,7 +358,7 @@
                     category: 'edcafe',
                     section: 'hero',
                     brandColor: 'bg-white', 
-                    logoImg: 'edcafe-logo.png', // 已修正為 edcafe-logo.png
+                    logoImg: 'edcafe-logo.png', // 已修正在根目錄
                     country: t('新加坡 🇸🇬 / 台灣獨家代理', 'Singapore 🇸🇬', 'シンガポール 🇸🇬'),
                     badge: t('促銷價', 'Sale', 'セール'),
                     hasTutorial: true,
@@ -378,7 +378,7 @@
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
-                    logoImg: 'images/kahoot-logo.png',
+                    logoImg: 'kahoot-logo.png', // 已修正在根目錄
                     country: '挪威 🇳🇴',
                     hasTutorial: true,
                     videoUrl: 'https://youtu.be/7ndLUhJlsBU?si=XLGih3Q9jg0PVF_6',
@@ -392,7 +392,7 @@
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
-                    logoImg: 'images/padlet-logo.png',
+                    logoImg: 'padlet-logo.png', // 已修正在根目錄
                     country: '美國 🇺🇸',
                     minQty: 10, 
                     hasTutorial: true,
@@ -408,7 +408,7 @@
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
-                    logoImg: 'images/wordwall-logo.png',
+                    logoImg: 'wordwall-logo.png', // 已修正在根目錄
                     country: '英國 🇬🇧',
                     hasTutorial: true,
                     videoUrl: 'https://youtube.com/playlist?list=PLU-8o76TOvQX7dKPKPDDDTEiVqaLRfOgs&si=yTUE9EFc5UkEJvCq',
@@ -423,7 +423,7 @@
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
-                    logoImg: 'images/wordwall-logo.png',
+                    logoImg: 'wordwall-logo.png', // 已修正在根目錄
                     country: '英國 🇬🇧',
                     hasTutorial: true,
                     videoUrl: 'https://youtube.com/playlist?list=PLU-8o76TOvQX7dKPKPDDDTEiVqaLRfOgs&si=yTUE9EFc5UkEJvCq',
@@ -439,7 +439,7 @@
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
-                    logoImg: 'images/gemini-logo.png',
+                    logoImg: 'gemini-logo.png', // 已修正在根目錄
                     country: '美國 🇺🇸',
                     hasTutorial: true,
                     videoUrl: 'https://youtu.be/2fTqduml_CY?si=HuF6qDplNq0yQFSf',
@@ -827,7 +827,7 @@
                     if (region === 'AU') return 'https://au.edcafeai.ai/';
                     if (region === 'JP') return 'https://jp.edcafeai.ai/';
                     if (region === 'TW' || region === 'HK') return 'https://www.edcafechinese.com/';
-                    return null; // MY & UK 取消超連結
+                    return null; 
                 };
                 const homeUrl = getHomeUrl();
 
@@ -938,6 +938,8 @@
                                     onClick={() => handleRegionSelect(code)}
                                     className="group bg-slate-900 border border-slate-700 hover:border-cyan-500 rounded-2xl p-6 transition-all duration-300 hover:shadow-[0_0_30px_rgba(6,182,212,0.3)] hover:-translate-y-1 flex flex-col items-center justify-center gap-3"
                                 >
+                                    {/* 加入國旗 */}
+                                    <span className="text-4xl group-hover:scale-110 transition-transform">{config.flag}</span>
                                     <span className="text-2xl font-bold text-slate-200 group-hover:text-cyan-400">{config.name}</span>
                                     <span className="text-slate-500 text-xs font-mono bg-slate-800 px-2 py-1 rounded">{config.currency}</span>
                                 </button>
@@ -1265,15 +1267,13 @@
 
             if (step === 3) {
                 return (
-                    <div className="min-h-screen bg-slate-900 py-8 print:bg-white print:p-0">
-                        <Header />
-                        <div className="max-w-[210mm] mx-auto mb-2 print:hidden"><ProgressBar /></div>
+                    <div className="min-h-screen bg-slate-900 py-8 print:bg-white print:p-0 text-slate-800">
                         <div className="max-w-[210mm] mx-auto mb-6 flex justify-between items-center print:hidden px-4">
                             <div className="flex items-center gap-3">
-                                <button onClick={() => setStep(2)} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors bg-slate-800 px-4 py-2 rounded-lg shadow border border-slate-700 hover:bg-slate-700"><ArrowLeft size={18} /> {t('返回修改', 'Back to Edit', '修正する')}</button>
-                                <button onClick={handlePrint} className="flex items-center gap-2 bg-slate-700 text-white px-4 py-2 rounded-lg hover:bg-slate-600 shadow border border-slate-600 transition-all font-bold"><Printer size={18} /> {t('下載 PDF', 'Download PDF', 'PDFダウンロード')}</button>
+                                <button onClick={() => setStep(2)} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors bg-slate-800 px-4 py-2 rounded-lg border border-slate-700"><ArrowLeft size={18} /> {t('返回修改', 'Back to Edit', '修正する')}</button>
+                                <button onClick={handlePrint} className="flex items-center gap-2 bg-slate-700 text-white px-4 py-2 rounded-lg font-bold"><Printer size={18} /> {t('下載 PDF', 'Download PDF', 'PDFダウンロード')}</button>
                             </div>
-                            <button onClick={handleConfirmOrder} className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-2 rounded-lg hover:shadow-lg hover:scale-105 transition-all font-bold animate-pulse hover:animate-none">
+                            <button onClick={handleConfirmOrder} className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all font-bold">
                                 {isSubmitting ? <Loader2 className="animate-spin" size={18}/> : <Send size={18} />} {t('確認訂購', 'Confirm Order', '注文を確定する')}
                             </button>
                         </div>
@@ -1320,57 +1320,57 @@
                             </div>
                         )}
                         
-                        <div className="max-w-[210mm] mx-auto bg-white shadow-2xl print:shadow-none min-h-[297mm] p-[15mm] relative text-slate-900 print:w-full rounded-sm mb-20 flex flex-col justify-between">
+                        <div className="max-w-[210mm] mx-auto bg-white shadow-2xl print:shadow-none min-h-[297mm] p-[15mm] relative text-slate-900 print:w-full rounded-sm flex flex-col justify-between">
                             <div>
                                 <div className="flex justify-between items-start border-b-2 border-slate-800 pb-6 mb-8">
                                     <div className="flex flex-col justify-between h-full">
-                                        <div className="mb-4 -ml-1 select-none">
-                                            <div className="flex items-baseline gap-3">
-                                                <h1 className="text-4xl font-black text-slate-800 print:text-black tracking-tight" style={{ fontFamily: 'Arial Black, sans-serif' }}>
-                                                    {isIntl ? 'Edcafe AI' : 'Future Knowledge'}
-                                                </h1>
-                                            </div>
+                                        <div className="mb-4 -ml-1">
+                                            {!isIntl ? (
+                                                <h1 className="text-4xl font-black text-slate-800 tracking-tight" style={{ fontFamily: 'Arial Black, sans-serif' }}>Future Knowledge</h1>
+                                            ) : (
+                                                <h1 className="text-4xl font-black text-slate-800 tracking-tight" style={{ fontFamily: 'Arial Black, sans-serif' }}>Edcafe AI</h1>
+                                            )}
                                         </div>
                                         {!isIntl && currency === 'TWD' && (
-                                            <div className="text-sm text-slate-500 space-y-1 leading-relaxed">
+                                            <div className="text-sm text-slate-500 space-y-1 leading-relaxed mt-2">
                                                 <p className="font-bold text-slate-700">經典人文教育股份有限公司</p>
                                                 <p>統編：89187632</p>
                                             </div>
                                         )}
                                     </div>
                                     <div className="text-right">
-                                        <h1 className="text-5xl font-extrabold text-slate-800 tracking-tight mb-2 print:text-black">{t('報價單', 'QUOTATION', '見積書')}</h1>
-                                        <div className="space-y-1 mt-4">
-                                            <p className="text-slate-500 text-sm font-medium">{t('報價單號：', 'Quote No.: ', '見積書番号: ')}<span className="text-slate-800">{`QT-${generateOrderId()}`}</span></p>
-                                            <p className="text-slate-500 text-sm font-medium">{t('開立日期：', 'Date: ', '発行日: ')}<span className="text-slate-800">{new Date().toLocaleDateString()}</span></p>
-                                            <p className="text-slate-500 text-sm font-medium">{t('幣別：', 'Currency: ', '通貨: ')}<span className="text-slate-800 font-bold">{currency}</span></p>
+                                        <h1 className="text-4xl font-extrabold text-slate-800 tracking-tight mb-2">{dict.quoteHeading}</h1>
+                                        <div className="space-y-1 mt-4 text-slate-500 text-sm font-medium">
+                                            <p>{dict.quoteNo} <span className="text-slate-800">{`QT-${generateOrderId()}`}</span></p>
+                                            <p>{dict.dateTitle} <span className="text-slate-800">{new Date().toLocaleDateString()}</span></p>
+                                            <p>{dict.curTitle} <span className="text-slate-800 font-bold">{currency}</span></p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-12 mb-10">
                                     <div>
-                                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 pb-1 border-b border-slate-100">{t('客戶資訊 (Bill To)', 'Bill To', '請求先')}</h3>
+                                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 pb-1 border-b border-slate-100">{dict.billTo}</h3>
                                         <div className="space-y-2">
-                                            <p className="font-bold text-xl text-slate-800 print:text-black">{formData.title}</p>
-                                            <p className="text-slate-600">{t('聯絡人：', 'Contact: ', '担当者: ')}{formData.name}</p>
-                                            <p className="text-slate-600">Email：{formData.email}</p>
-                                            <p className="text-slate-600">{t('統編：', 'Tax ID / ABN: ', '法人番号: ')}{formData.taxId}</p>
+                                            <p className="font-bold text-xl text-slate-800">{formData.title}</p>
+                                            <p className="text-slate-600">{dict.contactInfo}: {formData.name}</p>
+                                            <p className="text-slate-600">Email: {formData.email}</p>
+                                            <p className="text-slate-600">{dict.taxTitle}: {formData.taxId}</p>
                                         </div>
                                     </div>
                                     <div>
-                                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 pb-1 border-b border-slate-100">{t('專案詳情 (Details)', 'Details', '詳細')}</h3>
+                                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 pb-1 border-b border-slate-100">{dict.projDetails}</h3>
                                         <div className="space-y-3 text-sm">
                                             <div className="flex justify-between">
-                                                <span className="text-slate-500">{t('期望啟用日：', 'Expected Start Date: ', '利用開始希望日: ')}</span>
+                                                <span className="text-slate-500">{dict.startDate}</span>
                                                 <span className="font-medium text-slate-800">{formData.date}</span>
                                             </div>
                                             <div className="flex flex-col text-right">
-                                                <p className="font-medium text-slate-800">{t('有效期限：報價後 14 天內有效', 'Valid for 14 days from issue date', '有効期限：発行から14日間')}</p>
-                                                <p className="text-xs text-rose-600 font-bold mt-1 leading-tight">{t('報價單需與我們真人客戶做最後確認\n並用印後才開始生效', 'Requires final confirmation and signature to be valid.', 'この見積書は最終確認と署名後に有効になります。')}</p>
+                                                <p className="font-medium text-slate-800">{dict.validFor}</p>
+                                                <p className="text-xs text-rose-600 font-bold mt-1 leading-tight">{dict.reqSign}</p>
                                             </div>
                                             {!isIntl && referralCode && (
-                                                <div className="flex justify-between bg-blue-50 p-2 roundedLine text-blue-800 print:text-black print:bg-slate-100">
+                                                <div className="flex justify-between bg-blue-50 p-2 roundedLine text-blue-800">
                                                     <span className="flex items-center gap-1 font-medium"><Tag size={14} /> 推薦代碼：</span>
                                                     <span className="font-bold">{referralCode}</span>
                                                 </div>
@@ -1381,60 +1381,52 @@
 
                                 <table className="w-full mb-8 border-collapse">
                                     <thead>
-                                        <tr className="bg-slate-800 text-white text-sm uppercase tracking-wider print:bg-slate-900 print:text-white">
-                                            <th className="py-3 px-4 text-left first:rounded-tl-md">{t('項目說明', 'Description', '項目')}</th><th className="py-3 px-4 text-center w-32">{t('品牌', 'Brand', 'ブランド')}</th><th className="py-3 px-4 text-center w-28">{t('單價', 'Unit Price', '単価')}</th><th className="py-3 px-4 text-center w-20">{t('數量', 'Qty', '数量')}</th><th className="py-3 px-4 text-right last:rounded-tr-md w-36">{t('金額', 'Amount', '金額')}</th>
+                                        <tr className="bg-slate-800 text-white text-sm uppercase tracking-wider">
+                                            <th className="py-3 px-4 text-left">{dict.thDesc}</th>
+                                            <th className="py-3 px-4 text-center">{dict.thPrice}</th>
+                                            <th className="py-3 px-4 text-center">{dict.thQty}</th>
+                                            <th className="py-3 px-4 text-right">{dict.thAmt}</th>
                                         </tr>
                                     </thead>
                                     <tbody className="text-sm">
-                                        {products.filter(p => cart[p.id] > 0).map((product, idx) => {
-                                            const currentQty = cart[product.id];
-                                            const unitPrice = getProductPrice(product, currentQty);
-                                            return (
-                                                <tr key={product.id} className={`border-b border-slate-100 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}`}>
-                                                    <td className="py-4 px-4"><div><div className="font-bold text-slate-800 text-base print:text-black">{product.name}</div><div className="text-xs text-slate-500 mt-0.5">{product.desc}</div><div className="text-[10px] text-slate-400 mt-0.5">{t('技術來源：', 'Origin: ', '開発国: ')}{product.country}</div></div></td>
-                                                    <td className="py-4 px-4 text-center">
-                                                        <div className="inline-flex items-center justify-center h-[40px] w-[100px] bg-white border border-slate-200 rounded-md print:border-slate-300">
-                                                            <img src={product.logoImg} alt={product.brandLogo} className="h-8 w-auto max-w-[90px] object-contain" />
-                                                        </div>
-                                                    </td>
-                                                    <td className="py-4 px-4 text-center text-slate-600 font-medium">{formatPrice(unitPrice)}</td>
-                                                    <td className="py-4 px-4 text-center font-bold text-slate-800">{currentQty}</td>
-                                                    <td className="py-4 px-4 text-right font-bold text-slate-800">{formatPrice(unitPrice * currentQty)}</td>
-                                                </tr>
-                                            );
-                                        })}
+                                        {products.filter(p => cart[p.id] > 0).map((product, idx) => (
+                                            <tr key={product.id} className="border-b border-slate-100 bg-white">
+                                                <td className="py-4 px-4 font-bold text-slate-800">{getName(product)}</td>
+                                                <td className="py-4 px-4 text-center text-slate-600">{formatPrice(getProductPrice(product, cart[product.id]))}</td>
+                                                <td className="py-4 px-4 text-center font-bold text-slate-800">{cart[product.id]}</td>
+                                                <td className="py-4 px-4 text-right font-bold text-slate-800">{formatPrice(getProductPrice(product, cart[product.id]) * cart[product.id])}</td>
+                                            </tr>
+                                        ))}
                                     </tbody>
                                 </table>
 
                                 <div className="flex justify-end mb-12">
                                     <div className="w-96 space-y-3">
-                                            <div className="flex justify-between text-slate-600 text-sm font-medium px-2">
-                                                <span>{t('小計 Subtotal', 'Subtotal', '小計')}</span>
-                                                <span>{formatPrice(totals.subtotal)}</span>
+                                        <div className="flex justify-between text-slate-600 text-sm font-medium px-2">
+                                            <span>{dict.subtotal}</span><span>{formatPrice(totals.subtotal)}</span>
+                                        </div>
+                                        {totals.discount > 0 && (
+                                            <div className="flex justify-between text-green-700 text-sm font-bold bg-green-50 py-2 px-3 rounded">
+                                                <span>{dict.discount}</span><span>-{formatPrice(totals.discount)}</span>
                                             </div>
-                                            {!isIntl && totals.discount > 0 && (
-                                                <div className="flex justify-between text-green-700 text-sm font-bold bg-green-50 py-2 px-3 rounded border border-green-100 print:text-black print:bg-slate-100 print:border-slate-200">
-                                                    <span className="flex items-center gap-1"><Check size={14}/> 折扣 (Discount)</span>
-                                                    <span>-{formatPrice(totals.discount)}</span>
-                                                </div>
-                                            )}
-                                            <div className="flex justify-end items-baseline gap-4 pt-4 border-t-2 border-slate-800 mt-4 px-2">
-                                                <span className="text-xl font-bold text-slate-800 print:text-black">{t('總計 Total:', 'Total:', '合計:')}</span>
-                                                <span className="text-4xl font-extrabold text-slate-900 print:text-black tracking-tight">{formatPrice(totals.total)}</span>
-                                            </div>
-                                            <div className="text-right text-xs font-medium text-slate-400 uppercase tracking-wider px-2">{t('(含稅金額)', '(Tax Included)', '（税込）')}</div>
+                                        )}
+                                        <div className="flex justify-end items-baseline gap-4 pt-4 border-t-2 border-slate-800 mt-4 px-2">
+                                            <span className="text-xl font-bold text-slate-800">{dict.total}:</span>
+                                            <span className="text-4xl font-extrabold text-slate-900 tracking-tight">{formatPrice(totals.total)}</span>
+                                        </div>
+                                        <div className="text-right text-xs font-medium text-slate-400 uppercase tracking-wider px-2">{dict.taxInc}</div>
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-12 border-t border-slate-200 pt-8 print:break-inside-avoid">
+                                <div className="grid grid-cols-2 gap-12 border-t border-slate-200 pt-8">
                                     <div>
-                                        <h4 className="font-bold text-sm text-slate-800 mb-3 uppercase tracking-wider">{t('備註事項 (Notes)', 'NOTES', '備考')}</h4>
-                                        <ul className="text-xs text-slate-600 space-y-2 list-disc list-inside bg-slate-50 p-4 rounded-lg border border-slate-100 print:bg-white print:border-slate-200">
-                                            {formData.note && <li className="font-medium text-slate-800">{t('客戶備註：', 'Customer Note: ', 'お客様備考: ')}{formData.note}</li>}
+                                        <h4 className="font-bold text-sm text-slate-800 mb-3 uppercase tracking-wider">{dict.notesUpper}</h4>
+                                        <ul className="text-xs text-slate-600 space-y-2 list-disc list-inside bg-slate-50 p-4 rounded-lg border border-slate-100">
+                                            {formData.note && <li className="font-medium text-slate-800">{dict.custNotePrefix} {formData.note}</li>}
                                             
-                                            {!isIntl && totals.appliedRule && <li className="text-green-700 font-bold print:text-black">{totals.appliedRule}</li>}
+                                            {!isIntl && totals.appliedRule && <li className="text-green-700 font-bold">{totals.appliedRule}</li>}
                                             {!isIntl && referralCode && !totals.appliedRule && <li className="text-slate-800 font-medium">指定推薦代碼：{referralCode}</li>}
-                                            {!isIntl && <li className="text-red-600 font-bold text-sm mt-2 print:text-black">匯款請在備註欄上填寫貴校大名以利對帳 謝謝</li>}
+                                            {!isIntl && <li className="text-red-600 font-bold text-sm mt-2">匯款請在備註欄上填寫貴校大名以利對帳 謝謝</li>}
                                             
                                             {/* 各國銀行帳戶切換 */}
                                             {!isIntl && currency === 'TWD' && (
@@ -1488,25 +1480,16 @@
                                         </ul>
                                     </div>
                                     <div>
-                                            <h4 className="font-bold text-sm text-slate-800 mb-3 uppercase tracking-wider">{t('簽署確認 (Signature)', 'Signature', '署名')}</h4>
-                                            <div className="h-32 border-2 border-dashed border-slate-300 rounded-lg bg-slate-50/50 mt-2 relative flex items-end justify-center pb-4 print:bg-white print:border-slate-400">
-                                                <span className="text-xs text-slate-400 font-medium uppercase tracking-wider print:text-slate-600">{t('請在此處用印或簽名回傳', 'Please sign or stamp here and return', 'こちらに署名または捺印してご返信ください')}</span>
-                                            </div>
-                                            <p className="text-[10px] text-slate-400 mt-3 text-center">
-                                                {t('簽署後請回傳至 sales@futureknowledge.ai 以完成訂單程序。', 'Please return the signed copy. Confidential.', '署名後、指定のメールアドレスまでご返信ください。')}<br/>
-                                                {t('本報價單內容具商業機密，請勿外流。', '', '本見積書は機密情報です。')}
-                                            </p>
+                                        <h4 className="font-bold text-sm text-slate-800 mb-3 uppercase tracking-wider">{dict.signTitle}</h4>
+                                        <div className="h-32 border-2 border-dashed border-slate-300 rounded-lg bg-slate-50/50 mt-2 flex items-end justify-center pb-4">
+                                            <span className="text-xs text-slate-400 font-medium uppercase tracking-wider">{dict.signHere}</span>
+                                        </div>
+                                        <p className="text-[10px] text-slate-400 mt-3 text-center">
+                                            {dict.signDesc}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
-                            <div className="mt-8 border-t border-slate-200 pt-4 flex items-center justify-center text-slate-400 gap-8 print:flex hidden">
-                                <div className="flex items-center gap-2"><div className="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold print:bg-slate-800 print:text-white">1</div><span className="text-xs">產出報價單</span></div>
-                                <ArrowRightCircle size={14} />
-                                <div className="flex items-center gap-2"><div className="w-6 h-6 rounded-full bg-slate-800 text-white flex items-center justify-center text-xs font-bold print:bg-slate-200 print:text-slate-800">2</div><span className="text-xs font-bold text-slate-800">用印回傳真人客服</span></div>
-                                <ArrowRightCircle size={14} />
-                                <div className="flex items-center gap-2"><div className="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold print:bg-slate-800 print:text-white">3</div><span className="text-xs">真人客服授權開通</span></div>
-                            </div>
-                            <div className="absolute bottom-0 left-0 right-0 h-3 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 print:block"></div>
                         </div>
                     </div>
                 );
