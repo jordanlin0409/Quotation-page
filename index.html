@@ -55,8 +55,81 @@
             X, Coins, ArrowRightCircle, ShieldCheck, Info, Loader2, Gift,
             PenTool, Video, FileText as NoteIcon, FileSignature, ChevronDown,
             ChevronUp, Percent, AlertTriangle, TrendingUp, Megaphone, BadgeCheck,
-            Home
+            Home, Mail
         } from 'lucide-react';
+
+        // 語系字典
+        const getDict = (lang) => {
+            if (lang === 'en') return {
+                cartTitle: "Cart", subtotal: "Subtotal", discount: "Discount", total: "Total",
+                buyPriceMatch: "Price Match", reselectRegion: "Change Region", banner: "Buy Edcafe, we pay for other software!",
+                enterCode: "Enter referral code", notApplied: "No discount applied", applied: "Discount applied",
+                details: "Details", tutorial: "Tutorial", notion: "Notion", origin: "Origin: ", annualFee: "Annual Fee",
+                nextFill: "Next: Fill Details", selected: "Selected", items: "items", totalTax: "Total (Tax inc.)",
+                custInfo: "Customer Information", custDesc: "Please enter the required information", contactInfo: "Contact Info",
+                nameTitle: "Contact Name *", emailTitle: "Email *", billInfo: "Billing Details", compTitle: "Company/School Name *",
+                taxTitle: "Tax ID / ABN *", orderSet: "Order Settings", startDate: "Expected Start Date", noteTitle: "Notes",
+                back: "Back", nextQuote: "Next (Preview Quote)", backEdit: "Back to Edit", dlPdf: "Download PDF",
+                confirmBtn: "Confirm Order", quoteHeading: "QUOTATION", quoteNo: "Quote No.:", dateTitle: "Date:",
+                curTitle: "Currency:", billTo: "Bill To", projDetails: "Details", validFor: "Valid for 14 days from issue date",
+                reqSign: "Requires final confirmation and signature to be valid.", refCode: "Referral Code:", thDesc: "Description",
+                thBrand: "Brand", thPrice: "Unit Price", thQty: "Qty", thAmt: "Amount", taxInc: "(Tax Included)", notesUpper: "NOTES", 
+                custNotePrefix: "Customer Note: ", signTitle: "Signature",
+                signHere: "Please sign or stamp here and return", signDesc: "Please return the signed copy. Confidential.",
+                thanksOrder: "Thank you for your order!", returnSigned: "Please sign and return the quotation", viaEmail: "",
+                onlinePayment: "Or choose online payment:"
+            };
+            if (lang === 'ja') return {
+                cartTitle: "カート", subtotal: "小計", discount: "割引", total: "合計",
+                buyPriceMatch: "最低価格保証", reselectRegion: "地域を変更", banner: "Edcafeを購入すると他のソフトが無料に！",
+                enterCode: "紹介コードを入力", notApplied: "割引未適用", applied: "割引適用済み", details: "詳細", tutorial: "動画",
+                notion: "Notion", origin: "開発国: ", annualFee: "年会費", nextFill: "次へ：情報を入力", selected: "選択中", items: "点",
+                totalTax: "合計（税込）", custInfo: "お客様情報入力", custDesc: "見積書に必要な情報を入力してください", contactInfo: "連絡先情報",
+                nameTitle: "担当者名 *", emailTitle: "メールアドレス *", billInfo: "請求先情報", compTitle: "会社・学校名 *",
+                taxTitle: "法人番号 *", orderSet: "注文設定", startDate: "利用開始希望日", noteTitle: "備考", back: "戻る",
+                nextQuote: "次へ（見積書プレビュー）", backEdit: "修正する", dlPdf: "PDFダウンロード", confirmBtn: "注文を確定する",
+                quoteHeading: "見積書", quoteNo: "見積書番号:", dateTitle: "発行日:", curTitle: "通貨:", billTo: "請求先",
+                projDetails: "詳細", validFor: "有効期限：発行から14日間", reqSign: "この見積書は最終確認と署名後に有効になります。",
+                refCode: "紹介コード:", thDesc: "項目", thBrand: "ブランド", thPrice: "単価", thQty: "数量", thAmt: "金額",
+                taxInc: "（税込）", notesUpper: "備考", custNotePrefix: "お客様備考: ",
+                signTitle: "署名", signHere: "こちらに署名または捺印してご返信ください", signDesc: "署名後、指定のメールアドレスまでご返信ください。本見積書は機密情報です。",
+                thanksOrder: "ご注文ありがとうございます！", returnSigned: "署名済みの見積書を返信してください", viaEmail: "",
+                onlinePayment: "またはオンライン決済を選択:"
+            };
+            return {
+                cartTitle: "購物清單", subtotal: "小計", discount: "折扣", total: "總計",
+                buyPriceMatch: "買貴退差價", reselectRegion: "重新選擇地區", banner: "只要有買 Edcafe，其他軟體我來 Pay！",
+                enterCode: "輸入推薦代碼 (例如：翻轉教育, 燕秋老師)", notApplied: "未套用折扣", applied: "優惠/價格已套用",
+                details: "詳細資訊", tutorial: "教學影片", notion: "Notion筆記", origin: "技術來源：", annualFee: "年費",
+                nextFill: "下一步：填寫資料", selected: "已選項目", items: "項", totalTax: "總金額 (含稅)",
+                custInfo: "客戶資料填寫", custDesc: "請輸入報價單所需的相關資訊", contactInfo: "聯絡人資訊", nameTitle: "聯絡人名稱 *",
+                emailTitle: "電子郵件 *", billInfo: "開立對象 (抬頭/統編)", compTitle: "公司/學校抬頭 *", taxTitle: "統一編號 *",
+                orderSet: "訂單設定", startDate: "期望啟用日期", noteTitle: "備註事項", back: "上一步", nextQuote: "前往下一步 (預覽報價單)",
+                backEdit: "返回修改", dlPdf: "下載 PDF", confirmBtn: "確認訂購", quoteHeading: "報價單", quoteNo: "報價單號：",
+                dateTitle: "開立日期：", curTitle: "幣別：", billTo: "客戶資訊 (Bill To)", projDetails: "專案詳情 (Details)",
+                validFor: "有效期限：報價後 14 天內有效", reqSign: "報價單需與我們真人客戶做最後確認\n並用印後才開始生效",
+                refCode: "推薦代碼：", thDesc: "項目說明", thBrand: "品牌", thPrice: "單價", thQty: "數量", thAmt: "金額",
+                taxInc: "(含稅金額)", notesUpper: "備註事項 (Notes)", custNotePrefix: "客戶備註：", signTitle: "簽署確認 (Signature)",
+                signHere: "請在此處用印或簽名回傳", signDesc: "簽署後請回傳至 sales@futureknowledge.ai 以完成訂單程序。\n本報價單內容具商業機密，請勿外流。",
+                thanksOrder: "感謝您的訂購！", returnSigned: "請將報價單用印後", viaEmail: "透過以下方式回傳給真人客服",
+                onlinePayment: "或選擇線上付款："
+            };
+        };
+
+        const getStepsInfo = (lang) => {
+            if (lang === 'en') return [
+                { id: 1, label: "Choose Plan", icon: ShoppingCart }, { id: 2, label: "Fill Details", icon: FileText },
+                { id: 3, label: "Generate Quote", icon: Printer }, { id: 4, label: "Sign & Return", icon: Stamp }, { id: 5, label: "Activation", icon: KeyRound }
+            ];
+            if (lang === 'ja') return [
+                { id: 1, label: "プラン選択", icon: ShoppingCart }, { id: 2, label: "情報入力", icon: FileText },
+                { id: 3, label: "見積書作成", icon: Printer }, { id: 4, label: "署名して返信", icon: Stamp }, { id: 5, label: "有効化", icon: KeyRound }
+            ];
+            return [
+                { id: 1, label: "選購方案", icon: ShoppingCart }, { id: 2, label: "填寫資料", icon: FileText },
+                { id: 3, label: "產出報價單", icon: Printer }, { id: 4, label: "用印回傳真人客服", icon: Stamp }, { id: 5, label: "真人客服授權開通", icon: KeyRound }
+            ];
+        };
 
         const QuotationSystem = () => {
             // --- 狀態管理 ---
@@ -75,7 +148,7 @@
                 date: new Date().toISOString().split('T')[0], note: ''
             });
 
-            // 核心分流判斷：是否為國際純英文/日文版 (除了台港以外的國家)
+            // 核心分流判斷
             const isIntl = ['AU', 'UK', 'MY', 'JP'].includes(region);
 
             // 多國語系動態翻譯輔助函式
@@ -85,14 +158,14 @@
                 return tw;
             };
 
-            // --- 國家設定 ---
+            // --- 國家設定 (拿掉縮寫顯示，純顯示名字) ---
             const REGION_CONFIG = {
-                'TW': { name: '台灣', currency: 'TWD', flag: '🇹🇼' },
-                'HK': { name: '香港', currency: 'HKD', flag: '🇭🇰' },
-                'AU': { name: 'Australia', currency: 'AUD', flag: '🇦🇺' },
-                'UK': { name: 'United Kingdom', currency: 'GBP', flag: '🇬🇧' },
-                'MY': { name: 'Malaysia', currency: 'MYR', flag: '🇲🇾' },
-                'JP': { name: '日本 / Japan', currency: 'JPY', flag: '🇯🇵' }
+                'TW': { code: 'TW', name: '台灣', currency: 'TWD', lang: 'zh' },
+                'HK': { code: 'HK', name: '香港', currency: 'HKD', lang: 'zh' },
+                'AU': { code: 'AU', name: 'Australia', currency: 'AUD', lang: 'en' },
+                'UK': { code: 'UK', name: 'United Kingdom', currency: 'GBP', lang: 'en' },
+                'MY': { code: 'MY', name: 'Malaysia', currency: 'USD', lang: 'en' }, // MY 改收美金
+                'JP': { code: 'JP', name: 'Japan', currency: 'JPY', lang: 'ja' }
             };
 
             const handleRegionSelect = (regionCode) => {
@@ -152,10 +225,10 @@
                 // 國際專區報價
                 if (region === 'AU') return product.id === 'edcafe_pro' ? 129 : 249;
                 if (region === 'UK') return product.id === 'edcafe_pro' ? 69 : 129;
-                if (region === 'MY') return product.id === 'edcafe_pro' ? 375 : 699;
+                if (region === 'MY') return product.id === 'edcafe_pro' ? 89 : 169; // 馬來西亞已改 USD 報價
                 if (region === 'JP') return product.id === 'edcafe_pro' ? 14900 : 27900;
 
-                // 原始 TW / HK 報價邏輯 (一字不漏)
+                // 原始 TW / HK 報價邏輯
                 if (group === 'Senco' && currency === 'HKD' && product.id === 'kahoot') {
                     const normalHKD = product.priceHKD || Math.round(product.price * EXCHANGE_RATE);
                     const discountFactor = qty > 25 ? 0.8 : 0.9;
@@ -248,12 +321,11 @@
                 if (currency === 'HKD') return `HK$ ${price.toLocaleString()}`;
                 if (currency === 'AUD') return `A$ ${price.toLocaleString()}`;
                 if (currency === 'GBP') return `£ ${price.toLocaleString()}`;
-                if (currency === 'MYR') return `RM ${price.toLocaleString()}`;
+                if (currency === 'USD') return `US$ ${price.toLocaleString()}`; // 馬來西亞的 USD
                 if (currency === 'JPY') return `¥ ${price.toLocaleString()}`;
                 return `NT$ ${price.toLocaleString()}`;
             };
 
-            // 原始商品資料庫 (加入語系 t 判斷)
             const allProducts = [
                 { 
                     id: 'edcafe_pro', 
@@ -265,7 +337,7 @@
                     category: 'edcafe',
                     section: 'hero',
                     brandColor: 'bg-white',
-                    logoImg: 'edcafe_Primary Logo-black (15).png',
+                    logoImg: 'edcafe-logo.png',
                     country: t('新加坡 🇸🇬 / 台灣獨家代理', 'Singapore 🇸🇬', 'シンガポール 🇸🇬'),
                     badge: t('年銷3000萬', 'Best Seller', 'ベストセラー'),
                     hasTutorial: true,
@@ -286,7 +358,7 @@
                     category: 'edcafe',
                     section: 'hero',
                     brandColor: 'bg-white', 
-                    logoImg: 'edcafe_Primary Logo-black (15).png',
+                    logoImg: 'edcafe-logo.png',
                     country: t('新加坡 🇸🇬 / 台灣獨家代理', 'Singapore 🇸🇬', 'シンガポール 🇸🇬'),
                     badge: t('促銷價', 'Sale', 'セール'),
                     hasTutorial: true,
@@ -375,9 +447,12 @@
                 }
             ];
 
-            // 根據是否為國際版動態過濾產品 (一字不漏保留原始 HK/TW 判斷)
+            const lang = REGION_CONFIG[region]?.lang || 'zh';
+            const dict = getDict(lang);
+            const stepsInfo = getStepsInfo(lang);
+
             const products = allProducts.filter(p => {
-                if (isIntl && p.category !== 'edcafe') return false; // 國際版只保留 Edcafe AI 服務
+                if (isIntl && p.category !== 'edcafe') return false; 
                 return !(currency === 'HKD' && p.id === 'padlet');
             });
 
@@ -429,7 +504,6 @@
                 let ruleDescription = '';
                 let nextTierPrompt = null; 
 
-                // 原始甜心卡折扣邏輯 (僅在非國際版啟用)
                 if (!isIntl) {
                     const group = getAgentGroup(referralCode);
 
@@ -521,7 +595,7 @@
                     const qty = cart[p.id];
                     if (qty > 0) {
                         const unitPrice = getProductPrice(p, qty);
-                        const itemTotalPrice = formatPrice(unitPrice * qty).replace(/HK\$ |NT\$ |A\$ |£ |RM |¥ /g, '');
+                        const itemTotalPrice = formatPrice(unitPrice * qty).replace(/HK\$ |NT\$ |A\$ |£ |US\$ |RM |¥ /g, '');
                             
                         itemsPayload.push({
                             name: `${p.name} x ${qty}`,
@@ -628,7 +702,7 @@
                                         <div className="text-xs text-slate-500">x {cart[p.id]}</div>
                                     </div>
                                     <div className="text-slate-200 font-mono">
-                                        {formatPrice(getProductPrice(p, cart[p.id]) * cart[p.id]).replace(/HK\$ |NT\$ |A\$ |£ |RM |¥ /g, '')}
+                                        {formatPrice(getProductPrice(p, cart[p.id]) * cart[p.id]).replace(/HK\$ |NT\$ |A\$ |£ |US\$ |RM |¥ /g, '')}
                                     </div>
                                 </div>
                             ))}
@@ -636,12 +710,12 @@
                         <div className="border-t border-slate-700 pt-3 space-y-2">
                              <div className="flex justify-between text-xs text-slate-400">
                                 <span>{t('小計', 'Subtotal', '小計')}</span>
-                                <span>{formatPrice(totals.subtotal).replace(/HK\$ |NT\$ |A\$ |£ |RM |¥ /g, '')}</span>
+                                <span>{formatPrice(totals.subtotal).replace(/HK\$ |NT\$ |A\$ |£ |US\$ |RM |¥ /g, '')}</span>
                              </div>
                              {totals.discount > 0 && (
                                 <div className="flex justify-between text-xs text-green-400">
                                     <span>{t('折扣', 'Discount', '割引')}</span>
-                                    <span>-{formatPrice(totals.discount).replace(/HK\$ |NT\$ |A\$ |£ |RM |¥ /g, '')}</span>
+                                    <span>-{formatPrice(totals.discount).replace(/HK\$ |NT\$ |A\$ |£ |US\$ |RM |¥ /g, '')}</span>
                                 </div>
                              )}
                              <div className="flex justify-between text-lg font-bold text-white pt-2 border-t border-slate-700/50">
@@ -656,7 +730,6 @@
             const SweetheartProgress = () => {
                 const count = totals.edcafeCount;
                 const nextTier = discountTiers.find(t => t.qty > count);
-                const currentTier = [...discountTiers].reverse().find(t => t.qty <= count);
                 
                 const maxQty = 40;
                 const percentage = Math.min(100, (count / maxQty) * 100);
@@ -749,87 +822,110 @@
                 );
             };
 
-            const Header = () => (
-                <header className="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800 shadow-lg print:hidden">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-                        <div className="flex items-center gap-6">
-                            <div className="flex flex-col justify-center select-none">
-                                {isIntl ? (
-                                    <a href="https://au.edcafeai.ai/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3">
-                                        <img src="edcafe_Primary Logo-black (15).png" alt="Edcafe AI" className="h-8 md:h-10 bg-white/90 p-1 rounded object-contain" />
-                                        <h1 className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 tracking-tight whitespace-nowrap" style={{ fontFamily: 'Arial Black, sans-serif' }}>Edcafe AI</h1>
-                                    </a>
-                                ) : (
-                                    <div className="flex items-baseline gap-3">
-                                        <h1 className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 tracking-tight whitespace-nowrap" style={{ fontFamily: 'Arial Black, sans-serif' }}>
-                                            Future Knowledge
-                                        </h1>
-                                    </div>
-                                )}
+            const Header = () => {
+                const getHomeUrl = () => {
+                    if (region === 'AU') return 'https://au.edcafeai.ai/';
+                    if (region === 'JP') return 'https://jp.edcafeai.ai/';
+                    if (region === 'TW' || region === 'HK') return 'https://www.edcafechinese.com/';
+                    return null; // MY & UK 取消超連結
+                };
+                const homeUrl = getHomeUrl();
+
+                return (
+                    <header className="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800 shadow-lg print:hidden">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+                            <div className="flex items-center gap-6">
+                                <div className="flex flex-col justify-center select-none">
+                                    {isIntl ? (
+                                        homeUrl ? (
+                                            <a href={homeUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3">
+                                                <img src="edcafe-logo.png" alt="Edcafe AI" className="h-8 md:h-10 bg-white/90 p-1 rounded object-contain" />
+                                                <h1 className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 tracking-tight whitespace-nowrap" style={{ fontFamily: 'Arial Black, sans-serif' }}>Edcafe AI</h1>
+                                            </a>
+                                        ) : (
+                                            <div className="flex items-center gap-3">
+                                                <img src="edcafe-logo.png" alt="Edcafe AI" className="h-8 md:h-10 bg-white/90 p-1 rounded object-contain" />
+                                                <h1 className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 tracking-tight whitespace-nowrap" style={{ fontFamily: 'Arial Black, sans-serif' }}>Edcafe AI</h1>
+                                            </div>
+                                        )
+                                    ) : (
+                                        <div className="flex items-baseline gap-3">
+                                            <h1 className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 tracking-tight whitespace-nowrap" style={{ fontFamily: 'Arial Black, sans-serif' }}>
+                                                Future Knowledge
+                                            </h1>
+                                        </div>
+                                    )}
+                                </div>
+                                
+                                <div className="hidden md:block h-8 w-px bg-slate-800/50 mx-2"></div>
+                                
+                                <div className="hidden md:flex items-center gap-3">
+                                    {isIntl ? (
+                                        homeUrl ? (
+                                            <a href={homeUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-white transition-colors px-2 py-1.5 mr-2">
+                                                <Home size={18} /> {t('官方網站', 'Official Site', '公式サイト')}
+                                            </a>
+                                        ) : (
+                                            <div className="inline-flex items-center gap-2 text-sm font-bold text-slate-500 px-2 py-1.5 mr-2 cursor-default">
+                                                <Home size={18} /> {t('官方網站', 'Official Site', '公式サイト')}
+                                            </div>
+                                        )
+                                    ) : (
+                                        <>
+                                            <a href="https://www.edcafechinese.com/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-white transition-colors px-2 py-1.5 mr-2">
+                                                <Home size={18} /> 官方網站
+                                            </a>
+                                            <a href={STATEMENT_LINK} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-bold text-yellow-400 hover:text-yellow-300 transition-colors bg-yellow-400/10 px-3 py-1.5 rounded-md border border-yellow-400/20">
+                                                <FileSignature size={16} /> 聲明切結書
+                                            </a>
+                                            <a href={AGENCY_PROOF_LINK} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-bold text-cyan-400 hover:text-cyan-300 transition-colors bg-cyan-400/10 px-3 py-1.5 rounded-md border border-cyan-400/20">
+                                                <BadgeCheck size={16} /> 獨家代理證明
+                                            </a>
+                                        </>
+                                    )}
+                                </div>
                             </div>
                             
-                            <div className="hidden md:block h-8 w-px bg-slate-800/50 mx-2"></div>
-                            
-                            <div className="hidden md:flex items-center gap-3">
-                                {isIntl ? (
-                                    <a href="https://au.edcafeai.ai/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-white transition-colors px-2 py-1.5 mr-2">
-                                        <Home size={18} /> {t('官方網站', 'Official Site', '公式サイト')}
-                                    </a>
-                                ) : (
-                                    <>
-                                        <a href="https://www.edcafechinese.com/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-white transition-colors px-2 py-1.5 mr-2">
-                                            <Home size={18} /> 官方網站
-                                        </a>
-                                        <a href={STATEMENT_LINK} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-bold text-yellow-400 hover:text-yellow-300 transition-colors bg-yellow-400/10 px-3 py-1.5 rounded-md border border-yellow-400/20">
-                                            <FileSignature size={16} /> 聲明切結書
-                                        </a>
-                                        <a href={AGENCY_PROOF_LINK} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-bold text-cyan-400 hover:text-cyan-300 transition-colors bg-cyan-400/10 px-3 py-1.5 rounded-md border border-cyan-400/20">
-                                            <BadgeCheck size={16} /> 獨家代理證明
-                                        </a>
-                                    </>
-                                )}
-                            </div>
-                        </div>
-                        
-                        <div className="flex items-center gap-6">
-                            <div className="flex flex-col items-end gap-1">
-                                {!isIntl && (
-                                    <div className="flex items-center gap-2 mb-1">
-                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                                            <span className="w-2 h-2 rounded-full bg-green-500 animate-ping"></span> 真人客服
-                                        </span>
-                                        <div className="flex items-center gap-1 bg-slate-800 border border-slate-600 text-cyan-400 text-[10px] font-bold px-2 py-0.5 rounded transition-colors">
+                            <div className="flex items-center gap-6">
+                                <div className="flex flex-col items-end gap-1">
+                                    {!isIntl && (
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                                                <span className="w-2 h-2 rounded-full bg-green-500 animate-ping"></span> 真人客服
+                                            </span>
+                                            <div className="flex items-center gap-1 bg-slate-800 border border-slate-600 text-cyan-400 text-[10px] font-bold px-2 py-0.5 rounded transition-colors">
+                                                <Coins size={10} /> {currency}
+                                            </div>
+                                        </div>
+                                    )}
+                                    {isIntl && (
+                                        <div className="flex items-center gap-1 bg-slate-800 border border-slate-600 text-cyan-400 text-[10px] font-bold px-2 py-0.5 rounded transition-colors mb-1">
                                             <Coins size={10} /> {currency}
                                         </div>
-                                    </div>
-                                )}
-                                {isIntl && (
-                                    <div className="flex items-center gap-1 bg-slate-800 border border-slate-600 text-cyan-400 text-[10px] font-bold px-2 py-0.5 rounded transition-colors mb-1">
-                                        <Coins size={10} /> {currency}
-                                    </div>
-                                )}
-                                {!isIntl && (
-                                    <div className="flex items-center gap-2">
-                                        {currency === 'HKD' ? (
-                                            <SocialButton type="whatsapp" href="https://wa.me/message/OOAOI3R5DAQVJ1" label="WhatsApp" />
-                                        ) : (
-                                            <SocialButton type="line" href="https://lin.ee/luo4Dgq" label="LINE" />
-                                        )}
-                                    </div>
-                                )}
+                                    )}
+                                    {!isIntl && (
+                                        <div className="flex items-center gap-2">
+                                            {currency === 'HKD' ? (
+                                                <SocialButton type="whatsapp" href="https://wa.me/message/OOAOI3R5DAQVJ1" label="WhatsApp" />
+                                            ) : (
+                                                <SocialButton type="line" href="https://lin.ee/luo4Dgq" label="LINE" />
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </header>
-            );
+                    </header>
+                );
+            };
 
             if (step === 0) {
                 return (
                     <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 relative overflow-hidden font-sans">
                         <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-cyan-900/20 to-transparent pointer-events-none"></div>
                         
-                        <div className="z-10 text-center mb-12">
-                            <img src="edcafe_Primary Logo-black (15).png" alt="Edcafe AI Logo" className="h-20 md:h-24 bg-white/90 p-2 rounded-xl mx-auto mb-6 object-contain shadow-[0_0_20px_rgba(255,255,255,0.1)]" />
+                        <div className="z-10 text-center mb-12 mt-8">
+                            <img src="edcafe-logo.png" alt="Edcafe AI Logo" className="h-20 md:h-24 bg-white/90 p-2 rounded-xl mx-auto mb-6 object-contain shadow-[0_0_20px_rgba(255,255,255,0.1)]" />
                             <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 mb-4 tracking-tight" style={{ fontFamily: 'Arial Black, sans-serif' }}>
                                 Welcome to Edcafe AI
                             </h1>
@@ -842,8 +938,7 @@
                                     onClick={() => handleRegionSelect(code)}
                                     className="group bg-slate-900 border border-slate-700 hover:border-cyan-500 rounded-2xl p-6 transition-all duration-300 hover:shadow-[0_0_30px_rgba(6,182,212,0.3)] hover:-translate-y-1 flex flex-col items-center justify-center gap-3"
                                 >
-                                    <span className="text-4xl group-hover:scale-110 transition-transform">{config.flag}</span>
-                                    <span className="text-slate-300 font-bold text-lg group-hover:text-cyan-400">{config.name}</span>
+                                    <span className="text-2xl font-bold text-slate-200 group-hover:text-cyan-400">{config.name}</span>
                                     <span className="text-slate-500 text-xs font-mono bg-slate-800 px-2 py-1 rounded">{config.currency}</span>
                                 </button>
                             ))}
@@ -1107,7 +1202,7 @@
 
                                         {!isIntl && totals.discount > 0 && !totals.nextTierPrompt && (
                                             <div className="hidden md:flex items-center gap-1 text-green-400 text-xs font-bold uppercase tracking-wider bg-green-900/20 px-3 py-1.5 rounded-full border border-green-500/20">
-                                                <Check size={12} /> 已套用折扣 (省下 {formatPrice(totals.discount).replace(/HK\$ |NT\$ |A\$ |£ |RM |¥ /g, '')})
+                                                <Check size={12} /> 已套用折扣 (省下 {formatPrice(totals.discount).replace(/HK\$ |NT\$ |A\$ |£ |US\$ |RM |¥ /g, '')})
                                             </div>
                                         )}
                                     </div>
@@ -1194,14 +1289,30 @@
                                             {!isIntl ? (
                                                 <>請將報價單<span className="text-cyan-400 font-bold mx-1">用印後</span><br/>透過以下方式回傳給真人客服</>
                                             ) : (
-                                                <>{t('', 'Please sign and return the quotation', '署名済みの見積書を返信してください')}<br/>{t('', 'to sales@futureknowledge.ai', '宛先: sales@futureknowledge.ai')}</>
+                                                <>{t('', 'Please sign and return the quotation', '署名済みの見積書を返信してください')}</>
                                             )}
                                         </p>
                                     </div>
-                                    {!isIntl && (
+                                    
+                                    {!isIntl ? (
                                         <div className="space-y-4">
                                             {currency === 'TWD' && (<a href="https://lin.ee/luo4Dgq" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3 bg-[#06c755] hover:bg-[#05b34c] text-white py-4 rounded-xl font-bold transition-transform hover:scale-105 shadow-lg"><MessageCircle size={24} /> 傳送至 LINE 客服</a>)}
                                             {currency === 'HKD' && (<><a href="https://wa.me/message/OOAOI3R5DAQVJ1" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#20bd5a] text-white py-4 rounded-xl font-bold transition-transform hover:scale-105 shadow-lg"><Phone size={24} /> 傳送至 WhatsApp</a><div className="mt-6 pt-6 border-t border-slate-700"><p className="text-slate-400 text-sm mb-3 text-center">或選擇線上付款：</p></div></>)}
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-4 mt-6 pt-6 border-t border-slate-700">
+                                            {region === 'JP' && (
+                                                <>
+                                                    <a href="https://lin.ee/5xNAlwM" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3 bg-[#06c755] hover:bg-[#05b34c] text-white py-4 rounded-xl font-bold transition-transform hover:scale-105 shadow-lg"><MessageCircle size={24} /> LINEでお問い合わせ</a>
+                                                    <p className="text-slate-400 text-sm text-center mt-4">またはメールで送信：<br/><a href="mailto:japan@edcafeai.ai" className="text-cyan-400 font-bold">japan@edcafeai.ai</a></p>
+                                                </>
+                                            )}
+                                            {region === 'AU' && (
+                                                <p className="text-slate-400 text-sm text-center">Please return signed copy to:<br/><a href="mailto:australia@edcafeai.ai" className="text-cyan-400 font-bold">australia@edcafeai.ai</a></p>
+                                            )}
+                                            {(region === 'UK' || region === 'MY') && (
+                                                <p className="text-slate-400 text-sm text-center">Please return signed copy to:<br/><a href="mailto:edcafe@edcafeai.ai" className="text-cyan-400 font-bold">edcafe@edcafeai.ai</a></p>
+                                            )}
                                         </div>
                                     )}
                                     <div className="mt-6 text-center text-xs text-slate-500">{t('專人將於收到文件後協助您開通授權', 'Our team will assist with activation after receiving the document', '書類受領後、担当者が有効化をサポートします')}</div>
@@ -1325,6 +1436,7 @@
                                             {!isIntl && referralCode && !totals.appliedRule && <li className="text-slate-800 font-medium">指定推薦代碼：{referralCode}</li>}
                                             {!isIntl && <li className="text-red-600 font-bold text-sm mt-2 print:text-black">匯款請在備註欄上填寫貴校大名以利對帳 謝謝</li>}
                                             
+                                            {/* 各國銀行帳戶切換 */}
                                             {!isIntl && currency === 'TWD' && (
                                                 <>
                                                     <li className="mt-1 pt-1 border-t border-slate-200 text-slate-600 font-bold print:text-black">經典人文教育股份有限公司</li>
@@ -1333,7 +1445,6 @@
                                                     <li className="print:hidden"><a href="https://drive.google.com/file/d/1KzCNoW6X4UT_0o-fjniSq4p3KjPiWpYJ/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800 flex items-center gap-1"><ExternalLink size={12} /> Edcafe AI 台幣銀行存摺</a></li>
                                                 </>
                                             )}
-                                            
                                             {!isIntl && currency === 'HKD' && (
                                                 <>
                                                     <li className="mt-1 pt-1 border-t border-slate-200 text-slate-800 font-bold print:text-black">Airwallex 全球收款账户信息</li>
@@ -1344,6 +1455,36 @@
                                                     <li className="text-slate-600">地區: 香港特別行政區</li>
                                                 </>
                                             )}
+                                            {region === 'AU' && (
+                                                <>
+                                                    <li className="mt-1 pt-1 border-t border-slate-200 text-slate-800 font-bold print:text-black">Bank Details</li>
+                                                    <li className="text-slate-600 text-[10px]">Account Name: JING DIAN REN WEN JIAO YU GU FEN YOU XIAN GONG SI</li>
+                                                    <li className="text-slate-600">Account Number: 613669884</li>
+                                                    <li className="text-slate-600">BSB: 013943</li>
+                                                    <li className="text-slate-600">Bank Name: Australia and New Zealand Banking Group Limited</li>
+                                                </>
+                                            )}
+                                            {region === 'UK' && (
+                                                <>
+                                                    <li className="mt-1 pt-1 border-t border-slate-200 text-slate-800 font-bold print:text-black">Bank Details</li>
+                                                    <li className="text-slate-600 text-[10px]">Account Name: JING DIAN REN WEN JIAO YU GU FEN YOU XIAN GONG SI</li>
+                                                    <li className="text-slate-600">Account Number: 05117769</li>
+                                                    <li className="text-slate-600">Sort Code: 041907</li>
+                                                    <li className="text-slate-600">SWIFT: AIRWGB22XXX</li>
+                                                    <li className="text-slate-600">Bank Name: AIRWALLEX (UK) LIMITED</li>
+                                                </>
+                                            )}
+                                            {(region === 'MY' || region === 'JP') && (
+                                                <>
+                                                    <li className="mt-1 pt-1 border-t border-slate-200 text-slate-800 font-bold print:text-black">{region === 'JP' ? '振込先口座情報' : 'Bank Details'}</li>
+                                                    <li className="text-slate-600 text-[10px]">{region === 'JP' ? '口座名義' : 'Account Name'}: JING DIAN REN WEN JIAO YU GU FEN YOU XIAN GONG SI</li>
+                                                    <li className="text-slate-600">{region === 'JP' ? '口座番号' : 'Account Number'}: 88538718545</li>
+                                                    <li className="text-slate-600">{region === 'JP' ? '銀行コード' : 'Bank Code'}: 7171</li>
+                                                    <li className="text-slate-600">{region === 'JP' ? '支店コード' : 'Branch Code'}: 072</li>
+                                                    <li className="text-slate-600">SWIFT: DBSSSGSG</li>
+                                                    <li className="text-slate-600">{region === 'JP' ? '銀行名' : 'Bank Name'}: DBS Bank Ltd</li>
+                                                </>
+                                            )}
                                         </ul>
                                     </div>
                                     <div>
@@ -1352,8 +1493,8 @@
                                                 <span className="text-xs text-slate-400 font-medium uppercase tracking-wider print:text-slate-600">{t('請在此處用印或簽名回傳', 'Please sign or stamp here and return', 'こちらに署名または捺印してご返信ください')}</span>
                                             </div>
                                             <p className="text-[10px] text-slate-400 mt-3 text-center">
-                                                {t('簽署後請回傳至 sales@futureknowledge.ai 以完成訂單程序。', 'Please return signed copy to sales@futureknowledge.ai.', '署名後、sales@futureknowledge.ai までご返信ください。')}<br/>
-                                                {t('本報價單內容具商業機密，請勿外流。', 'Confidential.', '本見積書は機密情報です。')}
+                                                {t('簽署後請回傳至 sales@futureknowledge.ai 以完成訂單程序。', 'Please return the signed copy. Confidential.', '署名後、指定のメールアドレスまでご返信ください。')}<br/>
+                                                {t('本報價單內容具商業機密，請勿外流。', '', '本見積書は機密情報です。')}
                                             </p>
                                     </div>
                                 </div>
