@@ -589,7 +589,7 @@
                     const qty = cart[p.id];
                     if (qty > 0) {
                         const unitPrice = getProductPrice(p, qty);
-                        const itemTotalPrice = formatPrice(unitPrice * qty).replace(/HK\$ |NT\$ |A\$ |£ |US\$ |RM |¥ /g, '');
+                        const itemTotalPrice = formatPrice(unitPrice * qty));
                             
                         itemsPayload.push({
                             name: `${p.name} x ${qty}`,
