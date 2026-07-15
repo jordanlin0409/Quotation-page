@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <title>Welcome to Edcafe AI - Quotation System</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -133,6 +132,7 @@
         };
 
         const QuotationSystem = () => {
+            // --- 狀態管理 ---
             const [step, setStep] = useState(0); 
             const [region, setRegion] = useState(''); 
             const [referralCode, setReferralCode] = useState('');
@@ -148,21 +148,24 @@
                 date: new Date().toISOString().split('T')[0], note: ''
             });
 
+            // 核心分流判斷
             const isIntl = ['AU', 'UK', 'MY', 'JP'].includes(region);
 
+            // 多國語系動態翻譯輔助函式
             const t = (tw, en, jp) => {
                 if (region === 'JP') return jp || en || tw;
                 if (isIntl) return en || tw;
                 return tw;
             };
 
+            // --- 國家設定 (加入國旗 flag) ---
             const REGION_CONFIG = {
-                'TW': { code: 'TW', name: '台灣', currency: 'TWD', lang: 'zh', flagUrl: 'https://flagcdn.com/w80/tw.png' },
-                'HK': { code: 'HK', name: '香港', currency: 'HKD', lang: 'zh', flagUrl: 'https://flagcdn.com/w80/hk.png' },
-                'AU': { code: 'AU', name: 'Australia', currency: 'AUD', lang: 'en', flagUrl: 'https://flagcdn.com/w80/au.png' },
-                'UK': { code: 'UK', name: 'United Kingdom', currency: 'GBP', lang: 'en', flagUrl: 'https://flagcdn.com/w80/gb.png' },
-                'MY': { code: 'MY', name: 'Malaysia', currency: 'USD', lang: 'en', flagUrl: 'https://flagcdn.com/w80/my.png' },
-                'JP': { code: 'JP', name: 'Japan', currency: 'JPY', lang: 'ja', flagUrl: 'https://flagcdn.com/w80/jp.png' }
+                'TW': { code: 'TW', name: '台灣', currency: 'TWD', lang: 'zh', flag: '🇹🇼' },
+                'HK': { code: 'HK', name: '香港', currency: 'HKD', lang: 'zh', flag: '🇭🇰' },
+                'AU': { code: 'AU', name: 'Australia', currency: 'AUD', lang: 'en', flag: '🇦🇺' },
+                'UK': { code: 'UK', name: 'United Kingdom', currency: 'GBP', lang: 'en', flag: '🇬🇧' },
+                'MY': { code: 'MY', name: 'Malaysia', currency: 'USD', lang: 'en', flag: '🇲🇾' },
+                'JP': { code: 'JP', name: 'Japan', currency: 'JPY', lang: 'ja', flag: '🇯🇵' }
             };
 
             const handleRegionSelect = (regionCode) => {
@@ -172,6 +175,7 @@
             };
 
             const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwrz5nz9VtFN93rEHa5s2-biA4qQIVcx0kN5TDoPbPiwoDT8FAVu7632EASD9hV5E64iw/exec"; 
+            const AIRWALLEX_LINK = ""; 
             const STATEMENT_LINK = "https://drive.google.com/file/d/1FilXl5as_biAy8Y4swmqW9SLNpD0Idc0/view?usp=sharing";
             const AGENCY_PROOF_LINK = "https://65cba177-0604-4c48-be0d-e242b10e175a.filesusr.com/ugd/f58c1e_84d0ea46e14544e887cccdf5218eda7a.pdf";
 
@@ -181,7 +185,7 @@
             ];
 
             const agentGroups = {
-                groupA: ['勁園351#', '麗文$581', '台奇資訊3351', '仕揚科技2850', '國眾電腦%480', '英閱音躍研創0709','新叡文教-+12','校園文化8103', '宥林數位4824', '奧斯丁國際6850', '旭恩科技5555', '先志2258', '葉興資訊6841', '吉邦數位8750', '開駿實業6971', '智識家1573', '優學網Gary', '首羿國際6840', '神奕教育5816', '極電資訊8710', '炳昌企業8842', '泰溥科技9852', '長峰資訊2616', '宏寶6842', '全華圖書3318', '宏菖文教4317', '潤采數位5988'],
+                groupA: ['勁園351#', '麗文$581', '台奇資訊3351', '仕揚科技2850', '國眾電腦%480', '新叡文教-+12', '校園文化8103', '宥林數位4824', '奧斯丁國際6850', '旭恩科技5555', '先志2258', '葉興資訊6841', '吉邦數位8750', '開駿實業6971', '智識家1573', '優學網Gary', '首羿國際6840', '神奕教育5816', '極電資訊8710', '炳昌企業8842', '泰溥科技9852', '長峰資訊2616', '宏寶6842', '全華圖書3318', '宏菖文教4317', '潤采數位5988'],
                 groupC: ['敦煌書局9520'],
                 groupB: ['承揚5810', '富動科技1582'],
                 groupD: ['晶盛科技9977'],
@@ -218,11 +222,13 @@
             const getProductPrice = (product, qty = 1) => {
                 const group = getAgentGroup(referralCode);
 
+                // 國際專區報價
                 if (region === 'AU') return product.id === 'edcafe_pro' ? 129 : 249;
                 if (region === 'UK') return product.id === 'edcafe_pro' ? 69 : 129;
-                if (region === 'MY') return product.id === 'edcafe_pro' ? 89 : 169;
+                if (region === 'MY') return product.id === 'edcafe_pro' ? 89 : 169; // 馬來西亞已改 USD 報價
                 if (region === 'JP') return product.id === 'edcafe_pro' ? 14900 : 27900;
 
+                // 原始 TW / HK 報價邏輯
                 if (group === 'Senco' && currency === 'HKD' && product.id === 'kahoot') {
                     const normalHKD = product.priceHKD || Math.round(product.price * EXCHANGE_RATE);
                     const discountFactor = qty > 25 ? 0.8 : 0.9;
@@ -320,6 +326,8 @@
                 return `NT$ ${price.toLocaleString()}`;
             };
 
+            const originLabel = '新加坡 🇸🇬 / ' + (region === 'HK' ? '香港獨家代理' : '台灣獨家代理');
+
             const allProducts = [
                 { 
                     id: 'edcafe_pro', 
@@ -331,8 +339,8 @@
                     category: 'edcafe',
                     section: 'hero',
                     brandColor: 'bg-white',
-                    logoImg: 'images/edcafe-logo.png',
-                    country: t('新加坡 🇸🇬 / 台灣獨家代理', 'Singapore 🇸🇬', 'シンガポール 🇸🇬'),
+                    logoImg: 'edcafe-logo.png', // 已修正在根目錄
+                    country: t(originLabel, 'Singapore 🇸🇬', 'シンガポール 🇸🇬'),
                     badge: t('年銷3000萬', 'Best Seller', 'ベストセラー'),
                     hasTutorial: true,
                     hasNotion: true,
@@ -352,8 +360,8 @@
                     category: 'edcafe',
                     section: 'hero',
                     brandColor: 'bg-white', 
-                    logoImg: 'images/edcafe-logo.png',
-                    country: t('新加坡 🇸🇬 / 台灣獨家代理', 'Singapore 🇸🇬', 'シンガポール 🇸🇬'),
+                    logoImg: 'edcafe-logo.png', // 已修正在根目錄
+                    country: t(originLabel, 'Singapore 🇸🇬', 'シンガポール 🇸🇬'),
                     badge: t('促銷價', 'Sale', 'セール'),
                     hasTutorial: true,
                     hasNotion: true,
@@ -363,8 +371,91 @@
                         (region === 'JP' ? ['全機能アクセス', '無制限のAI生成', 'テスト作成', 'チャットボット作成', '採点アシスタント', '参加者無制限', '無制限のカスタムボット'] : ['Full access', 'Unlimited AI generations', 'Quiz generator', 'Chatbot generator', 'Grading assistant', 'Unlimited participants', 'Unlimited custom chatbots'])
                         : ['全功能解鎖', '無限次 AI 生成', '測驗產生器', '聊天機器人產生器', '作業評分器', '不限參與人數', '無限客製化聊天機器人', '無限作業評分助手']
                 },
-                { 
-                    id: 'kahoot', 
+                {
+                    id: 'edcafe_campus_35',
+                    name: 'Edcafe AI Pro 校園版 (35組)',
+                    price: 109999,
+                    priceHKD: 24990,
+                    category: 'edcafe_campus',
+                    section: 'hero',
+                    standalone: true,
+                    brandColor: 'bg-white',
+                    logoImg: 'edcafe-logo.png',
+                    country: originLabel,
+                    badge: '校園方案',
+                    features: ['+ 後台帳號管理功能', '+ 優惠價格', '+ 線上研習 1 HR'],
+                    details: ['35 組 Edcafe AI Pro 帳號', '後台帳號管理功能', '優惠價格', '線上研習 1 HR']
+                },
+                {
+                    id: 'edcafe_campus_50',
+                    name: 'Edcafe AI Pro 校園版 (50組)',
+                    price: 149990,
+                    priceHKD: 34950,
+                    category: 'edcafe_campus',
+                    section: 'hero',
+                    standalone: true,
+                    brandColor: 'bg-white',
+                    logoImg: 'edcafe-logo.png',
+                    country: originLabel,
+                    badge: '校園方案',
+                    features: ['+ 後台帳號管理功能', '+ 優惠價格', region === 'HK' ? '+ 線上研習 2 HR' : '+ 實體研習 2 HR'],
+                    details: ['50 組 Edcafe AI Pro 帳號', '後台帳號管理功能', '優惠價格', region === 'HK' ? '線上研習 2 HR' : '實體研習 2 HR']
+                },
+                {
+                    id: 'edcafe_campus_100',
+                    name: 'Edcafe AI Pro 校園版 (100組)',
+                    price: 64900,
+                    priceHKD: 64900,
+                    category: 'edcafe_campus',
+                    section: 'hero',
+                    standalone: true,
+                    hkOnly: true,
+                    brandColor: 'bg-white',
+                    logoImg: 'edcafe-logo.png',
+                    country: originLabel,
+                    badge: '校園方案',
+                    features: ['+ 後台帳號管理功能', '+ 優惠價格', '+ 線上研習 2 HR ×2 場'],
+                    details: ['100 組 Edcafe AI Pro 帳號', '後台帳號管理功能', '優惠價格', '線上研習 2 HR ×2 場']
+                },
+                {
+                    id: 'bundle_ke_10',
+                    name: 'Kahoot + Edcafe AI Pro 校園版 各10組',
+                    price: 74900,
+                    priceHKD: 17950,
+                    category: 'bundle',
+                    section: 'bundle',
+                    standalone: true,
+                    country: originLabel,
+                    features: ['+ 後台帳號管理功能', '+ 優惠價格'],
+                    details: ['Kahoot 各 10 組', 'Edcafe AI Pro 校園版 各 10 組', '後台帳號管理功能', '優惠價格']
+                },
+                {
+                    id: 'bundle_ke_20',
+                    name: 'Kahoot + Edcafe AI Pro 校園版 各20組',
+                    price: 149990,
+                    priceHKD: 34950,
+                    category: 'bundle',
+                    section: 'bundle',
+                    standalone: true,
+                    country: originLabel,
+                    features: ['+ 後台帳號管理功能', '+ 優惠價格', region === 'HK' ? '+ 線上研習 2 HR' : '+ 實體研習 2 HR'],
+                    details: ['Kahoot 各 20 組', 'Edcafe AI Pro 校園版 各 20 組', '後台帳號管理功能', '優惠價格', region === 'HK' ? '線上研習 2 HR' : '實體研習 2 HR']
+                },
+                {
+                    id: 'bundle_ke_50',
+                    name: 'Kahoot + Edcafe AI Pro 校園版 各50組',
+                    price: 79950,
+                    priceHKD: 79950,
+                    category: 'bundle',
+                    section: 'bundle',
+                    standalone: true,
+                    hkOnly: true,
+                    country: originLabel,
+                    features: ['+ 後台帳號管理功能', '+ 優惠價格', '+ 線上研習 2 HR ×2 場'],
+                    details: ['Kahoot 各 50 組', 'Edcafe AI Pro 校園版 各 50 組', '後台帳號管理功能', '優惠價格', '線上研習 2 HR ×2 場']
+                },
+                {
+                    id: 'kahoot',
                     name: 'Kahoot EDU Standard 教師版',
                     price: 4500, 
                     desc: '全球最受歡迎的遊戲化學習平台',
@@ -372,7 +463,7 @@
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
-                    logoImg: 'images/kahoot-logo.png',
+                    logoImg: 'kahoot-logo.png', // 已修正在根目錄
                     country: '挪威 🇳🇴',
                     hasTutorial: true,
                     videoUrl: 'https://youtu.be/7ndLUhJlsBU?si=XLGih3Q9jg0PVF_6',
@@ -386,7 +477,7 @@
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
-                    logoImg: 'images/padlet-logo.png',
+                    logoImg: 'padlet-logo.png', // 已修正在根目錄
                     country: '美國 🇺🇸',
                     minQty: 10, 
                     hasTutorial: true,
@@ -402,7 +493,7 @@
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
-                    logoImg: 'images/wordwall-logo.png',
+                    logoImg: 'wordwall-logo.png', // 已修正在根目錄
                     country: '英國 🇬🇧',
                     hasTutorial: true,
                     videoUrl: 'https://youtube.com/playlist?list=PLU-8o76TOvQX7dKPKPDDDTEiVqaLRfOgs&si=yTUE9EFc5UkEJvCq',
@@ -417,7 +508,7 @@
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
-                    logoImg: 'images/wordwall-logo.png',
+                    logoImg: 'wordwall-logo.png', // 已修正在根目錄
                     country: '英國 🇬🇧',
                     hasTutorial: true,
                     videoUrl: 'https://youtube.com/playlist?list=PLU-8o76TOvQX7dKPKPDDDTEiVqaLRfOgs&si=yTUE9EFc5UkEJvCq',
@@ -433,7 +524,7 @@
                     category: 'other',
                     section: 'standard',
                     brandColor: 'bg-white', 
-                    logoImg: 'images/gemini-logo.png',
+                    logoImg: 'gemini-logo.png', // 已修正在根目錄
                     country: '美國 🇺🇸',
                     hasTutorial: true,
                     videoUrl: 'https://youtu.be/2fTqduml_CY?si=HuF6qDplNq0yQFSf',
@@ -446,7 +537,9 @@
             const stepsInfo = getStepsInfo(lang);
 
             const products = allProducts.filter(p => {
-                if (isIntl && p.category !== 'edcafe') return false; 
+                if (p.standalone && isIntl) return false; // 校園版/組合包：僅台灣、香港
+                if (p.hkOnly && currency !== 'HKD') return false; // 100組/各50組：僅香港
+                if (isIntl && p.category !== 'edcafe') return false;
                 return !(currency === 'HKD' && p.id === 'padlet');
             });
 
@@ -485,7 +578,9 @@
                     subtotal += amount;
                     itemCount += qty;
                     
-                    if (p.category === 'edcafe') {
+                    if (p.standalone) {
+                        // 校園版/組合包：固定價，不參與甜心卡套數與折抵邏輯
+                    } else if (p.category === 'edcafe') {
                         edcafeCount += qty;
                     } else if (p.id !== 'gemini_pro') {
                         otherSoftwareSubtotal += amount;
@@ -589,7 +684,7 @@
                     const qty = cart[p.id];
                     if (qty > 0) {
                         const unitPrice = getProductPrice(p, qty);
-                        const itemTotalPrice = formatPrice(unitPrice * qty);
+                        const itemTotalPrice = formatPrice(unitPrice * qty).replace(/HK\$ |NT\$ |A\$ |£ |US\$ |RM |¥ /g, '');
                             
                         itemsPayload.push({
                             name: `${p.name} x ${qty}`,
@@ -622,7 +717,7 @@
                     }
                     await fetch(GOOGLE_SCRIPT_URL, {
                         method: "POST",
-                        mode: "no-cors", 
+                        mode: "no-cors",
                         headers: { "Content-Type": "text/plain" },
                         body: JSON.stringify(orderPayload),
                     });
@@ -833,12 +928,12 @@
                                     {isIntl ? (
                                         homeUrl ? (
                                             <a href={homeUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3">
-                                                <img src="images/edcafe-logo.png" alt="Edcafe AI" className="h-8 md:h-10 bg-white/90 p-1 rounded object-contain" />
+                                                <img src="edcafe-logo.png" alt="Edcafe AI" className="h-8 md:h-10 bg-white/90 p-1 rounded object-contain" />
                                                 <h1 className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 tracking-tight whitespace-nowrap" style={{ fontFamily: 'Arial Black, sans-serif' }}>Edcafe AI</h1>
                                             </a>
                                         ) : (
                                             <div className="flex items-center gap-3">
-                                                <img src="images/edcafe-logo.png" alt="Edcafe AI" className="h-8 md:h-10 bg-white/90 p-1 rounded object-contain" />
+                                                <img src="edcafe-logo.png" alt="Edcafe AI" className="h-8 md:h-10 bg-white/90 p-1 rounded object-contain" />
                                                 <h1 className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 tracking-tight whitespace-nowrap" style={{ fontFamily: 'Arial Black, sans-serif' }}>Edcafe AI</h1>
                                             </div>
                                         )
@@ -919,7 +1014,7 @@
                         <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-cyan-900/20 to-transparent pointer-events-none"></div>
                         
                         <div className="z-10 text-center mb-12 mt-8">
-                            <img src="images/edcafe-logo.png" alt="Edcafe AI Logo" className="h-20 md:h-24 bg-white/90 p-2 rounded-xl mx-auto mb-6 object-contain shadow-[0_0_20px_rgba(255,255,255,0.1)]" />
+                            <img src="edcafe-logo.png" alt="Edcafe AI Logo" className="h-20 md:h-24 bg-white/90 p-2 rounded-xl mx-auto mb-6 object-contain shadow-[0_0_20px_rgba(255,255,255,0.1)]" />
                             <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 mb-4 tracking-tight" style={{ fontFamily: 'Arial Black, sans-serif' }}>
                                 Welcome to Edcafe AI
                             </h1>
@@ -932,7 +1027,8 @@
                                     onClick={() => handleRegionSelect(code)}
                                     className="group bg-slate-900 border border-slate-700 hover:border-cyan-500 rounded-2xl p-6 transition-all duration-300 hover:shadow-[0_0_30px_rgba(6,182,212,0.3)] hover:-translate-y-1 flex flex-col items-center justify-center gap-3"
                                 >
-                                    <img src={config.flagUrl} alt={config.name} className="w-12 h-auto group-hover:scale-110 transition-transform shadow-sm rounded-sm" />
+                                    {/* 加入國旗 */}
+                                    <span className="text-4xl group-hover:scale-110 transition-transform">{config.flag}</span>
                                     <span className="text-2xl font-bold text-slate-200 group-hover:text-cyan-400">{config.name}</span>
                                     <span className="text-slate-500 text-xs font-mono bg-slate-800 px-2 py-1 rounded">{config.currency}</span>
                                 </button>
@@ -944,6 +1040,7 @@
 
             if (step === 1) {
                 const heroProducts = products.filter(p => p.section === 'hero');
+                const bundleProducts = products.filter(p => p.section === 'bundle');
                 const standardProducts = products.filter(p => p.section === 'standard');
 
                 return (
@@ -974,7 +1071,7 @@
                                     <div className="inline-block relative group">
                                         <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-full blur opacity-40 group-hover:opacity-75 transition duration-500"></div>
                                         <span className="relative flex items-center gap-2 px-8 py-3 rounded-full bg-slate-900 border border-slate-700 text-white font-black text-xl md:text-2xl shadow-2xl tracking-wide">
-                                            只要有買 Edcafe，其他軟體我來 Pay！
+                                            {region === 'HK' ? '『智』啟學教 AI計畫 最好的選擇' : 'AI方舟計畫 數位精進方案 最好的選擇'}
                                         </span>
                                     </div>
                                 </div>
@@ -984,7 +1081,7 @@
                                 <div className="max-w-xl mx-auto mb-16 relative">
                                     <div className="bg-slate-900/80 backdrop-blur-md p-1.5 rounded-full shadow-2xl border border-slate-700 flex items-center pl-6 pr-2 transition-all focus-within:ring-2 focus-within:ring-cyan-500/50 focus-within:border-cyan-500">
                                         <Tag className="text-cyan-500 w-5 h-5 mr-3" />
-                                        <input type="text" placeholder="輸入推薦代碼 (例如：翻轉教育, 燕秋老師)" className="flex-1 outline-none text-white placeholder:text-slate-500 font-medium bg-transparent tracking-wide" value={referralCode} onChange={(e) => setReferralCode(e.target.value)} />
+                                        <input type="text" placeholder={currency === 'HKD' ? '輸入推薦代碼' : '輸入推薦代碼 (例如：翻轉教育, 燕秋老師)'} className="flex-1 outline-none text-white placeholder:text-slate-500 font-medium bg-transparent tracking-wide" value={referralCode} onChange={(e) => setReferralCode(e.target.value)} />
                                         <div className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-300 ${totals.discount > 0 || getAgentGroup(referralCode) ? 'bg-green-500/20 text-green-400 border border-green-500/30 shadow-[0_0_10px_rgba(74,222,128,0.2)]' : 'bg-slate-800 text-slate-500 border border-slate-700'}`}>
                                             {totals.discount > 0 || getAgentGroup(referralCode) ? '優惠/價格已套用' : '未套用折扣'}
                                         </div>
@@ -1066,10 +1163,18 @@
                                                     </div>
                                                     <div className="flex-1 mb-2">
                                                         <h3 className="text-2xl font-bold text-white mb-2 tracking-tight">{product.name}</h3>
-                                                        <p className="text-cyan-200 mb-3 text-sm leading-relaxed border-l-2 border-slate-700 pl-3">
-                                                            {product.desc}
-                                                            {product.subDesc && <><br /><span className="text-cyan-100 text-xs mt-1 block">{product.subDesc}</span></>}
-                                                        </p>
+                                                        {product.features ? (
+                                                            <ul className="space-y-2 mt-3">
+                                                                {product.features.map((f, i) => (
+                                                                    <li key={i} className="flex items-center gap-2 text-sm text-cyan-100 font-medium"><Check size={16} className="text-green-400 shrink-0" /> {f}</li>
+                                                                ))}
+                                                            </ul>
+                                                        ) : (
+                                                            <p className="text-cyan-200 mb-3 text-sm leading-relaxed border-l-2 border-slate-700 pl-3">
+                                                                {product.desc}
+                                                                {product.subDesc && <><br /><span className="text-cyan-100 text-xs mt-1 block">{product.subDesc}</span></>}
+                                                            </p>
+                                                        )}
                                                     </div>
                                                     <div className="mt-auto">
                                                         <div className="text-sm text-cyan-200 font-mono flex items-center gap-1 font-bold mb-1"><Flag size={14} /> {t('技術來源：', 'Origin: ', '開発国: ')}{product.country}</div>
@@ -1086,6 +1191,47 @@
                                         ))}
                                     </div>
                                 </div>
+
+                                {!isIntl && bundleProducts.length > 0 && (
+                                <div>
+                                    <div className="flex items-center justify-between mb-8 border-b border-slate-800 pb-4">
+                                        <h2 className="text-2xl font-bold text-slate-200 flex items-center gap-3"><Sparkles className="w-6 h-6 text-pink-400" /> 超值組合方案（Kahoot + Edcafe）</h2>
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        {bundleProducts.map(product => (
+                                            <div key={product.id} className={`relative bg-slate-900 rounded-xl border transition-all duration-300 overflow-hidden group h-full flex flex-col hover:transform hover:-translate-y-1 min-h-[280px] ${cart[product.id] > 0 ? 'border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.15)] ring-1 ring-cyan-500/20' : 'border-slate-800 hover:border-slate-600 hover:shadow-lg'}`}>
+                                                <div className="p-6 flex flex-col h-full">
+                                                    <div className="flex items-center justify-between mb-5">
+                                                        <div className="flex items-center gap-2">
+                                                            <img src="kahoot-logo.png" alt="Kahoot" className="h-8 w-auto max-w-[70px] object-contain bg-white/95 rounded px-2 py-1" />
+                                                            <span className="text-slate-500 font-bold text-lg">+</span>
+                                                            <img src="edcafe-logo.png" alt="Edcafe" className="h-8 w-auto max-w-[80px] object-contain bg-white/95 rounded px-2 py-1" />
+                                                        </div>
+                                                        {cart[product.id] > 0 && <div className="bg-cyan-500/10 p-1.5 rounded-full"><Check size={16} className="text-cyan-400" /></div>}
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <h3 className="font-bold text-slate-100 text-lg mb-3 leading-snug">{product.name}</h3>
+                                                        <ul className="space-y-2 mb-4">
+                                                            {product.features.map((f, i) => (
+                                                                <li key={i} className="flex items-center gap-2 text-sm text-cyan-100 font-medium"><Check size={14} className="text-green-400 shrink-0" /> {f}</li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                    <div className="mb-1 flex items-center gap-1 text-xs text-cyan-200 font-mono font-bold"><Flag size={12} /> 技術來源：{product.country}</div>
+                                                    <div className="mt-auto flex items-end justify-between border-t border-slate-800 pt-3">
+                                                        <div>
+                                                            <div className="text-[10px] text-slate-500 uppercase tracking-widest mb-1">{t('年費', 'Annual Fee', '年会費')}</div>
+                                                            <div className="text-slate-100 font-bold text-2xl tracking-tight">{formatPrice(getProductPrice(product, cart[product.id]))}</div>
+                                                        </div>
+                                                        <QuantityControl productId={product.id} compact={true} />
+                                                    </div>
+                                                </div>
+                                                <div className={`h-[2px] w-full transition-all duration-300 ${cart[product.id] > 0 ? 'bg-gradient-to-r from-cyan-500 to-blue-500' : 'bg-transparent'}`}></div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                                )}
 
                                 {!isIntl && standardProducts.length > 0 && (
                                 <div>
