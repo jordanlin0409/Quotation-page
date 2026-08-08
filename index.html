@@ -18,8 +18,18 @@
   h1,h2,h3,h4,h5,h6 { font-family: "Archivo", "Noto Sans TC", system-ui, sans-serif; }
   a { color: var(--color-accent-700); text-decoration: none; }
   a:hover { color: var(--color-accent); }
-  .btn { white-space: nowrap; flex: 0 0 auto; }
-  .btn:disabled { opacity: 1; background: #ebebeb; color: #a0a0a0; border-color: #dcdcdc; }
+  .btn { white-space: nowrap; flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: flex-start;
+    font-family: inherit; font-size: 14.5px; font-weight: 900; line-height: 1.2; border-radius: 0;
+    padding: 11px 16px; border: 1px solid #101010; background: #fff; color: #101010; cursor: pointer; text-decoration: none; }
+  .btn-secondary { background: #fff; color: #101010; border: 1px solid #101010; }
+  .btn-secondary:hover { background: #f0f0f0; }
+  .btn:disabled { opacity: 1; background: #ebebeb; color: #a0a0a0; border-color: #dcdcdc; cursor: not-allowed; }
+  .field { display: grid; gap: 7px; }
+  .field label { font-size: 11px; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; color: #4f4f4f; }
+  .input { font-family: inherit; font-size: 15px; color: #101010; background: #fff;
+    border: 1px solid #101010; border-radius: 0; padding: 10px 12px; width: 100%; box-sizing: border-box; }
+  .input:focus { outline: 2px solid #101010; outline-offset: 0; }
+  textarea.input { resize: vertical; }
   input[type=number]::-webkit-outer-spin-button,
   input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
   @media print {
@@ -339,7 +349,7 @@
             <div style="font-size: 25px; font-weight: 900; letter-spacing: -0.02em;">{{ totalLabel }}</div>
           </div>
           <div style="font-size: 13.5px; color: var(--color-accent-700); font-weight: 700; max-width: 32em;">{{ appliedRule }}</div>
-          <button class="btn btn-primary" onClick="{{ goForm }}" disabled="{{ noItems }}" style="margin-left: auto; padding: 18px 34px; font-size: 19px; font-weight: 900; letter-spacing: 0.02em; box-shadow: 4px 4px 0 var(--color-neutral-300);" style-hover="box-shadow: 2px 2px 0 var(--color-neutral-400); transform: translate(2px, 2px)">{{ t.nextDetails }}</button>
+          <button class="btn" onClick="{{ goForm }}" disabled="{{ noItems }}" style="{{ nextBtnStyle }}">{{ t.nextDetails }}</button>
         </div>
       </div>
     </div>
@@ -385,7 +395,7 @@
         <button class="btn btn-secondary" onClick="{{ goProducts }}" style="padding: 13px 20px; font-size: 15.5px;">{{ t.back }}</button>
         <div style="margin-left: auto; display: flex; align-items: center; gap: 18px;">
           <div style="font-size: 15.5px; font-weight: 900;">{{ totalLabel }}</div>
-          <button class="btn btn-primary" onClick="{{ goQuote }}" disabled="{{ formInvalid }}" style="padding: 13px 20px; font-size: 15.5px;">{{ t.previewQuote }}</button>
+          <button class="btn" onClick="{{ goQuote }}" disabled="{{ formInvalid }}" style="{{ previewBtnStyle }}">{{ t.previewQuote }}</button>
         </div>
       </div>
     </section>
@@ -396,7 +406,7 @@
       <div class="no-print" style="max-width: 900px; margin: 0 auto; padding: 32px 40px 20px; display: flex; align-items: center; gap: 12px;">
         <button class="btn btn-secondary" onClick="{{ goForm }}" style="padding: 11px 16px; font-size: 14.5px;">{{ t.backEdit }}</button>
         <button class="btn btn-secondary" onClick="{{ printQuote }}" style="padding: 11px 16px; font-size: 14.5px;">{{ t.downloadPdf }}</button>
-        <button class="btn btn-primary" onClick="{{ confirmOrder }}" disabled="{{ submitting }}" style="margin-left: auto; padding: 11px 18px; font-size: 14.5px;">{{ confirmLabel }}</button>
+        <button class="btn" onClick="{{ confirmOrder }}" disabled="{{ submitting }}" style="{{ confirmBtnStyle }}">{{ confirmLabel }}</button>
       </div>
 
       <div style="max-width: 900px; margin: 0 auto 90px; padding: 0 40px;">
@@ -508,7 +518,7 @@
               </div>
             </div>
             <div style="display: grid; gap: 10px;">
-              <a class="btn btn-primary" href="{{ contactHref }}" target="_blank" style="padding: 13px 18px; font-size: 15.5px;">{{ contactLabel }}</a>
+              <a class="btn" href="{{ contactHref }}" target="_blank" style="padding: 13px 18px; font-size: 15.5px; background: #101010; color: #fff; border: 0;">{{ contactLabel }}</a>
               <button class="btn btn-secondary" onClick="{{ closeConfirm }}" style="padding: 13px 18px; font-size: 15.5px;">{{ t.close }}</button>
             </div>
           </div>
@@ -1189,6 +1199,13 @@ class Component extends DCLogic {
         this.submitOrder(orderId, tot).then(() => this.setState({ submitting: false, showConfirm: true }));
       },
       submitting: !!st.submitting,
+      confirmBtnStyle: {
+        marginLeft: 'auto', padding: '11px 18px', fontSize: '14.5px', fontWeight: 900,
+        fontFamily: 'inherit', border: 0, borderRadius: 0,
+        cursor: st.submitting ? 'not-allowed' : 'pointer',
+        background: st.submitting ? '#ebebeb' : '#101010',
+        color: st.submitting ? '#a0a0a0' : '#ffffff'
+      },
       confirmLabel: st.submitting ? (zh ? '送出中…' : 'Sending…') : t.confirmOrder,
       closeConfirm: () => this.setState({ showConfirm: false }),
       showConfirm: st.showConfirm,
@@ -1229,6 +1246,14 @@ class Component extends DCLogic {
       },
       itemCountLabel: tot.itemCount + (zh ? ' 項' : ' items'),
       noItems: tot.total === 0,
+      nextBtnStyle: {
+        marginLeft: 'auto', padding: '18px 34px', fontSize: '19px', fontWeight: 900,
+        letterSpacing: '0.02em', fontFamily: 'inherit', border: 0, borderRadius: 0,
+        cursor: tot.total === 0 ? 'not-allowed' : 'pointer',
+        background: tot.total === 0 ? '#ebebeb' : '#101010',
+        color: tot.total === 0 ? '#a0a0a0' : '#ffffff',
+        boxShadow: tot.total === 0 ? 'none' : '4px 4px 0 #cfcfcf'
+      },
       totalLabel: this.fmt(tot.total), subtotalLabel: this.fmt(tot.subtotal),
       discountLabel: this.fmt(tot.discount), hasDiscount: tot.discount > 0,
       appliedRule: tot.appliedRule,
@@ -1238,6 +1263,13 @@ class Component extends DCLogic {
       setTitle: this.setField('title'), setTaxId: this.setField('taxId'),
       setDate: this.setField('date'), setNote: this.setField('note'),
       formInvalid: !(st.form.name && st.form.email && st.form.title && st.form.taxId),
+      previewBtnStyle: {
+        padding: '13px 20px', fontSize: '15.5px', fontWeight: 900, fontFamily: 'inherit',
+        border: 0, borderRadius: 0,
+        cursor: !(st.form.name && st.form.email && st.form.title && st.form.taxId) ? 'not-allowed' : 'pointer',
+        background: !(st.form.name && st.form.email && st.form.title && st.form.taxId) ? '#ebebeb' : '#101010',
+        color: !(st.form.name && st.form.email && st.form.title && st.form.taxId) ? '#a0a0a0' : '#ffffff'
+      },
       contactLine: (zh ? '聯絡人 ' : 'Contact ') + st.form.name,
       taxLine: (zh ? '統一編號 ' : 'Tax ID / ABN ') + st.form.taxId,
       startDateLine: (zh ? '期望啟用日期 ' : 'Expected start date ') + st.form.date,
