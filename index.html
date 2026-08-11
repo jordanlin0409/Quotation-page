@@ -550,6 +550,7 @@ class Component extends DCLogic {
     { key: 'ww_pro', test: id => /^ww_pro_/.test(id), name: () => this.zh ? 'WordWall 專業版' : 'WordWall Pro' },
     { key: 'kahoot_campus', test: id => /^kahoot_\d+$/.test(id), name: () => 'Kahoot EDU Standard' },
     { key: 'edcafe_campus', test: id => /^edcafe_campus_/.test(id), name: () => this.zh ? 'Edcafe AI Pro 校園版' : 'Edcafe AI Pro' },
+    { key: 'edcafe_prem_campus', test: id => /^edcafe_prem_campus_/.test(id), name: () => this.zh ? 'Edcafe AI Premium 校園版' : 'Edcafe AI Premium' },
     { key: 'bundle_ke', test: id => /^bundle_ke_/.test(id), bundle: true,
       name: () => this.zh ? 'Kahoot + Edcafe AI Pro 校園版' : 'Kahoot + Edcafe AI Pro' },
     { key: 'combo_ew', test: id => /^combo_ew_/.test(id), bundle: true,
@@ -689,6 +690,15 @@ class Component extends DCLogic {
     edcafe_campus_100: { name: 'Edcafe AI Pro Campus (100 seats)', badge: 'Campus plan', origin: 'Singapore / exclusive distributor',
       features: ['100 Edcafe AI Pro accounts', 'Admin console'],
       details: ['100 Edcafe AI Pro accounts', 'Admin console', 'Online training 2 hrs × 2 sessions'] },
+    edcafe_prem_campus_25: { name: 'Edcafe AI Premium Campus (25 seats)', badge: 'Campus plan', origin: 'Singapore / exclusive distributor',
+      features: ['25 Edcafe AI Premium accounts', 'Unlimited AI generations'],
+      details: ['25 Edcafe AI Premium accounts', 'Unlimited AI generations', 'Admin console'] },
+    edcafe_prem_campus_50: { name: 'Edcafe AI Premium Campus (50 seats)', badge: 'Campus plan', origin: 'Singapore / exclusive distributor',
+      features: ['50 Edcafe AI Premium accounts', 'Unlimited AI generations'],
+      details: ['50 Edcafe AI Premium accounts', 'Unlimited AI generations', 'Admin console'] },
+    edcafe_prem_campus_100: { name: 'Edcafe AI Premium Campus (100 seats)', badge: 'Campus plan', origin: 'Singapore / exclusive distributor',
+      features: ['100 Edcafe AI Premium accounts', 'Unlimited AI generations'],
+      details: ['100 Edcafe AI Premium accounts', 'Unlimited AI generations', 'Admin console'] },
     bundle_ke_10: { name: 'Kahoot + Edcafe AI Pro Campus · 10 each', origin: 'Norway / Singapore',
       features: ['Kahoot × 10', 'Edcafe AI Pro Campus × 10'],
       details: ['Kahoot × 10', 'Edcafe AI Pro Campus × 10', 'Admin console'] },
@@ -775,12 +785,18 @@ class Component extends DCLogic {
         features: ['無限次 AI 生成', '不限參與人數', '無限客製化聊天機器人與評分助手'],
         details: ['全功能解鎖', '無限次 AI 生成', '測驗產生器', '聊天機器人產生器', '作業評分器', '不限參與人數', '無限客製化聊天機器人', '無限作業評分助手'],
         video: EDCAFE_VIDEO, notion: EDCAFE_NOTION },
-      { id: 'edcafe_campus_35', brand: 'Edcafe AI', name: 'Edcafe AI Pro 校園版（35 組）', price: 109999, priceHKD: 24990, category: 'edcafe_campus', section: 'campus', standalone: true, origin, badge: '校園方案', logos: ['edcafe-logo-3x.png'],
+      { id: 'edcafe_campus_35', brand: 'Edcafe AI', name: 'Edcafe AI Pro 校園版（35 組）', price: 109990, priceHKD: 24990, category: 'edcafe_campus', section: 'campus', standalone: true, origin, badge: '校園方案', logos: ['edcafe-logo-3x.png'],
         desc: '', features: ['35 組 Edcafe AI Pro 帳號', '後台帳號管理功能', '線上研習 1 HR'] },
       { id: 'edcafe_campus_50', brand: 'Edcafe AI', name: 'Edcafe AI Pro 校園版（50 組）', price: 149990, priceHKD: 34950, category: 'edcafe_campus', section: 'campus', standalone: true, origin, badge: '校園方案', logos: ['edcafe-logo-3x.png'],
         desc: '', features: ['50 組 Edcafe AI Pro 帳號', '後台帳號管理功能', hk ? '線上研習 2 HR' : '實體研習 2 HR'] },
       { id: 'edcafe_campus_100', brand: 'Edcafe AI', name: 'Edcafe AI Pro 校園版（100 組）', price: 64900, priceHKD: 64900, category: 'edcafe_campus', section: 'campus', standalone: true, hkOnly: true, origin, badge: '校園方案', logos: ['edcafe-logo-3x.png'],
         desc: '', features: ['100 組 Edcafe AI Pro 帳號', '後台帳號管理功能', '線上研習 2 HR ×2 場'] },
+      { id: 'edcafe_prem_campus_25', brand: 'Edcafe AI', name: 'Edcafe AI Premium 校園版（25 組）', price: 149990, priceHKD: 33490, category: 'edcafe_campus', section: 'campus', standalone: true, origin, badge: '校園方案', logos: ['edcafe-logo-3x.png'],
+        desc: '', features: ['25 組 Edcafe AI Premium 帳號', '無限次 AI 生成', '後台帳號管理功能'] },
+      { id: 'edcafe_prem_campus_50', brand: 'Edcafe AI', name: 'Edcafe AI Premium 校園版（50 組）', price: 0, priceHKD: 64950, category: 'edcafe_campus', section: 'campus', standalone: true, hkOnly: true, origin, badge: '校園方案', logos: ['edcafe-logo-3x.png'],
+        desc: '', features: ['50 組 Edcafe AI Premium 帳號', '無限次 AI 生成', '後台帳號管理功能'] },
+      { id: 'edcafe_prem_campus_100', brand: 'Edcafe AI', name: 'Edcafe AI Premium 校園版（100 組）', price: 0, priceHKD: 124900, category: 'edcafe_campus', section: 'campus', standalone: true, hkOnly: true, origin, badge: '校園方案', logos: ['edcafe-logo-3x.png'],
+        desc: '', features: ['100 組 Edcafe AI Premium 帳號', '無限次 AI 生成', '後台帳號管理功能'] },
       { id: 'bundle_ke_10', brand: 'Kahoot! + Edcafe AI', name: 'Kahoot + Edcafe AI Pro 校園版 各 10 組', price: 75900, priceHKD: 19450, category: 'bundle', section: 'bundle', standalone: true, origin, logos: ['kahoot-logo-3x.png', 'edcafe-logo-3x.png'],
         desc: '', features: ['Kahoot 10 組', 'Edcafe AI Pro 校園版 10 組', '後台帳號管理功能'] },
       { id: 'bundle_ke_20', brand: 'Kahoot! + Edcafe AI', name: 'Kahoot + Edcafe AI Pro 校園版 各 20 組', price: 149990, priceHKD: 36500, category: 'bundle', section: 'bundle', standalone: true, origin, logos: ['kahoot-logo-3x.png', 'edcafe-logo-3x.png'],
@@ -959,7 +975,11 @@ class Component extends DCLogic {
     const zhT = this.zh;
     if (!this.isIntl) {
       const group = this.agentGroup();
-      if (group === 'Influencer' && subtotal > 0) {
+      const internal = /^經典人文教育股份有限公司(\d+)$/.exec((this.state.referral || '').trim());
+      if (internal && subtotal > 0) {
+        discount = Math.min(subtotal, parseInt(internal[1], 10));
+        appliedRule = zhT ? '專案折扣' : 'Project discount';
+      } else if (group === 'Influencer' && subtotal > 0) {
         discount = 100; appliedRule = zhT ? '專屬代碼優惠（現折 ' + this.fmt(100) + '）' : 'Referral code discount (' + this.fmt(100) + ' off)';
       } else if (group === 'Senco') {
         appliedRule = (this.state.cart['kahoot'] || 0) > 25
