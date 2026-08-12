@@ -32,6 +32,13 @@
   textarea.input { resize: vertical; }
   input[type=number]::-webkit-outer-spin-button,
   input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  /* 選購頁：左邊商品格、右邊採購明細（黏在畫面上） */
+  .pgrid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 30px; align-items: start; }
+  .psum { position: sticky; top: 132px; }
+  @media (max-width: 1080px) {
+    .pgrid { grid-template-columns: 1fr; }
+    .psum { position: static; }
+  }
   @media print {
     @page { margin: 12mm; }
     .no-print { display: none !important; }
@@ -282,6 +289,8 @@
           </div>
         </sc-if>
 
+        <div class="pgrid">
+        <div>
         <sc-for list="{{ groups }}" as="g" hint-placeholder-count="2">
           <div style="margin-bottom: 44px;">
             <div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid var(--color-divider); padding-bottom: 10px;">
@@ -335,6 +344,44 @@
             </div>
           </div>
         </sc-for>
+        </div>
+
+        <aside class="psum">
+          <div style="border: 2px solid var(--color-text); background: var(--color-bg);">
+            <div style="background: var(--color-text); color: var(--color-bg); padding: 9px 14px; font-size: 11.5px; font-weight: 900; letter-spacing: 0.16em; text-transform: uppercase;">{{ t.summaryTitle }}</div>
+            <div style="padding: 4px 14px 14px;">
+              <sc-if value="{{ hasLines }}" hint-placeholder-val="{{ true }}">
+                <div>
+                  <sc-for list="{{ lines }}" as="l" hint-placeholder-count="2">
+                    <div style="padding: 10px 0; border-bottom: 1px solid var(--color-divider);">
+                      <div style="font-size: 13px; font-weight: 700; line-height: 1.35; text-wrap: pretty;">{{ l.name }}</div>
+                      <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-top: 3px;">
+                        <span style="font-size: 12px; color: var(--color-neutral-700);">{{ l.unit }} × {{ l.qty }}</span>
+                        <span style="font-size: 13px; font-weight: 900;">{{ l.amount }}</span>
+                      </div>
+                    </div>
+                  </sc-for>
+                  <div style="display: flex; justify-content: space-between; font-size: 13px; padding-top: 12px;">
+                    <span style="color: var(--color-neutral-700);">{{ t.subtotal }}</span><span>{{ subtotalLabel }}</span>
+                  </div>
+                  <sc-if value="{{ hasDiscount }}" hint-placeholder-val="{{ false }}">
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; padding-top: 6px;">
+                      <span>{{ t.discount }}</span><span>−{{ discountLabel }}</span>
+                    </div>
+                  </sc-if>
+                  <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px; border-top: 2px solid var(--color-text); margin-top: 10px; padding-top: 10px;">
+                    <span style="font-size: 11px; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase;">{{ t.total }}</span>
+                    <span style="font-size: 21px; font-weight: 900; letter-spacing: -0.02em;">{{ totalLabel }}</span>
+                  </div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ noLines }}" hint-placeholder-val="{{ false }}">
+                <p style="margin: 10px 0 4px; font-size: 13px; line-height: 1.65; color: var(--color-neutral-600);">{{ t.summaryEmpty }}</p>
+              </sc-if>
+            </div>
+          </div>
+        </aside>
+        </div>
       </section>
 
       <div class="no-print" style="position: fixed; bottom: 0; left: 0; right: 0; background: var(--color-bg); border-top: 1px solid var(--color-divider); z-index: 40;">
@@ -546,11 +593,12 @@ class Component extends DCLogic {
   };
 
   TIER_RULES = [
-    { key: 'ww_std', test: id => /^ww_std_/.test(id), name: () => this.zh ? 'WordWall 標準版' : 'WordWall Standard' },
-    { key: 'ww_pro', test: id => /^ww_pro_/.test(id), name: () => this.zh ? 'WordWall 專業版' : 'WordWall Pro' },
-    { key: 'kahoot_campus', test: id => /^kahoot_\d+$/.test(id), name: () => 'Kahoot EDU Standard' },
-    { key: 'edcafe_campus', test: id => /^edcafe_campus_/.test(id), name: () => this.zh ? 'Edcafe AI Pro 校園版' : 'Edcafe AI Pro' },
-    { key: 'edcafe_prem_campus', test: id => /^edcafe_prem_campus_/.test(id), name: () => this.zh ? 'Edcafe AI Premium 校園版' : 'Edcafe AI Premium' },
+    { key: 'ww_std', test: id => id === 'wordwall_std' || /^ww_std_/.test(id), name: () => this.zh ? 'WordWall 標準版' : 'WordWall Standard' },
+    { key: 'ww_pro', test: id => id === 'wordwall_pro' || /^ww_pro_/.test(id), name: () => this.zh ? 'WordWall 專業版' : 'WordWall Pro' },
+    { key: 'kahoot_campus', test: id => id === 'kahoot' || /^kahoot_\d+$/.test(id), name: () => 'Kahoot EDU Standard' },
+    { key: 'edcafe_campus', test: id => id === 'edcafe_pro' || /^edcafe_campus_/.test(id), name: () => 'Edcafe AI Pro' },
+    { key: 'edcafe_prem_campus', test: id => id === 'edcafe_premium' || /^edcafe_prem_campus_/.test(id), name: () => 'Edcafe AI Premium' },
+    { key: 'quizlet', test: id => /^quizlet_\d+$/.test(id), name: () => this.zh ? 'Quizlet 教育版' : 'Quizlet for Education' },
     { key: 'bundle_ke', test: id => /^bundle_ke_/.test(id), bundle: true,
       name: () => this.zh ? 'Kahoot + Edcafe AI Pro 校園版' : 'Kahoot + Edcafe AI Pro' },
     { key: 'combo_ew', test: id => /^combo_ew_/.test(id), bundle: true,
@@ -567,12 +615,12 @@ class Component extends DCLogic {
       if (seen[rule.key]) return;
       seen[rule.key] = true;
       const members = list.filter(x => rule.test(x.id));
-      const seats = id => { const m = String(id).match(/(\d+)$/); return m ? +m[1] : 0; };
+      const seats = id => { const m = String(id).match(/_(\d+)$/); return m ? +m[1] : 1; };
       const opts = members.map(m => ({
         id: m.id, seats: seats(m.id),
         label: rule.bundle
           ? (this.zh ? '各 ' + seats(m.id) + ' 組' : seats(m.id) + ' each')
-          : seats(m.id) + (this.zh ? ' 套' : ''),
+          : (this.zh ? seats(m.id) + ' 套' : seats(m.id) + (seats(m.id) === 1 ? ' seat' : ' seats')),
         qty: this.state.cart[m.id] || 0
       })).sort((a, b) => a.seats - b.seats);
       const activeId = (this.state.tier || {})[rule.key];
@@ -586,8 +634,10 @@ class Component extends DCLogic {
     return out;
   }
 
-  LOGO_H = { 'edcafe-logo-3x.png': 22, 'kahoot-logo-3x.png': 24, 'wordwall-logo-3x.png': 20, 'padlet-logo-3x.png': 22, 'gemini-logo-3x.png': 24 };
-  LOGO_AR = { 'edcafe-logo-3x.png': 4.38, 'kahoot-logo-3x.png': 2.93, 'wordwall-logo-3x.png': 5.98, 'padlet-logo-3x.png': 3.49, 'gemini-logo-3x.png': 2.72 };
+  // 視覺對齊：粗體大寫的字標（Kahoot / Wordwall / Quizlet）調小，
+  // 小寫或細筆畫的字標（padlet / Gemini）調大，讓每張卡的 logo 看起來一樣重
+  LOGO_H = { 'edcafe-logo-3x.png': 22, 'kahoot-logo-3x.png': 20, 'wordwall-logo-3x.png': 19, 'padlet-logo-3x.png': 26, 'gemini-logo-3x.png': 26, 'quizlet-logo-3x.png': 18, 'kami-logo-3x.png': 25 };
+  LOGO_AR = { 'edcafe-logo-3x.png': 4.36, 'kahoot-logo-3x.png': 2.90, 'wordwall-logo-3x.png': 5.95, 'padlet-logo-3x.png': 3.23, 'gemini-logo-3x.png': 2.69, 'quizlet-logo-3x.png': 4.30, 'kami-logo-3x.png': 2.05 };
 
   AGENTS = {
     A: ['勁園351#','麗文$581','台奇資訊3351','仕揚科技2850','國眾電腦%480','新叡文教-+12','校園文化8103','宥林數位4824','奧斯丁國際6850','旭恩科技5555','先志2258','葉興資訊6841','吉邦數位8750','開駿實業6971','智識家1573','優學網Gary','首羿國際6840','神奕教育5816','極電資訊8710','炳昌企業8842','泰溥科技9852','長峰資訊2616','宏寶6842','全華圖書3318','宏菖文教4317','潤采數位5988'],
@@ -612,6 +662,7 @@ class Component extends DCLogic {
       productsTitle: 'Choose your plan',
       productsHint: 'Adjust quantities to build your quote. Enter a referral or reseller code to apply your pricing.',
       annual: 'Annual fee', selected: 'Selected', totalCaption: 'Total (tax incl.)', qtyLabel: 'Packs',
+      summaryTitle: 'Your selection', summaryEmpty: 'Nothing selected yet. Adjust any quantity to start building your quote.',
       moreInfo: 'Details →', backCard: '← Back', hot: 'Recommended',
       priceMatch: 'Price match guarantee',
       priceMatchNote: 'Refunds are capped at our original purchase cost.',
@@ -644,6 +695,7 @@ class Component extends DCLogic {
       productsTitle: '選購方案',
       productsHint: '調整數量即可即時試算；輸入代理或推薦代碼可套用專屬價格。',
       annual: '年費', selected: '已選項目', totalCaption: '總金額（含稅）', qtyLabel: '購買份數',
+      summaryTitle: '採購明細', summaryEmpty: '尚未選擇任何項目。調整任一商品的數量就會出現在這裡。',
       moreInfo: '詳細資訊', backCard: '← 返回', hot: '熱銷推薦',
       priceMatch: '買貴退差價',
       priceMatchNote: '退還差價以本公司原始進貨成本價為上限',
@@ -785,17 +837,17 @@ class Component extends DCLogic {
         features: ['無限次 AI 生成', '不限參與人數', '無限客製化聊天機器人與評分助手'],
         details: ['全功能解鎖', '無限次 AI 生成', '測驗產生器', '聊天機器人產生器', '作業評分器', '不限參與人數', '無限客製化聊天機器人', '無限作業評分助手'],
         video: EDCAFE_VIDEO, notion: EDCAFE_NOTION },
-      { id: 'edcafe_campus_35', brand: 'Edcafe AI', name: 'Edcafe AI Pro 校園版（35 組）', price: 109990, priceHKD: 24990, category: 'edcafe_campus', section: 'campus', standalone: true, origin, badge: '校園方案', logos: ['edcafe-logo-3x.png'],
+      { id: 'edcafe_campus_35', brand: 'Edcafe AI', name: 'Edcafe AI Pro 校園版（35 組）', price: 109990, priceHKD: 24990, category: 'edcafe_campus', section: 'edcafe', standalone: true, pack: true, origin, badge: '校園方案', logos: ['edcafe-logo-3x.png'],
         desc: '', features: ['35 組 Edcafe AI Pro 帳號', '後台帳號管理功能', '線上研習 1 HR'] },
-      { id: 'edcafe_campus_50', brand: 'Edcafe AI', name: 'Edcafe AI Pro 校園版（50 組）', price: 149990, priceHKD: 34950, category: 'edcafe_campus', section: 'campus', standalone: true, origin, badge: '校園方案', logos: ['edcafe-logo-3x.png'],
+      { id: 'edcafe_campus_50', brand: 'Edcafe AI', name: 'Edcafe AI Pro 校園版（50 組）', price: 149990, priceHKD: 34950, category: 'edcafe_campus', section: 'edcafe', standalone: true, pack: true, origin, badge: '校園方案', logos: ['edcafe-logo-3x.png'],
         desc: '', features: ['50 組 Edcafe AI Pro 帳號', '後台帳號管理功能', hk ? '線上研習 2 HR' : '實體研習 2 HR'] },
-      { id: 'edcafe_campus_100', brand: 'Edcafe AI', name: 'Edcafe AI Pro 校園版（100 組）', price: 64900, priceHKD: 64900, category: 'edcafe_campus', section: 'campus', standalone: true, hkOnly: true, origin, badge: '校園方案', logos: ['edcafe-logo-3x.png'],
+      { id: 'edcafe_campus_100', brand: 'Edcafe AI', name: 'Edcafe AI Pro 校園版（100 組）', price: 64900, priceHKD: 64900, category: 'edcafe_campus', section: 'edcafe', standalone: true, pack: true, hkOnly: true, origin, badge: '校園方案', logos: ['edcafe-logo-3x.png'],
         desc: '', features: ['100 組 Edcafe AI Pro 帳號', '後台帳號管理功能', '線上研習 2 HR ×2 場'] },
-      { id: 'edcafe_prem_campus_25', brand: 'Edcafe AI', name: 'Edcafe AI Premium 校園版（25 組）', price: 149990, priceHKD: 33490, category: 'edcafe_campus', section: 'campus', standalone: true, origin, badge: '校園方案', logos: ['edcafe-logo-3x.png'],
+      { id: 'edcafe_prem_campus_25', brand: 'Edcafe AI', name: 'Edcafe AI Premium 校園版（25 組）', price: 149990, priceHKD: 33490, category: 'edcafe_campus', section: 'edcafe', standalone: true, pack: true, origin, badge: '校園方案', logos: ['edcafe-logo-3x.png'],
         desc: '', features: ['25 組 Edcafe AI Premium 帳號', '無限次 AI 生成', '後台帳號管理功能'] },
-      { id: 'edcafe_prem_campus_50', brand: 'Edcafe AI', name: 'Edcafe AI Premium 校園版（50 組）', price: 0, priceHKD: 64950, category: 'edcafe_campus', section: 'campus', standalone: true, hkOnly: true, origin, badge: '校園方案', logos: ['edcafe-logo-3x.png'],
+      { id: 'edcafe_prem_campus_50', brand: 'Edcafe AI', name: 'Edcafe AI Premium 校園版（50 組）', price: 0, priceHKD: 64950, category: 'edcafe_campus', section: 'edcafe', standalone: true, pack: true, hkOnly: true, origin, badge: '校園方案', logos: ['edcafe-logo-3x.png'],
         desc: '', features: ['50 組 Edcafe AI Premium 帳號', '無限次 AI 生成', '後台帳號管理功能'] },
-      { id: 'edcafe_prem_campus_100', brand: 'Edcafe AI', name: 'Edcafe AI Premium 校園版（100 組）', price: 0, priceHKD: 124900, category: 'edcafe_campus', section: 'campus', standalone: true, hkOnly: true, origin, badge: '校園方案', logos: ['edcafe-logo-3x.png'],
+      { id: 'edcafe_prem_campus_100', brand: 'Edcafe AI', name: 'Edcafe AI Premium 校園版（100 組）', price: 0, priceHKD: 124900, category: 'edcafe_campus', section: 'edcafe', standalone: true, pack: true, hkOnly: true, origin, badge: '校園方案', logos: ['edcafe-logo-3x.png'],
         desc: '', features: ['100 組 Edcafe AI Premium 帳號', '無限次 AI 生成', '後台帳號管理功能'] },
       { id: 'bundle_ke_10', brand: 'Kahoot! + Edcafe AI', name: 'Kahoot + Edcafe AI Pro 校園版 各 10 組', price: 75900, priceHKD: 19450, category: 'bundle', section: 'bundle', standalone: true, origin, logos: ['kahoot-logo-3x.png', 'edcafe-logo-3x.png'],
         desc: '', features: ['Kahoot 10 組', 'Edcafe AI Pro 校園版 10 組', '後台帳號管理功能'] },
@@ -808,11 +860,6 @@ class Component extends DCLogic {
         features: ['AI Kahoot! Generator', '匯入 Google／Microsoft Slides', '100 位學生 pass'],
         details: ['適合所有教師與學生', 'AI Kahoot! Generator 一鍵產生講義', '匯入並同步 Google 與 Microsoft Slides', '多種互動模式', 'Word clouds、polls', '100 位學生 pass', '強化課堂互動'],
         video: 'https://youtu.be/7ndLUhJlsBU' },
-      { id: 'padlet', brand: 'Padlet', name: 'Padlet 學校版', price: 3000, category: 'other', section: 'tools', origin: '美國', minQty: 10, logos: ['padlet-logo-3x.png'],
-        desc: '創意協作數位布告欄，版型豐富，最低採購 10 組。',
-        features: ['無限 Padlets · 無限學生', '1GB 檔案上傳 · 30 分鐘錄影', 'LMS 整合 · SSO 支援'],
-        details: ['無限個 Padlets', '1GB 檔案上傳', '無限學生', '30 分鐘影片錄製', 'API 存取權限', '角色權限管理', '使用者管理', '分析控制面板', '內容安全功能', 'LMS 整合', 'SSO 支援'],
-        video: 'https://youtube.com/playlist?list=PLU-8o76TOvQXBLq544ntgx1pimWwfiuSS' },
       { id: 'wordwall_std', brand: 'Wordwall', name: 'WordWall 標準版', price: 1600, category: 'other', section: 'official', origin: '英國', logos: ['wordwall-logo-3x.png'],
         desc: '輕鬆建立互動遊戲與測驗，單套定價；多套請看校園版。',
         features: ['12 種標準範本', 'AI 內容產生器', '無限活動與社群搜尋'],
@@ -823,32 +870,47 @@ class Component extends DCLogic {
         features: ['22 種專業範本', '搶先體驗新範本', '列印活動'],
         details: ['包含所有標準版功能', '22 種專業範本', '搶先體驗新範本', 'AI 內容產生器', '列印活動', '無限活動', '無限制社群搜尋'],
         video: 'https://youtube.com/playlist?list=PLU-8o76TOvQX7dKPKPDDDTEiVqaLRfOgs' },
-      { id: 'gemini_pro', brand: 'Google', name: 'Google AI Pro for Education', price: 8500, priceHKD: 2000, category: 'other', section: 'tools', origin: '美國', logos: ['gemini-logo-3x.png'],
+      { id: 'padlet', brand: 'Padlet', name: 'Padlet 學校版', price: 3000, category: 'other', section: 'official', origin: '美國', minQty: 10, logos: ['padlet-logo-3x.png'],
+        desc: '創意協作數位布告欄，版型豐富，最低採購 10 組。',
+        features: ['無限 Padlets · 無限學生', '1GB 檔案上傳 · 30 分鐘錄影', 'LMS 整合 · SSO 支援'],
+        details: ['無限個 Padlets', '1GB 檔案上傳', '無限學生', '30 分鐘影片錄製', 'API 存取權限', '角色權限管理', '使用者管理', '分析控制面板', '內容安全功能', 'LMS 整合', 'SSO 支援'],
+        video: 'https://youtube.com/playlist?list=PLU-8o76TOvQXBLq544ntgx1pimWwfiuSS' },
+      { id: 'gemini_pro', brand: 'Google', name: 'Google AI Pro for Education', price: 8500, priceHKD: 2000, category: 'other', section: 'official', origin: '美國', logos: ['gemini-logo-3x.png'],
         desc: 'Gemini AI Pro + NotebookLM AI Pro，可與 Edcafe 整合。',
         features: ['Gemini in Workspace', '進階文本生成', '提升教材產出與批改效率'],
         details: ['AI 文本生成加值功能', '可與 Edcafe 系統整合', '適合進階教師與創作者', '提升教材產出與批改品質'],
         video: 'https://youtu.be/2fTqduml_CY' },
-      { id: 'ww_std_5', brand: 'Wordwall', name: 'WordWall 標準版 × 5 套', price: 6500, priceHKD: 1700, category: 'other', section: 'campus', standalone: true, origin: '英國', logos: ['wordwall-logo-3x.png'],
+      { id: 'quizlet_2', brand: 'Quizlet', name: 'Quizlet 教育版 × 2 套', price: 3300, category: 'other', section: 'official', twOnly: true, origin: '美國', logos: ['quizlet-logo-3x.png'],
+        desc: '單字卡與練習測驗平台，最低採購 2 套。',
+        features: ['2 套 Quizlet 教育版帳號'], details: ['2 套 Quizlet 教育版帳號'] },
+      { id: 'quizlet_10', brand: 'Quizlet', name: 'Quizlet 教育版 × 10 套', price: 15500, category: 'other', section: 'official', twOnly: true, pack: true, origin: '美國', logos: ['quizlet-logo-3x.png'],
+        desc: '', features: ['10 套 Quizlet 教育版帳號'], details: ['10 套 Quizlet 教育版帳號'] },
+      { id: 'quizlet_40', brand: 'Quizlet', name: 'Quizlet 教育版 × 40 套', price: 58000, category: 'other', section: 'official', twOnly: true, pack: true, origin: '美國', logos: ['quizlet-logo-3x.png'],
+        desc: '', features: ['40 套 Quizlet 教育版帳號'], details: ['40 套 Quizlet 教育版帳號'] },
+      { id: 'kami', brand: 'Kami', name: 'Kami', price: 5100, category: 'other', section: 'official', twOnly: true, origin: '紐西蘭', logos: ['kami-logo-3x.png'],
+        desc: 'PDF 標註與線上作業批改工具。',
+        features: ['文件標註與線上批改'], details: ['文件標註與線上批改'] },
+      { id: 'ww_std_5', brand: 'Wordwall', name: 'WordWall 標準版 × 5 套', price: 6500, priceHKD: 1700, category: 'other', section: 'official', standalone: true, pack: true, origin: '英國', logos: ['wordwall-logo-3x.png'],
         desc: '', features: ['WordWall Standard 5 套', '12 種標準範本'], details: ['WordWall Standard 帳號 5 套', '無限活動與社群搜尋', 'AI 內容產生器'] },
-      { id: 'ww_std_10', brand: 'Wordwall', name: 'WordWall 標準版 × 10 套', price: 10000, priceHKD: 2500, category: 'other', section: 'campus', standalone: true, origin: '英國', logos: ['wordwall-logo-3x.png'],
+      { id: 'ww_std_10', brand: 'Wordwall', name: 'WordWall 標準版 × 10 套', price: 10000, priceHKD: 2500, category: 'other', section: 'official', standalone: true, pack: true, origin: '英國', logos: ['wordwall-logo-3x.png'],
         desc: '', features: ['WordWall Standard 10 套', '12 種標準範本'], details: ['WordWall Standard 帳號 10 套', '無限活動與社群搜尋', 'AI 內容產生器'] },
-      { id: 'ww_std_20', brand: 'Wordwall', name: 'WordWall 標準版 × 20 套', price: 16000, priceHKD: 4200, category: 'other', section: 'campus', standalone: true, origin: '英國', logos: ['wordwall-logo-3x.png'],
+      { id: 'ww_std_20', brand: 'Wordwall', name: 'WordWall 標準版 × 20 套', price: 16000, priceHKD: 4200, category: 'other', section: 'official', standalone: true, pack: true, origin: '英國', logos: ['wordwall-logo-3x.png'],
         desc: '', features: ['WordWall Standard 20 套', '12 種標準範本'], details: ['WordWall Standard 帳號 20 套', '無限活動與社群搜尋', 'AI 內容產生器'] },
-      { id: 'ww_std_50', brand: 'Wordwall', name: 'WordWall 標準版 × 50 套', price: 32500, priceHKD: 8500, category: 'other', section: 'campus', standalone: true, origin: '英國', logos: ['wordwall-logo-3x.png'],
+      { id: 'ww_std_50', brand: 'Wordwall', name: 'WordWall 標準版 × 50 套', price: 32500, priceHKD: 8500, category: 'other', section: 'official', standalone: true, pack: true, origin: '英國', logos: ['wordwall-logo-3x.png'],
         desc: '', features: ['WordWall Standard 50 套', '12 種標準範本'], details: ['WordWall Standard 帳號 50 套', '無限活動與社群搜尋', 'AI 內容產生器'] },
-      { id: 'ww_pro_5', brand: 'Wordwall', name: 'WordWall 專業版 × 5 套', price: 10000, priceHKD: 2525, category: 'other', section: 'campus', standalone: true, origin: '英國', logos: ['wordwall-logo-3x.png'],
+      { id: 'ww_pro_5', brand: 'Wordwall', name: 'WordWall 專業版 × 5 套', price: 10000, priceHKD: 2525, category: 'other', section: 'official', standalone: true, pack: true, origin: '英國', logos: ['wordwall-logo-3x.png'],
         desc: '', features: ['WordWall Pro 5 套', '22 種專業範本'], details: ['WordWall Pro 帳號 5 套', '22 種專業範本', '列印活動與 AI 內容產生器'] },
-      { id: 'ww_pro_10', brand: 'Wordwall', name: 'WordWall 專業版 × 10 套', price: 15000, priceHKD: 3800, category: 'other', section: 'campus', standalone: true, origin: '英國', logos: ['wordwall-logo-3x.png'],
+      { id: 'ww_pro_10', brand: 'Wordwall', name: 'WordWall 專業版 × 10 套', price: 15000, priceHKD: 3800, category: 'other', section: 'official', standalone: true, pack: true, origin: '英國', logos: ['wordwall-logo-3x.png'],
         desc: '', features: ['WordWall Pro 10 套', '22 種專業範本'], details: ['WordWall Pro 帳號 10 套', '22 種專業範本', '列印活動與 AI 內容產生器'] },
-      { id: 'ww_pro_20', brand: 'Wordwall', name: 'WordWall 專業版 × 20 套', price: 24000, priceHKD: 6300, category: 'other', section: 'campus', standalone: true, origin: '英國', logos: ['wordwall-logo-3x.png'],
+      { id: 'ww_pro_20', brand: 'Wordwall', name: 'WordWall 專業版 × 20 套', price: 24000, priceHKD: 6300, category: 'other', section: 'official', standalone: true, pack: true, origin: '英國', logos: ['wordwall-logo-3x.png'],
         desc: '', features: ['WordWall Pro 20 套', '22 種專業範本'], details: ['WordWall Pro 帳號 20 套', '22 種專業範本', '列印活動與 AI 內容產生器'] },
-      { id: 'ww_pro_50', brand: 'Wordwall', name: 'WordWall 專業版 × 50 套', price: 50000, priceHKD: 12500, category: 'other', section: 'campus', standalone: true, origin: '英國', logos: ['wordwall-logo-3x.png'],
+      { id: 'ww_pro_50', brand: 'Wordwall', name: 'WordWall 專業版 × 50 套', price: 50000, priceHKD: 12500, category: 'other', section: 'official', standalone: true, pack: true, origin: '英國', logos: ['wordwall-logo-3x.png'],
         desc: '', features: ['WordWall Pro 50 套', '22 種專業範本'], details: ['WordWall Pro 帳號 50 套', '22 種專業範本', '列印活動與 AI 內容產生器'] },
-      { id: 'kahoot_5', brand: 'Kahoot!', name: 'Kahoot EDU Standard × 5 套', price: 0, priceHKD: 6500, category: 'other', section: 'campus', standalone: true, hkOnly: true, origin: '挪威', logos: ['kahoot-logo-3x.png'],
+      { id: 'kahoot_5', brand: 'Kahoot!', name: 'Kahoot EDU Standard × 5 套', price: 0, priceHKD: 6500, category: 'other', section: 'official', standalone: true, pack: true, hkOnly: true, origin: '挪威', logos: ['kahoot-logo-3x.png'],
         desc: '', features: ['Kahoot EDU Standard 5 套', '100 位學生 pass'], details: ['Kahoot EDU Standard 帳號 5 套', 'AI Kahoot! Generator', '100 位學生 pass'] },
-      { id: 'kahoot_10', brand: 'Kahoot!', name: 'Kahoot EDU Standard × 10 套', price: 0, priceHKD: 12500, category: 'other', section: 'campus', standalone: true, hkOnly: true, origin: '挪威', logos: ['kahoot-logo-3x.png'],
+      { id: 'kahoot_10', brand: 'Kahoot!', name: 'Kahoot EDU Standard × 10 套', price: 0, priceHKD: 12500, category: 'other', section: 'official', standalone: true, pack: true, hkOnly: true, origin: '挪威', logos: ['kahoot-logo-3x.png'],
         desc: '', features: ['Kahoot EDU Standard 10 套', '100 位學生 pass'], details: ['Kahoot EDU Standard 帳號 10 套', 'AI Kahoot! Generator', '100 位學生 pass'] },
-      { id: 'kahoot_20', brand: 'Kahoot!', name: 'Kahoot EDU Standard × 20 套', price: 0, priceHKD: 22500, category: 'other', section: 'campus', standalone: true, hkOnly: true, origin: '挪威', logos: ['kahoot-logo-3x.png'],
+      { id: 'kahoot_20', brand: 'Kahoot!', name: 'Kahoot EDU Standard × 20 套', price: 0, priceHKD: 22500, category: 'other', section: 'official', standalone: true, pack: true, hkOnly: true, origin: '挪威', logos: ['kahoot-logo-3x.png'],
         desc: '', features: ['Kahoot EDU Standard 20 套', '100 位學生 pass'], details: ['Kahoot EDU Standard 帳號 20 套', 'AI Kahoot! Generator', '100 位學生 pass'] },
       { id: 'combo_ew_10', brand: 'Edcafe AI + Wordwall', name: 'Edcafe AI Pro + WordWall 專業版 各 10 組', price: 46900, priceHKD: 11100, category: 'other', section: 'bundle', standalone: true,
         origin: '新加坡 / 英國', logos: ['edcafe-logo-3x.png', 'wordwall-logo-3x.png'],
@@ -877,11 +939,18 @@ class Component extends DCLogic {
 
   products() {
     const hk = this.currency === 'HKD';
+    const lock = this.resellerLock();
     return this.allProducts().filter(p => {
       if (p.twOnly && this.currency !== 'TWD') return false;
       if (p.hkOnly && !hk) return false;
+      if (lock && (p.pack || p.section === 'bundle')) return false;
       return !(hk && p.id === 'padlet');
     });
+  }
+
+  resellerLock() {
+    const g = this.agentGroup();
+    return !!g && g !== 'Influencer';
   }
 
   agentGroup() {
@@ -1044,14 +1113,13 @@ class Component extends DCLogic {
     const zh = this.zh;
 
     const groupTitles = !this.zh
-      ? { edcafe: 'Exclusive distributor — Edcafe AI', official: 'Authorised distributor — Kahoot and Wordwall', tools: 'Other teaching tools', campus: 'Campus packs — same product, more seats', bundle: 'Bundles — mix brands and save more' }
-      : { edcafe: '獨家代理　Edcafe AI', official: '官方授權代理　Kahoot and Wordwall', tools: '其他教學工具', campus: '校園版　同一商品多套更優惠', bundle: '組合包　跨品牌搭配最優惠' };
+      ? { edcafe: 'Exclusive distributor — Edcafe AI', official: 'Authorised distributor', bundle: 'Bundles — mix brands and save more' }
+      : { edcafe: '獨家代理　Edcafe AI', official: '官方授權代理', bundle: '組合包　跨品牌搭配最優惠' };
 
     const brandRank = p => (/Kahoot/.test(p.brand) ? 1 : /Wordwall/.test(p.brand) ? 2 : 0);
-    const groups = ['edcafe', 'official', 'tools', 'campus', 'bundle'].map(key => ({
+    const groups = ['edcafe', 'official', 'bundle'].map(key => ({
       title: groupTitles[key],
       items: this.collapseTiers(this.products().filter(p => p.section === key))
-        .sort((a, b) => (key === 'campus' ? brandRank(a) - brandRank(b) : 0))
         .map(p => {
         const qty = st.cart[p.id] || 0;
         const flipped = !!st.flipped[p.id];
@@ -1097,12 +1165,13 @@ class Component extends DCLogic {
             color: 'var(--color-bg)', fontSize: '9.5px', fontWeight: 900, letterSpacing: '0.2em',
             textTransform: 'uppercase', flex: 'none'
           },
-          hasTiers: (p.tierOptions || []).length > 0,
+          hasTiers: (p.tierOptions || []).length > 1,
           tierTitle: p.bundleTier
             ? (zh ? '選擇組數' : 'Choose pack size')
             : (zh ? '選擇套數' : 'Choose seats'),
           tiers: (p.tierOptions || []).map(o => ({
-            label: o.label,
+            // 已經買了的級距直接把數量寫在按鈕上，切到別的級距也看得見
+            label: o.qty > 0 ? o.label + ' ×' + o.qty : o.label,
             pick: () => this.setState(s => ({ tier: { ...s.tier, [p.tierKey]: o.id } })),
             style: {
               padding: '6px 12px', fontFamily: 'inherit', fontSize: '13px', fontWeight: 900, cursor: 'pointer',
@@ -1296,6 +1365,7 @@ class Component extends DCLogic {
       regionLine: (zh ? '服務地區 ' : 'Region ') + (r ? r.en : '—'),
 
       lines, notes, orderId,
+      hasLines: lines.length > 0, noLines: lines.length === 0,
       today: now.toLocaleDateString(zh ? 'zh-TW' : 'en-GB')
     };
   }
