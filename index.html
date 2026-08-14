@@ -1050,7 +1050,7 @@ class Component extends DCLogic {
         discount = Math.min(subtotal, parseInt(internal[1], 10));
         appliedRule = zhT ? '專案折扣' : 'Project discount';
       } else if (group === 'Influencer' && subtotal > 0) {
-        discount = 100; appliedRule = zhT ? '專屬代碼優惠（現折 ' + this.fmt(100) + '）' : 'Referral code discount (' + this.fmt(100) + ' off)';
+        discount = Math.min(subtotal, 300); appliedRule = zhT ? '專屬代碼優惠（現折 ' + this.fmt(discount) + '）' : 'Referral code discount (' + this.fmt(discount) + ' off)';
       } else if (group === 'Senco') {
         appliedRule = (this.state.cart['kahoot'] || 0) > 25
           ? (zhT ? 'Senco-Masslink 專屬大宗優惠（香港 Kahoot 額外 20% 折扣）' : 'Senco-Masslink volume discount (extra 20% off Kahoot)')
