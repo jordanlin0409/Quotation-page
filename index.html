@@ -636,7 +636,7 @@ class Component extends DCLogic {
 
   // 視覺對齊：粗體大寫的字標（Kahoot / Wordwall / Quizlet）調小，
   // 小寫或細筆畫的字標（padlet / Gemini）調大，讓每張卡的 logo 看起來一樣重
-  LOGO_H = { 'edcafe-logo-3x.png': 22, 'kahoot-logo-3x.png': 20, 'wordwall-logo-3x.png': 19, 'padlet-logo-3x.png': 26, 'gemini-logo-3x.png': 26, 'quizlet-logo-3x.png': 18, 'kami-logo-3x.png': 25 };
+  LOGO_H = { 'edcafe-logo-3x.png': 22, 'kahoot-logo-3x.png': 26, 'wordwall-logo-3x.png': 19, 'padlet-logo-3x.png': 26, 'gemini-logo-3x.png': 26, 'quizlet-logo-3x.png': 18, 'kami-logo-3x.png': 25 };
   LOGO_AR = { 'edcafe-logo-3x.png': 4.36, 'kahoot-logo-3x.png': 2.90, 'wordwall-logo-3x.png': 5.95, 'padlet-logo-3x.png': 3.23, 'gemini-logo-3x.png': 2.69, 'quizlet-logo-3x.png': 4.30, 'kami-logo-3x.png': 2.05 };
 
   AGENTS = {
@@ -981,6 +981,7 @@ class Component extends DCLogic {
       return Math.round(base * (qty > 25 ? 0.8 : 0.9));
     }
     if (group && group !== 'Influencer') {
+      if (p.id === 'kami' && cur === 'TWD') return 4600;
       if (group === 'D') {
         if (cur === 'HKD') {
           if (p.id === 'edcafe_pro') return 525;
