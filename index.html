@@ -44,6 +44,58 @@
     .no-print { display: none !important; }
     body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   }
+
+  /* ===== m-mobile-patch：只在 768px 以下生效，桌面版完全不受影響 ===== */
+  @media (max-width: 768px) {
+    .m-sec, .m-psec, .m-fsec { padding-left: 16px !important; padding-right: 16px !important; }
+    .m-psec { padding-bottom: 200px !important; }
+    .m-band { margin-left: -16px !important; margin-right: -16px !important;
+              padding-left: 16px !important; padding-right: 16px !important; }
+    .m-hero { grid-template-columns: 1fr !important; gap: 20px !important; }
+    .m-hero h1 { font-size: 28px !important; }
+    .m-hero h2 { font-size: 23px !important; }
+    .m-hero p { font-size: 16px !important; }
+    .m-contact { border-left: 0 !important; padding-left: 0 !important; }
+    .m-brands, .m-regions { grid-template-columns: repeat(2, 1fr) !important; }
+    .m-brands > div, .m-regions > button { min-width: 0 !important; }
+    .m-brands > div > div { white-space: normal !important; }
+    .m-split { grid-template-columns: 1fr !important; gap: 12px !important; }
+    .m-svc { grid-template-columns: 1fr !important; gap: 18px !important; }
+    .m-split p, .m-svc p { font-size: 15px !important; }
+
+    .m-hdr { padding: 10px 16px !important; gap: 10px !important; }
+    .m-pm { display: none !important; }
+    .m-steps { padding: 0 16px 10px !important; display: flex !important;
+               overflow-x: auto !important; gap: 6px; -webkit-overflow-scrolling: touch; }
+    .m-steps > div { flex: 0 0 auto !important; }
+
+    .m-cards { grid-template-columns: 1fr !important; }
+    .m-barin { padding: 10px 16px !important; gap: 10px 14px !important; flex-wrap: wrap !important; }
+    .m-vline, .m-rule { display: none !important; }
+    .m-barin > button { width: 100% !important; margin-left: 0 !important;
+                        padding: 14px 18px !important; font-size: 17px !important;
+                        justify-content: center !important; box-shadow: none !important; }
+
+    .m-fgrid { grid-template-columns: 1fr !important; gap: 16px !important; padding: 22px 0 !important; }
+    .m-fbtn { flex-wrap: wrap !important; gap: 12px !important; padding-bottom: 48px !important; }
+    .m-fbtn > button { width: 100% !important; justify-content: center !important; }
+    .m-fbtn > div { width: 100% !important; margin-left: 0 !important; justify-content: space-between !important; }
+    .m-fbtn > div > button { justify-content: center !important; }
+
+    .m-qtool { padding: 16px !important; flex-wrap: wrap !important; gap: 8px !important; }
+    .m-qtool > button { flex: 1 1 auto !important; justify-content: center !important; margin-left: 0 !important; }
+    .m-qwrap { padding: 0 12px !important; margin-bottom: 48px !important; }
+    .m-qcard { padding: 20px !important; }
+    .m-qhead { flex-direction: column !important; gap: 14px !important; }
+    .m-qhead > div:last-child { text-align: left !important; }
+    .m-q2 { grid-template-columns: 1fr !important; gap: 20px !important; }
+    .m-qtot { width: 100% !important; }
+    .m-qcard table { font-size: 12.5px !important; }
+    .m-qcard th, .m-qcard td { padding-left: 0 !important; padding-right: 0 !important; }
+    .m-qcard th:nth-child(3), .m-qcard td:nth-child(3) { padding-left: 8px !important; }
+    .m-modalbox { padding: 20px !important; }
+    .m-qr { flex-wrap: wrap !important; gap: 12px !important; }
+  }
 </style>
 </helmet>
 
@@ -52,12 +104,12 @@
 
   <sc-if value="{{ showHeader }}" hint-placeholder-val="{{ false }}">
     <header class="no-print" style="position: sticky; top: 0; z-index: 30; background: var(--color-bg); border-bottom: 1px solid var(--color-divider);">
-      <div style="max-width: 1320px; margin: 0 auto; padding: 16px 40px; display: flex; align-items: center; gap: 24px;">
+      <div class="m-hdr" style="max-width: 1320px; margin: 0 auto; padding: 16px 40px; display: flex; align-items: center; gap: 24px;">
         <button onClick="{{ goIntro }}" style="border: 0; background: transparent; padding: 0; cursor: pointer; text-align: left; font-family: inherit; color: inherit;">
           <div style="font-weight: 900; font-size: 16px; line-height: 1.2;">{{ t.companyName }}</div>
         </button>
         <sc-if value="{{ showReferral }}" hint-placeholder-val="{{ false }}">
-          <div style="margin: 0 auto; display: flex; align-items: center; gap: 10px;">
+          <div class="m-pm" style="margin: 0 auto; display: flex; align-items: center; gap: 10px;">
             <span style="font-size: 14.5px; font-weight: 900; color: #111; white-space: nowrap;">{{ t.priceMatch }}</span>
             <span style="font-size: 13px; color: var(--color-neutral-600);">{{ t.priceMatchNote }}</span>
           </div>
@@ -68,7 +120,7 @@
           <button onClick="{{ goIntro }}" style="font-size: 13.5px; font-weight: 900; padding: 7px 12px; border: 1px solid var(--color-divider); background: transparent; font-family: inherit; cursor: pointer; white-space: nowrap;" style-hover="background: var(--color-neutral-200)">{{ t.changeRegion }}</button>
         </div>
       </div>
-      <div style="max-width: 1320px; margin: 0 auto; padding: 0 40px 12px; display: grid; grid-template-columns: repeat(5, 1fr);">
+      <div class="m-steps" style="max-width: 1320px; margin: 0 auto; padding: 0 40px 12px; display: grid; grid-template-columns: repeat(5, 1fr);">
         <sc-for list="{{ steps }}" as="s" hint-placeholder-count="5">
           <div style="{{ s.style }}">
             <span style="font-size: 11.5px; font-weight: 900; letter-spacing: 0.1em;">{{ s.num }}</span>
@@ -80,14 +132,14 @@
   </sc-if>
 
   <sc-if value="{{ atIntro }}" hint-placeholder-val="{{ true }}">
-    <section style="max-width: 1080px; margin: 0 auto; padding: 0 40px;">
-      <div style="background: var(--color-surface); margin: 0 -40px; padding: 44px 40px 36px;">
-        <div style="display: grid; grid-template-columns: 1fr 200px; gap: 40px; align-items: start;">
+    <section class="m-sec" style="max-width: 1080px; margin: 0 auto; padding: 0 40px;">
+      <div class="m-band" style="background: var(--color-surface); margin: 0 -40px; padding: 44px 40px 36px;">
+        <div class="m-hero" style="display: grid; grid-template-columns: 1fr 200px; gap: 40px; align-items: start;">
         <div>
         <h1 style="font-size: 44px; line-height: 1.2; letter-spacing: -0.03em; margin: 0 0 14px;">經典人文教育股份有限公司</h1>
         <p style="font-size: 19px; line-height: 1.7; margin: 0; max-width: 40em; text-wrap: pretty; color: var(--color-neutral-700);">深耕教育三十年，以辦學者的視角協助學校導入 AI 教學。以最好的服務，提供一站式教育軟體採購；最優惠的價格，可匹配市場上任何價格，歡迎比價，買貴退差價。</p>
         </div>
-        <div style="display: grid; gap: 8px; border-left: 1px solid var(--color-divider); padding-left: 20px;">
+        <div class="m-contact" style="display: grid; gap: 8px; border-left: 1px solid var(--color-divider); padding-left: 20px;">
           <a href="https://lin.ee/luo4Dgq" target="_blank" style="font-size: 14px; font-weight: 900; padding: 9px 12px; background: var(--color-accent); color: #fff;" style-hover="background: var(--color-accent-600)">LINE 客服</a>
           <a href="mailto:jordanlin@futurekn.com" style="font-size: 12px; font-weight: 900; padding: 9px 10px; border: 1px solid var(--color-divider); color: var(--color-text); white-space: nowrap; background: #fff;" style-hover="background: var(--color-neutral-200)">jordanlin@futurekn.com</a>
         </div>
@@ -96,7 +148,7 @@
       <div style="padding: 26px 0 6px;">
         <h2 style="font-size: 18px; margin: 0;">代理軟體與平台</h2>
       </div>
-      <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; padding-bottom: 8px;">
+      <div class="m-brands" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; padding-bottom: 8px;">
         <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
           <div style="height: 30px; margin-bottom: 12px; background: url(images/edcafe-logo-3x.png) left center / auto 22px no-repeat;"></div>
           <div style="font-size: 14.5px; font-weight: 900;">Edcafe AI</div>
@@ -127,7 +179,7 @@
       <div style="padding: 22px 0 12px;">
         <h2 style="font-size: 18px; margin: 0;">選擇地區</h2>
       </div>
-      <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;">
+      <div class="m-regions" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;">
         <sc-for list="{{ regions }}" as="r" hint-placeholder-count="5">
           <button onClick="{{ r.select }}" style="{{ r.cellStyle }}" style-hover="{{ r.hover }}">
             <span style="{{ r.flagStyleLg }}"></span>
@@ -138,7 +190,7 @@
       </div>
       </div>
 
-      <div style="border-top: 2px solid var(--color-divider); display: grid; grid-template-columns: 150px 1fr; gap: 40px; padding: 26px 0;">
+      <div class="m-split" style="border-top: 2px solid var(--color-divider); display: grid; grid-template-columns: 150px 1fr; gap: 40px; padding: 26px 0;">
         <div style="font-size: 13.5px; font-weight: 900; letter-spacing: 0.14em;">關於我們</div>
         <div>
           <p style="font-size: 16.5px; line-height: 1.75; margin: 0 0 12px; max-width: 46em; text-wrap: pretty;">經典人文教育根植於台灣中部，自營辦學逾三十年，熟悉招生、教學、行政與家長溝通的每一個環節，理解學校真正的需求與現場限制。</p>
@@ -146,9 +198,9 @@
         </div>
       </div>
 
-      <div style="border-top: 2px solid var(--color-divider); display: grid; grid-template-columns: 150px 1fr; gap: 40px; padding: 26px 0;">
+      <div class="m-split" style="border-top: 2px solid var(--color-divider); display: grid; grid-template-columns: 150px 1fr; gap: 40px; padding: 26px 0;">
         <div style="font-size: 13.5px; font-weight: 900; letter-spacing: 0.14em;">服務內容</div>
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px 40px;">
+        <div class="m-svc" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px 40px;">
           <div>
             <h3 style="font-size: 16.5px; margin: 0 0 6px;"><span style="color: var(--color-accent); margin-right: 8px;">01</span>專業研習</h3>
             <p style="font-size: 15.5px; line-height: 1.7; margin: 0; color: var(--color-neutral-800);">為合作學校與教師安排定期研習，涵蓋 AI 教學實務、平台操作與課程設計。</p>
@@ -168,13 +220,13 @@
         </div>
       </div>
 
-      <div style="background: var(--color-surface); margin: 34px -40px 0; padding: 40px 40px 36px;">
-        <div style="display: grid; grid-template-columns: 1fr 200px; gap: 40px; align-items: start;">
+      <div class="m-band" style="background: var(--color-surface); margin: 34px -40px 0; padding: 40px 40px 36px;">
+        <div class="m-hero" style="display: grid; grid-template-columns: 1fr 200px; gap: 40px; align-items: start;">
         <div>
           <h2 style="font-size: 34px; line-height: 1.2; letter-spacing: -0.03em; margin: 0 0 12px;">Classic Humanities Education Co., Ltd.</h2>
           <p style="font-size: 17.5px; line-height: 1.7; margin: 0; max-width: 44em; text-wrap: pretty; color: var(--color-neutral-700);">Thirty years in education, guiding schools into AI teaching from an operator's perspective. One-stop educational software with the best service and the most competitive pricing — we match any price on the market, price comparison welcome.</p>
         </div>
-        <div style="display: grid; gap: 8px; border-left: 1px solid var(--color-divider); padding-left: 20px;">
+        <div class="m-contact" style="display: grid; gap: 8px; border-left: 1px solid var(--color-divider); padding-left: 20px;">
           <a href="https://api.whatsapp.com/message/OOAOI3R5DAQVJ1?autoload=1&amp;app_absent=0" target="_blank" style="font-size: 14px; font-weight: 900; padding: 9px 12px; background: var(--color-accent); color: #fff;" style-hover="background: var(--color-accent-600)">WhatsApp</a>
           <a href="mailto:jordanlin@futurekn.com" style="font-size: 12px; font-weight: 900; padding: 9px 10px; border: 1px solid var(--color-divider); color: var(--color-text); white-space: nowrap; background: #fff;" style-hover="background: var(--color-neutral-200)">jordanlin@futurekn.com</a>
         </div>
@@ -183,7 +235,7 @@
       <div style="padding: 26px 0 6px; display: flex; align-items: baseline; gap: 14px;">
         <h2 style="font-size: 18px; margin: 0;">Software we represent</h2>
       </div>
-      <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; padding-bottom: 8px;">
+      <div class="m-brands" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; padding-bottom: 8px;">
         <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
           <div style="height: 30px; margin-bottom: 12px; background: url(images/edcafe-logo-3x.png) left center / auto 22px no-repeat;"></div>
           <div style="font-size: 14.5px; font-weight: 900;">Edcafe AI</div>
@@ -214,7 +266,7 @@
       <div style="padding: 22px 0 12px;">
         <h2 style="font-size: 18px; margin: 0;">Select your region</h2>
       </div>
-      <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;">
+      <div class="m-regions" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;">
         <sc-for list="{{ regions }}" as="r" hint-placeholder-count="5">
           <button onClick="{{ r.select }}" style="{{ r.cellStyle }}" style-hover="{{ r.hover }}">
             <span style="{{ r.flagStyleLg }}"></span>
@@ -225,7 +277,7 @@
       </div>
       </div>
 
-      <div style="border-top: 2px solid var(--color-divider); display: grid; grid-template-columns: 150px 1fr; gap: 40px; padding: 26px 0;">
+      <div class="m-split" style="border-top: 2px solid var(--color-divider); display: grid; grid-template-columns: 150px 1fr; gap: 40px; padding: 26px 0;">
         <div style="font-size: 13.5px; font-weight: 900; letter-spacing: 0.14em; text-transform: uppercase;">About us</div>
         <div>
           <p style="font-size: 16px; line-height: 1.7; margin: 0 0 12px; max-width: 46em; text-wrap: pretty;">Classic Humanities Education has operated its own schools in Central Taiwan for over thirty years — across admissions, instruction, administration and parent communication. We understand what schools need because we have run them.</p>
@@ -233,9 +285,9 @@
         </div>
       </div>
 
-      <div style="border-top: 2px solid var(--color-divider); display: grid; grid-template-columns: 150px 1fr; gap: 40px; padding: 26px 0;">
+      <div class="m-split" style="border-top: 2px solid var(--color-divider); display: grid; grid-template-columns: 150px 1fr; gap: 40px; padding: 26px 0;">
         <div style="font-size: 13.5px; font-weight: 900; letter-spacing: 0.14em; text-transform: uppercase;">Services</div>
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px 40px;">
+        <div class="m-svc" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px 40px;">
           <div>
             <h4 style="font-size: 16px; margin: 0 0 6px;"><span style="color: var(--color-accent); margin-right: 8px;">01</span>Professional workshops</h4>
             <p style="font-size: 15px; line-height: 1.65; margin: 0; color: var(--color-neutral-800);">Regular training for partner schools and teachers on AI teaching practice, platform operation and lesson design.</p>
@@ -270,7 +322,7 @@
 
   <sc-if value="{{ atProducts }}" hint-placeholder-val="{{ false }}">
     <div>
-      <section style="max-width: 1320px; margin: 0 auto; padding: 0 40px 200px;">
+      <section class="m-psec" style="max-width: 1320px; margin: 0 auto; padding: 0 40px 200px;">
         <div style="padding: 44px 0 30px;">
           <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
             <span style="width: 28px; height: 1px; background: var(--color-accent);"></span>
@@ -296,7 +348,7 @@
             <div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid var(--color-divider); padding-bottom: 10px;">
               <h2 style="font-size: 16.5px; margin: 0; font-weight: 800; letter-spacing: 0.02em;">{{ g.title }}</h2>
             </div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(272px, 1fr)); gap: 14px; padding-top: 16px;">
+            <div class="m-cards" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(272px, 1fr)); gap: 14px; padding-top: 16px;">
               <sc-for list="{{ g.items }}" as="p" hint-placeholder-count="4">
                 <div style="{{ p.cellStyle }}">
                   <div style="{{ p.innerStyle }}">
@@ -385,17 +437,17 @@
       </section>
 
       <div class="no-print" style="position: fixed; bottom: 0; left: 0; right: 0; background: var(--color-bg); border-top: 1px solid var(--color-divider); z-index: 40;">
-        <div style="max-width: 1320px; margin: 0 auto; padding: 14px 40px; display: flex; align-items: center; gap: 32px;">
+        <div class="m-barin" style="max-width: 1320px; margin: 0 auto; padding: 14px 40px; display: flex; align-items: center; gap: 32px;">
           <div>
             <div style="font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700);">{{ t.selected }}</div>
             <div style="font-size: 19px; font-weight: 900;">{{ itemCountLabel }}</div>
           </div>
-          <div style="width: 1px; height: 38px; background: var(--color-neutral-300);"></div>
+          <div class="m-vline" style="width: 1px; height: 38px; background: var(--color-neutral-300);"></div>
           <div>
             <div style="font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700);">{{ t.totalCaption }}</div>
             <div style="font-size: 25px; font-weight: 900; letter-spacing: -0.02em;">{{ totalLabel }}</div>
           </div>
-          <div style="font-size: 13.5px; color: var(--color-accent-700); font-weight: 700; max-width: 32em;">{{ appliedRule }}</div>
+          <div class="m-rule" style="font-size: 13.5px; color: var(--color-accent-700); font-weight: 700; max-width: 32em;">{{ appliedRule }}</div>
           <button class="btn" onClick="{{ goForm }}" disabled="{{ noItems }}" style="{{ nextBtnStyle }}">{{ t.nextDetails }}</button>
         </div>
       </div>
@@ -403,7 +455,7 @@
   </sc-if>
 
   <sc-if value="{{ atForm }}" hint-placeholder-val="{{ false }}">
-    <section style="max-width: 880px; margin: 0 auto; padding: 0 40px;">
+    <section class="m-fsec" style="max-width: 880px; margin: 0 auto; padding: 0 40px;">
       <div style="padding: 56px 0 28px;">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
           <span style="width: 40px; height: 2px; background: var(--color-accent);"></span>
@@ -412,7 +464,7 @@
         <h1 style="font-size: 40px; margin: 0 0 8px;">{{ t.formTitle }}</h1>
         <p style="font-size: 15.5px; color: var(--color-neutral-800); margin: 0;">{{ t.formHint }}</p>
       </div>
-      <div style="border-top: 2px solid var(--color-divider); padding: 32px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 24px 32px;">
+      <div class="m-fgrid" style="border-top: 2px solid var(--color-divider); padding: 32px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 24px 32px;">
         <div class="field">
           <label>{{ t.fName }}</label>
           <input class="input" value="{{ form.name }}" onChange="{{ setName }}" style="min-height: 44px;">
@@ -438,7 +490,7 @@
           <textarea class="input" value="{{ form.note }}" onChange="{{ setNote }}" style="min-height: 44px;"></textarea>
         </div>
       </div>
-      <div style="border-top: 2px solid var(--color-divider); padding: 24px 0 90px; display: flex; align-items: center; gap: 14px;">
+      <div class="m-fbtn" style="border-top: 2px solid var(--color-divider); padding: 24px 0 90px; display: flex; align-items: center; gap: 14px;">
         <button class="btn btn-secondary" onClick="{{ goProducts }}" style="padding: 13px 20px; font-size: 15.5px;">{{ t.back }}</button>
         <div style="margin-left: auto; display: flex; align-items: center; gap: 18px;">
           <div style="font-size: 15.5px; font-weight: 900;">{{ totalLabel }}</div>
@@ -450,15 +502,15 @@
 
   <sc-if value="{{ atQuote }}" hint-placeholder-val="{{ false }}">
     <div>
-      <div class="no-print" style="max-width: 900px; margin: 0 auto; padding: 32px 40px 20px; display: flex; align-items: center; gap: 12px;">
+      <div class="no-print m-qtool" style="max-width: 900px; margin: 0 auto; padding: 32px 40px 20px; display: flex; align-items: center; gap: 12px;">
         <button class="btn btn-secondary" onClick="{{ goForm }}" style="padding: 11px 16px; font-size: 14.5px;">{{ t.backEdit }}</button>
         <button class="btn btn-secondary" onClick="{{ printQuote }}" style="padding: 11px 16px; font-size: 14.5px;">{{ t.downloadPdf }}</button>
         <button class="btn" onClick="{{ confirmOrder }}" disabled="{{ submitting }}" style="{{ confirmBtnStyle }}">{{ confirmLabel }}</button>
       </div>
 
-      <div style="max-width: 900px; margin: 0 auto 90px; padding: 0 40px;">
-        <div style="background: #fff; color: #1d1d1f; border: 1px solid #d2d2d7; padding: 48px;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--color-text); padding-bottom: 22px;">
+      <div class="m-qwrap" style="max-width: 900px; margin: 0 auto 90px; padding: 0 40px;">
+        <div class="m-qcard" style="background: #fff; color: #1d1d1f; border: 1px solid #d2d2d7; padding: 48px;">
+          <div class="m-qhead" style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--color-text); padding-bottom: 22px;">
             <div>
               <div style="font-size: 22px; font-weight: 900; letter-spacing: -0.01em;">{{ t.companyName }}</div>
               <div style="font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700); margin-top: 5px;">{{ t.companySub }}</div>
@@ -474,7 +526,7 @@
             </div>
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 26px 0; border-bottom: 2px solid var(--color-divider);">
+          <div class="m-q2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 26px 0; border-bottom: 2px solid var(--color-divider);">
             <div>
               <div style="font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 10px;">{{ t.billTo }}</div>
               <div style="font-size: 18px; font-weight: 900;">{{ form.title }}</div>
@@ -517,7 +569,7 @@
           </table>
 
           <div style="display: flex; justify-content: flex-end; margin-top: 26px;">
-            <div style="width: 330px;">
+            <div class="m-qtot" style="width: 330px;">
               <div style="display: flex; justify-content: space-between; font-size: 14.5px; padding: 6px 0;">
                 <span style="color: var(--color-neutral-800);">{{ t.subtotal }}</span><span>{{ subtotalLabel }}</span>
               </div>
@@ -534,7 +586,7 @@
             </div>
           </div>
 
-          <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; border-top: 2px solid var(--color-divider); margin-top: 34px; padding-top: 24px;">
+          <div class="m-q2" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; border-top: 2px solid var(--color-divider); margin-top: 34px; padding-top: 24px;">
             <div>
               <div style="font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 10px;">{{ t.notes }}</div>
               <ul style="list-style: none; padding: 0; margin: 0; display: grid; gap: 7px; font-size: 14px; line-height: 1.6; color: var(--color-neutral-900);">
@@ -554,10 +606,10 @@
 
       <sc-if value="{{ showConfirm }}" hint-placeholder-val="{{ false }}">
         <div class="no-print" style="position: fixed; inset: 0; background: color-mix(in srgb, var(--color-text) 70%, transparent); z-index: 60; display: flex; align-items: center; justify-content: center; padding: 24px;">
-          <div style="background: var(--color-bg); border: 2px solid var(--color-text); max-width: 460px; width: 100%; padding: 32px;">
+          <div class="m-modalbox" style="background: var(--color-bg); border: 2px solid var(--color-text); max-width: 460px; width: 100%; padding: 32px;">
             <h3 style="font-size: 26px; margin: 0 0 10px;">{{ t.thanks }}</h3>
             <p style="font-size: 15.5px; line-height: 1.75; margin: 0 0 20px; color: var(--color-neutral-900);">{{ t.confirmText }}</p>
-            <div style="display: flex; align-items: center; gap: 18px; padding: 16px 0 20px; border-top: 1px solid var(--color-divider); border-bottom: 1px solid var(--color-divider); margin-bottom: 20px;">
+            <div class="m-qr" style="display: flex; align-items: center; gap: 18px; padding: 16px 0 20px; border-top: 1px solid var(--color-divider); border-bottom: 1px solid var(--color-divider); margin-bottom: 20px;">
               <div style="{{ qrStyle }}"></div>
               <div>
                 <div style="font-size: 11px; font-weight: 900; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-600); margin-bottom: 6px;">{{ qrTitle }}</div>
