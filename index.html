@@ -693,12 +693,13 @@ class Component extends DCLogic {
 
   AGENTS = {
     A: ['勁園351#','麗文$581','台奇資訊3351','仕揚科技2850','國眾電腦%480','新叡文教-+12','校園文化8103','宥林數位4824','奧斯丁國際6850','旭恩科技5555','先志2258','葉興資訊6841','吉邦數位8750','開駿實業6971','智識家1573','優學網Gary','首羿國際6840','神奕教育5816','極電資訊8710','炳昌企業8842','泰溥科技9852','長峰資訊2616','宏寶6842','全華圖書3318','宏菖文教4317','潤采數位5988'],
-    B: ['承揚5810','富動科技1582'],
-    C: ['敦煌書局9520'],
+    Hardware: ['承揚5810','富動科技1582','敦煌書局9520'],
     D: ['晶盛科技9977'],
     Super: ['鴻綸科技867831'],
     Restricted: ['Beesoft2637','先鋒教育4710','智域國際3510'],
     Senco: ['Senco-Masslink'],
+    EduFirst: ['教育局首購價'],
+    EduRenew: ['教育局續購價'],
     Influencer: ['翻轉教育','Lin','富動科技','Curt','Jector','江老師','陳世銘校長','龍騰','盛源','敦煌','賴炳樹老師','學習吧','呂聰賢老師','康軒','兔子老師','陳勇延校長','吳奇老師','燕秋老師','南一','程瑋翔老師','茶米老師','許嘉泰老師','Puti','方方老師','Abby老師','蘇秦老師','Tiffany','Johnny老師','Kimberly老師','Angela老師','奕鈞老師']
   };
 
@@ -992,12 +993,35 @@ class Component extends DCLogic {
   products() {
     const hk = this.currency === 'HKD';
     const lock = this.resellerLock();
-    return this.allProducts().filter(p => {
+    const edu = this.eduGroup();
+    // 只有有 WordWall 經銷級距價的群組才看得到 1／5／10／20／50 套的級距包
+    const wwTier = ['A', 'Hardware', 'Super'].includes(this.agentGroup());
+    const is50 = id => /^ww_(std|pro)_50$/.test(id);
+    const out = this.allProducts().filter(p => {
       if (p.twOnly && this.currency !== 'TWD') return false;
       if (p.hkOnly && !hk) return false;
-      if (lock && (p.pack || p.section === 'bundle')) return false;
-      return !(hk && p.id === 'padlet');
+      if (hk && p.id === 'padlet') return false;
+      const wwPack = /^ww_(std|pro)_(\d+)$/.exec(p.id);
+      if (edu) {
+        // 教育局專案價：WordWall 只開 50 套
+        if (p.id === 'wordwall_std' || p.id === 'wordwall_pro') return false;
+        if (wwPack) return is50(p.id);
+      }
+      if (lock && (p.pack || p.section === 'bundle') && !(wwPack && wwTier)) return false;
+      return true;
     });
+    if (!edu) return out;
+    // 把 WordWall 50 套卡片擺回 Padlet 前面，維持原本的排列順序
+    const ww = out.filter(p => is50(p.id));
+    const rest = out.filter(p => !is50(p.id));
+    const at = rest.findIndex(p => p.id === 'padlet');
+    const i = at < 0 ? rest.length : at;
+    return rest.slice(0, i).concat(ww, rest.slice(i));
+  }
+
+  eduGroup() {
+    const g = this.agentGroup();
+    return g === 'EduFirst' || g === 'EduRenew' ? g : null;
   }
 
   resellerLock() {
@@ -1008,7 +1032,7 @@ class Component extends DCLogic {
   agentGroup() {
     const c = (this.state.referral || '').trim();
     if (!c) return null;
-    for (const g of ['Influencer', 'A', 'Super', 'Restricted', 'B', 'C', 'D', 'Senco']) {
+    for (const g of ['Influencer', 'A', 'Super', 'Restricted', 'Hardware', 'D', 'Senco', 'EduFirst', 'EduRenew']) {
       if (this.AGENTS[g].includes(c)) return g;
     }
     return null;
@@ -1029,8 +1053,7 @@ class Component extends DCLogic {
     if (this.region === 'MY') return p.id === 'edcafe_pro' ? 89 : 169;
 
     if (group === 'Senco' && cur === 'HKD' && p.id === 'kahoot') {
-      const base = p.priceHKD || Math.round(p.price * 0.25);
-      return Math.round(base * (qty > 25 ? 0.8 : 0.9));
+      return qty >= 25 ? 900 : 1010;
     }
     if (group && group !== 'Influencer') {
       if (p.id === 'kami' && cur === 'TWD') return 4600;
@@ -1048,23 +1071,34 @@ class Component extends DCLogic {
         if (p.id === 'edcafe_premium') return 3168;
         if (p.id === 'kahoot') return 2464;
       }
-      if (['A', 'B', 'C', 'Restricted'].includes(group) && cur === 'TWD') {
-        if (p.id === 'edcafe_pro') return group === 'C' ? 2310 : group === 'B' ? 2475 : 2640;
-        if (p.id === 'edcafe_premium') return group === 'C' ? 4550 : group === 'B' ? 4875 : 5200;
+      // WordWall 級距價：A／硬體經銷商／Super 共用同一張表（1／5／10／20／50 套，數字為整包總價）
+      if (cur === 'TWD' && ['A', 'Hardware', 'Super'].includes(group)) {
+        const WW = {
+          std: { 1: 1380, 5: 5750, 10: 8500, 20: 14000, 50: 28000 },
+          pro: { 1: 2125, 5: 8500, 10: 12750, 20: 21200, 50: 42500 }
+        };
+        if (p.id === 'wordwall_std') return WW.std[1];
+        if (p.id === 'wordwall_pro') return WW.pro[1];
+        const pack = /^ww_(std|pro)_(\d+)$/.exec(p.id);
+        if (pack && WW[pack[1]][+pack[2]]) return WW[pack[1]][+pack[2]];
+      }
+      // 教育局專案價：未列出的品項比照 A 級經銷價
+      if (cur === 'TWD' && (group === 'EduFirst' || group === 'EduRenew')) {
+        const first = group === 'EduFirst';
+        if (p.id === 'edcafe_pro') return first ? 2310 : 2475;
+        if (p.id === 'edcafe_premium') return first ? 4550 : 4875;
+        if (p.id === 'kahoot') return 2700;
+        if (p.id === 'ww_std_50') return 510 * 50;
+        if (p.id === 'ww_pro_50') return 760 * 50;
+        if (p.id === 'padlet') return 2500;
+        if (p.id === 'gemini_pro') return 7820;
+      }
+      if (['A', 'Hardware', 'Restricted'].includes(group) && cur === 'TWD') {
+        if (p.id === 'edcafe_pro') return group === 'Hardware' ? 2475 : 2640;
+        if (p.id === 'edcafe_premium') return group === 'Hardware' ? 4875 : 5200;
         if (p.id === 'kahoot') return 3600;
         if (p.id === 'gemini_pro') return 7820;
-        if (group !== 'Restricted') {
-          if (p.id === 'padlet') return 2500;
-          const wwStd = n => n >= 50 ? 555 : n >= 20 ? 680 : n >= 10 ? 850 : n >= 5 ? 1105 : 1360;
-          const wwPro = n => n >= 50 ? 835 : n >= 20 ? 1020 : n >= 10 ? 1275 : n >= 5 ? 1700 : 2125;
-          if (p.id === 'wordwall_std') return wwStd(qty);
-          if (p.id === 'wordwall_pro') return wwPro(qty);
-          const pack = /^ww_(std|pro)_(\d+)$/.exec(p.id);
-          if (pack) {
-            const n = parseInt(pack[2], 10);
-            return (pack[1] === 'pro' ? wwPro(n) : wwStd(n)) * n;
-          }
-        }
+        if (group !== 'Restricted' && p.id === 'padlet') return 2500;
       }
     }
     if (cur === 'HKD') return p.priceHKD || Math.round(p.price * 0.25);
@@ -1104,9 +1138,13 @@ class Component extends DCLogic {
       } else if (group === 'Influencer' && subtotal > 0) {
         discount = Math.min(subtotal, 300); appliedRule = zhT ? '專屬代碼優惠（現折 ' + this.fmt(discount) + '）' : 'Referral code discount (' + this.fmt(discount) + ' off)';
       } else if (group === 'Senco') {
-        appliedRule = (this.state.cart['kahoot'] || 0) > 25
-          ? (zhT ? 'Senco-Masslink 專屬大宗優惠（香港 Kahoot 額外 20% 折扣）' : 'Senco-Masslink volume discount (extra 20% off Kahoot)')
-          : (zhT ? 'Senco-Masslink 專屬優惠（香港 Kahoot 額外 10% 折扣）' : 'Senco-Masslink discount (extra 10% off Kahoot)');
+        appliedRule = (this.state.cart['kahoot'] || 0) >= 25
+          ? (zhT ? 'Senco-Masslink 大宗專案價（香港 Kahoot HK$900／套）' : 'Senco-Masslink volume price (Kahoot HK$900 per seat)')
+          : (zhT ? 'Senco-Masslink 專案價（香港 Kahoot HK$1,010／套）' : 'Senco-Masslink price (Kahoot HK$1,010 per seat)');
+      } else if (group === 'EduFirst' || group === 'EduRenew') {
+        appliedRule = group === 'EduFirst'
+          ? (zhT ? '教育局首購專案價' : 'Education bureau first-purchase pricing')
+          : (zhT ? '教育局續購專案價' : 'Education bureau renewal pricing');
       }
     }
     return { subtotal, discount, total: Math.max(0, subtotal - discount), edcafeCount, itemCount, appliedRule, prompt };
