@@ -174,17 +174,38 @@
           <div style="font-size: 14.5px; font-weight: 900;">Google AI Pro</div>
           <div style="display: inline-block; font-size: 11.5px; font-weight: 900; padding: 2px 6px; margin-top: 6px; border: 1px solid var(--color-divider); color: var(--color-neutral-700); white-space: nowrap;">官方代理商</div>
         </div>
+        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
+          <div style="height: 30px; margin-bottom: 12px; background: url(images/chatgpt-logo-3x.png) left center / auto 22px no-repeat;"></div>
+          <div style="font-size: 14.5px; font-weight: 900;">ChatGPT</div>
+        </div>
+        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
+          <div style="height: 30px; margin-bottom: 12px; background: url(images/claude-logo-3x.png) left center / auto 22px no-repeat;"></div>
+          <div style="font-size: 14.5px; font-weight: 900;">Claude</div>
+        </div>
+        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
+          <div style="height: 30px; margin-bottom: 12px; background: url(images/kami-logo-3x.png) left center / auto 22px no-repeat;"></div>
+          <div style="font-size: 14.5px; font-weight: 900;">Kami</div>
+        </div>
+        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
+          <div style="height: 30px; margin-bottom: 12px; background: url(images/quizlet-logo-3x.png) left center / auto 18px no-repeat;"></div>
+          <div style="font-size: 14.5px; font-weight: 900;">Quizlet</div>
+        </div>
       </div>
 
       <div style="padding: 22px 0 12px;">
-        <h2 style="font-size: 18px; margin: 0;">選擇地區</h2>
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <span style="font-size: 11px; font-weight: 900; letter-spacing: 0.18em; padding: 4px 8px; background: var(--color-accent); color: #fff;">STEP 01</span>
+          <h2 style="font-size: 18px; margin: 0;">選擇地區</h2>
+        </div>
+        <p style="font-size: 14.5px; font-weight: 700; color: var(--color-neutral-700); margin: 8px 0 0;">點選下方地區，即可進入選購頁 ↓</p>
       </div>
       <div class="m-regions" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;">
         <sc-for list="{{ regions }}" as="r" hint-placeholder-count="5">
           <button onClick="{{ r.select }}" style="{{ r.cellStyle }}" style-hover="{{ r.hover }}">
             <span style="{{ r.flagStyleLg }}"></span>
             <span style="font-size: 16.5px; font-weight: 900; line-height: 1.25; margin-top: 12px;">{{ r.en }}</span>
-            <span style="font-size: 12px; font-weight: 900; margin-top: 6px; color: var(--color-neutral-600);">{{ r.currency }}</span>
+            <span style="{{ r.currencyStyle }}">{{ r.currency }}</span>
+            <span style="{{ r.ctaStyle }}">{{ r.ctaZh }}</span>
           </button>
         </sc-for>
       </div>
@@ -261,17 +282,38 @@
           <div style="font-size: 14.5px; font-weight: 900;">Google AI Pro</div>
           <div style="display: inline-block; font-size: 11.5px; font-weight: 900; padding: 2px 6px; margin-top: 6px; border: 1px solid var(--color-divider); color: var(--color-neutral-700); white-space: nowrap;">Authorised distributor</div>
         </div>
+        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
+          <div style="height: 30px; margin-bottom: 12px; background: url(images/chatgpt-logo-3x.png) left center / auto 22px no-repeat;"></div>
+          <div style="font-size: 14.5px; font-weight: 900;">ChatGPT</div>
+        </div>
+        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
+          <div style="height: 30px; margin-bottom: 12px; background: url(images/claude-logo-3x.png) left center / auto 22px no-repeat;"></div>
+          <div style="font-size: 14.5px; font-weight: 900;">Claude</div>
+        </div>
+        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
+          <div style="height: 30px; margin-bottom: 12px; background: url(images/kami-logo-3x.png) left center / auto 22px no-repeat;"></div>
+          <div style="font-size: 14.5px; font-weight: 900;">Kami</div>
+        </div>
+        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
+          <div style="height: 30px; margin-bottom: 12px; background: url(images/quizlet-logo-3x.png) left center / auto 18px no-repeat;"></div>
+          <div style="font-size: 14.5px; font-weight: 900;">Quizlet</div>
+        </div>
       </div>
 
       <div style="padding: 22px 0 12px;">
-        <h2 style="font-size: 18px; margin: 0;">Select your region</h2>
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <span style="font-size: 11px; font-weight: 900; letter-spacing: 0.18em; padding: 4px 8px; background: var(--color-accent); color: #fff;">STEP 01</span>
+          <h2 style="font-size: 18px; margin: 0;">Select your region</h2>
+        </div>
+        <p style="font-size: 14.5px; font-weight: 700; color: var(--color-neutral-700); margin: 8px 0 0;">Tap a region below to start building your quote ↓</p>
       </div>
       <div class="m-regions" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;">
         <sc-for list="{{ regions }}" as="r" hint-placeholder-count="5">
           <button onClick="{{ r.select }}" style="{{ r.cellStyle }}" style-hover="{{ r.hover }}">
             <span style="{{ r.flagStyleLg }}"></span>
             <span style="font-size: 16.5px; font-weight: 900; line-height: 1.25; margin-top: 12px;">{{ r.en }}</span>
-            <span style="font-size: 12px; font-weight: 900; margin-top: 6px; color: var(--color-neutral-600);">{{ r.currency }}</span>
+            <span style="{{ r.currencyStyle }}">{{ r.currency }}</span>
+            <span style="{{ r.ctaStyle }}">{{ r.ctaEn }}</span>
           </button>
         </sc-for>
       </div>
@@ -688,8 +730,8 @@ class Component extends DCLogic {
 
   // 視覺對齊：粗體大寫的字標（Kahoot / Wordwall / Quizlet）調小，
   // 小寫或細筆畫的字標（padlet / Gemini）調大，讓每張卡的 logo 看起來一樣重
-  LOGO_H = { 'edcafe-logo-3x.png': 22, 'kahoot-logo-3x.png': 26, 'wordwall-logo-3x.png': 19, 'padlet-logo-3x.png': 26, 'gemini-logo-3x.png': 26, 'quizlet-logo-3x.png': 18, 'kami-logo-3x.png': 25 };
-  LOGO_AR = { 'edcafe-logo-3x.png': 4.36, 'kahoot-logo-3x.png': 2.90, 'wordwall-logo-3x.png': 5.95, 'padlet-logo-3x.png': 3.23, 'gemini-logo-3x.png': 2.69, 'quizlet-logo-3x.png': 4.30, 'kami-logo-3x.png': 2.05 };
+  LOGO_H = { 'edcafe-logo-3x.png': 22, 'kahoot-logo-3x.png': 26, 'wordwall-logo-3x.png': 19, 'padlet-logo-3x.png': 26, 'gemini-logo-3x.png': 26, 'quizlet-logo-3x.png': 18, 'kami-logo-3x.png': 25, 'chatgpt-logo-3x.png': 22, 'claude-logo-3x.png': 22 };
+  LOGO_AR = { 'edcafe-logo-3x.png': 4.36, 'kahoot-logo-3x.png': 2.90, 'wordwall-logo-3x.png': 5.95, 'padlet-logo-3x.png': 3.23, 'gemini-logo-3x.png': 2.69, 'quizlet-logo-3x.png': 4.30, 'kami-logo-3x.png': 2.05, 'chatgpt-logo-3x.png': 4.35, 'claude-logo-3x.png': 4.65 };
 
   AGENTS = {
     A: ['勁園351#','麗文$581','台奇資訊3351','仕揚科技2850','國眾電腦%480','新叡文教-+12','校園文化8103','宥林數位4824','奧斯丁國際6850','旭恩科技5555','先志2258','葉興資訊6841','吉邦數位8750','開駿實業6971','智識家1573','優學網Gary','首羿國際6840','神奕教育5816','極電資訊8710','炳昌企業8842','泰溥科技9852','長峰資訊2616','宏寶6842','全華圖書3318','宏菖文教4317','潤采數位5988'],
@@ -943,6 +985,15 @@ class Component extends DCLogic {
       { id: 'kami', brand: 'Kami', name: 'Kami', price: 5100, category: 'other', section: 'official', twOnly: true, origin: '紐西蘭', logos: ['kami-logo-3x.png'],
         desc: 'PDF 標註與線上作業批改工具。',
         features: ['文件標註與線上批改'], details: ['文件標註與線上批改'] },
+      { id: 'claude_pro', brand: 'Claude', name: 'Claude Pro', price: 8500, category: 'other', section: 'official', twOnly: true, origin: '美國', logos: ['claude-logo-3x.png'],
+        desc: 'Anthropic Claude 進階版，適合長文閱讀、教材撰寫與課程設計。',
+        features: ['Claude Pro 帳號 1 套／年'], details: ['Claude Pro 帳號 1 套／年'] },
+      { id: 'chatgpt_plus', brand: 'ChatGPT', name: 'ChatGPT Plus', price: 9700, category: 'other', section: 'official', twOnly: true, origin: '美國', logos: ['chatgpt-logo-3x.png'],
+        desc: 'OpenAI ChatGPT 進階版，適合教材生成與日常備課使用。',
+        features: ['ChatGPT Plus 帳號 1 套／年'], details: ['ChatGPT Plus 帳號 1 套／年'] },
+      { id: 'chatgpt_go', brand: 'ChatGPT', name: 'ChatGPT GO', price: 3800, category: 'other', section: 'official', twOnly: true, origin: '美國', logos: ['chatgpt-logo-3x.png'],
+        desc: 'ChatGPT 入門付費方案，適合先導入小規模試用。',
+        features: ['ChatGPT GO 帳號 1 套／年'], details: ['ChatGPT GO 帳號 1 套／年'] },
       { id: 'ww_std_5', brand: 'Wordwall', name: 'WordWall 標準版 × 5 套', price: 6500, priceHKD: 1700, category: 'other', section: 'official', standalone: true, pack: true, origin: '英國', logos: ['wordwall-logo-3x.png'],
         desc: '', features: ['WordWall Standard 5 套', '12 種標準範本'], details: ['WordWall Standard 帳號 5 套', '無限活動與社群搜尋', 'AI 內容產生器'] },
       { id: 'ww_std_10', brand: 'Wordwall', name: 'WordWall 標準版 × 10 套', price: 10000, priceHKD: 2500, category: 'other', section: 'official', standalone: true, pack: true, origin: '英國', logos: ['wordwall-logo-3x.png'],
@@ -1348,9 +1399,22 @@ class Component extends DCLogic {
         cellStyle: {
           display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
           padding: '18px 16px 16px', cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left',
-          border: '1px solid var(--color-divider)',
+          border: on ? '2px solid var(--color-text)' : '2px solid var(--color-text)',
+          boxShadow: '4px 4px 0 var(--color-neutral-400)',
           background: on ? 'var(--color-accent)' : '#fff',
           color: on ? '#fff' : 'var(--color-text)'
+        },
+        currencyStyle: {
+          fontSize: '12px', fontWeight: 900, marginTop: '6px',
+          color: on ? 'var(--color-neutral-300)' : 'var(--color-neutral-600)'
+        },
+        ctaZh: on ? '已選擇 ✓' : '開始選購 →',
+        ctaEn: on ? 'Selected ✓' : 'Start →',
+        ctaStyle: {
+          display: 'inline-block', marginTop: '12px', padding: '6px 10px',
+          fontSize: '12px', fontWeight: 900, letterSpacing: '0.04em', whiteSpace: 'nowrap',
+          background: on ? '#fff' : 'var(--color-accent)',
+          color: on ? 'var(--color-text)' : '#fff'
         },
         select: () => this.setState({ step: 1, region: code }),
         rowStyle: {
@@ -1360,7 +1424,7 @@ class Component extends DCLogic {
           background: on ? 'var(--color-accent)' : '#fff',
           color: on ? '#fff' : 'var(--color-text)'
         },
-        hover: on ? {} : { background: 'var(--color-neutral-200)' }
+        hover: on ? {} : { background: '#fff', boxShadow: '7px 7px 0 var(--color-text)' }
       };
     });
 
