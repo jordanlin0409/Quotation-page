@@ -39,14 +39,37 @@
     .pgrid { grid-template-columns: 1fr; }
     .psum { position: static; }
   }
+  /* ===== print-patch 2026-08-26：讓「下載 PDF」印出來的報價單乾淨、字清楚、分頁不亂切 =====
+     重點 1：改用本機字型（微軟正黑體／蘋方）。Google Fonts 的 Noto Sans TC 是可變字型，
+             Chrome 列印時無法嵌入 → 每個中文字被拆成 Type3 輪廓，印出來糊糊髒髒的。
+     重點 2：font-synthesis 關掉，避免 900 粗體被「假粗體」合成（一樣會變 Type3）。
+     重點 3：加分頁保護，表格列／備註／簽名欄不會被切成兩半。 */
   @media print {
-    @page { margin: 12mm; }
+    @page { size: A4; margin: 12mm; }
     .no-print { display: none !important; }
     body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+    body, .m-qwrap, .m-qwrap * {
+      font-family: Arial, "Microsoft JhengHei", "PingFang TC", "Heiti TC", sans-serif !important;
+      font-synthesis: none !important;
+      -webkit-font-smoothing: auto !important;
+    }
+
+    /* 報價單本身撐滿整頁，不要再留網頁版的外距與外框 */
+    .m-qwrap { max-width: none !important; margin: 0 !important; padding: 0 !important; }
+    .m-qcard { border: 0 !important; padding: 0 !important; }
+
+    /* 分頁保護：表格標題每頁重印，單列／清單／區塊不被切斷 */
+    .m-qcard table { break-inside: auto; }
+    .m-qcard thead { display: table-header-group; }
+    .m-qcard tfoot { display: table-footer-group; }
+    .m-qcard tr, .m-qcard li { break-inside: avoid; page-break-inside: avoid; }
+    .m-qhead, .m-q2, .m-qtot { break-inside: avoid; page-break-inside: avoid; }
+    .m-qcard h1, .m-qcard h2, .m-qcard h3 { break-after: avoid; }
   }
 
   /* ===== m-mobile-patch：只在 768px 以下生效，桌面版完全不受影響 ===== */
-  @media (max-width: 768px) {
+  @media screen and (max-width: 768px) {
     .m-sec, .m-psec, .m-fsec { padding-left: 16px !important; padding-right: 16px !important; }
     .m-psec { padding-bottom: 200px !important; }
     .m-band { margin-left: -16px !important; margin-right: -16px !important;
@@ -1182,8 +1205,15 @@ class Component extends DCLogic {
     const zhT = this.zh;
     if (!this.isIntl) {
       const group = this.agentGroup();
-      const internal = /^經典人文教育股份有限公司(\d+)$/.exec((this.state.referral || '').trim());
-      if (internal && subtotal > 0) {
+      const rawCode = (this.state.referral || '').trim();
+      // 專案折扣兩種寫法：固定金額「經典人文教育股份有限公司5000」／百分比「經典人文教育股份有限公司10%」（%10 也吃）
+      const internalPct = /^經典人文教育股份有限公司\s*(?:%\s*(\d+(?:\.\d+)?)|(\d+(?:\.\d+)?)\s*%)$/.exec(rawCode);
+      const internal = /^經典人文教育股份有限公司\s*(\d+)$/.exec(rawCode);
+      if (internalPct && subtotal > 0) {
+        const pct = Math.min(100, parseFloat(internalPct[1] || internalPct[2]));
+        discount = Math.min(subtotal, Math.round(subtotal * pct / 100));
+        appliedRule = (zhT ? '專案折扣 ' : 'Project discount ') + pct + '%';
+      } else if (internal && subtotal > 0) {
         discount = Math.min(subtotal, parseInt(internal[1], 10));
         appliedRule = zhT ? '專案折扣' : 'Project discount';
       } else if (group === 'Influencer' && subtotal > 0) {
@@ -1436,7 +1466,13 @@ class Component extends DCLogic {
       goProducts: () => this.setState({ step: 1 }),
       goForm: () => this.setState({ step: 2 }),
       goQuote: () => this.setState({ step: 3 }),
-      printQuote: () => window.print(),
+      printQuote: () => {
+        // 列印前把分頁標題換成「抬頭 報價單 QT-xxxx」，Chrome 的預設檔名與頁首才不會是 futurekn.store
+        const prevTitle = document.title;
+        document.title = ((st.form.title || t.companyName).trim() + ' ' + t.quoteHeading + ' ' + orderId).replace(/[\/:*?"<>|]/g, ' ');
+        window.print();
+        setTimeout(() => { document.title = prevTitle; }, 1000);
+      },
       confirmOrder: () => {
         if (this.state.submitting) return;
         this.setState({ submitting: true });
