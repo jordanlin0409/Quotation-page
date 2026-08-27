@@ -932,7 +932,7 @@ class Component extends DCLogic {
     const origin = '新加坡 / ' + (this.region === 'HK' ? '香港獨家代理' : '台灣獨家代理');
     const EDCAFE_VIDEO = 'https://youtu.be/5UBQLFchuYA';
     const EDCAFE_NOTION = 'https://www.notion.so/azt156/20251129-ChatGPT-Edcafe-AI-2b99ae758af38069a431d5e3cbae6039';
-    if (this.isIntl) return [
+    if (this.isIntl) return this.applyRemoteProducts([
       { id: 'edcafe_pro', brand: 'Edcafe AI', name: 'Edcafe AI Pro', price: 0, category: 'edcafe', section: 'edcafe', origin: 'Singapore', badge: 'Best seller', logos: ['edcafe-logo-3x.png'],
         desc: 'The easiest educational AI — one platform before, during and after class.',
         features: ['1,000 AI generations per month', 'Quiz & chatbot generators', 'Grading assistant · 200 participants'],
@@ -943,7 +943,7 @@ class Component extends DCLogic {
         features: ['Unlimited AI generations', 'Unlimited participants', 'Unlimited custom chatbots and graders'],
         details: ['Full access', 'Unlimited AI generations', 'Quiz generator', 'Chatbot generator', 'Grading assistant', 'Unlimited participants', 'Unlimited custom chatbots', 'Unlimited grading assistants'],
         video: EDCAFE_VIDEO }
-    ];
+    ]);
     const list = [
       { id: 'edcafe_pro', brand: 'Edcafe AI', name: 'Edcafe AI Pro 入門版', price: 3300, priceHKD: 750, category: 'edcafe', section: 'edcafe', origin, badge: '年銷 3000 萬', logos: ['edcafe-logo-3x.png'],
         desc: '最簡易操作的教育版 ChatGPT — 課前、課中、課後一站式解決。',
@@ -1060,11 +1060,31 @@ class Component extends DCLogic {
         features: ['Kahoot EDU Standard 20 組', 'WordWall 專業版 20 組'],
         details: ['Kahoot EDU Standard 20 組（100 位學生 pass）', 'WordWall 專業版 20 組（22 種專業範本）', '後台帳號管理功能'] }
     ];
-    if (this.zh) return list;
-    return list.map(p => ({ ...p, ...(this.EN_TEXT[p.id] || {}) }));
+    if (this.zh) return this.applyRemoteProducts(list);
+    return this.applyRemoteProducts(list.map(p => ({ ...p, ...(this.EN_TEXT[p.id] || {}) })));
   }
 
   products() {
+    // Sheet 模式：沒有群組——每個代碼獨立。量販包/組合包只顯示「這家有填價」的；
+    // 一般客人（沒輸入代碼）看到全部。
+    const R = this.remotePricing();
+    if (R && R.reseller && R.codes) {
+      const hkR = this.currency === 'HKD';
+      const code = (this.state.referral || '').trim();
+      const info = this.remoteCodeInfo();
+      const priced = id => {
+        const t1 = R.reseller[code + '|' + this.currency];
+        const t2 = R.reseller[code + '|' + this.currency + '|25'];
+        return (t1 && t1[id] != null && t1[id] !== '') || (t2 && t2[id] != null && t2[id] !== '');
+      };
+      return this.allProducts().filter(p => {
+        if (p.twOnly && this.currency !== 'TWD') return false;
+        if (p.hkOnly && !hkR) return false;
+        if (hkR && p.id === 'padlet') return false;
+        if (info && info.mode && (p.pack || p.section === 'bundle') && !priced(p.id)) return false;
+        return true;
+      });
+    }
     const hk = this.currency === 'HKD';
     const lock = this.resellerLock();
     const edu = this.eduGroup();
@@ -1103,6 +1123,7 @@ class Component extends DCLogic {
     return !!g && g !== 'Influencer';
   }
 
+  // 只給「Sheet 沒載到」的備援路徑用；Sheet 模式沒有群組概念，改用 remoteCodeInfo()
   agentGroup() {
     const c = (this.state.referral || '').trim();
     if (!c) return null;
@@ -1122,9 +1143,28 @@ class Component extends DCLogic {
     }
     const group = this.agentGroup();
     const cur = this.currency;
-    if (this.region === 'AU') return p.id === 'edcafe_pro' ? 129 : 249;
-    if (this.region === 'UK') return p.id === 'edcafe_pro' ? 69 : 129;
-    if (this.region === 'MY') return p.id === 'edcafe_pro' ? 89 : 169;
+    if (this.region === 'AU') return p.priceAUD || (p.id === 'edcafe_pro' ? 129 : 249);
+    if (this.region === 'UK') return p.priceGBP || (p.id === 'edcafe_pro' ? 69 : 129);
+    if (this.region === 'MY') return p.priceUSD || (p.id === 'edcafe_pro' ? 89 : 169);
+
+    // Sheet 價格已載入 → 經銷專屬價查「網站_經銷價」分頁，一列＝一家經銷商，
+    // 用「代碼|幣別」直接查那一家的價（滿 25 套先查「代碼|幣別|25」那列）。
+    // 空格＝該家無專屬價 → 用「網站_原價」的原價。
+    const R = this.remotePricing();
+    if (R && R.reseller) {
+      const code = (this.state.referral || '').trim();
+      if (code) {
+        const keys = [];
+        if (qty >= 25) keys.push(code + '|' + cur + '|25');
+        keys.push(code + '|' + cur);
+        for (const k of keys) {
+          const t = R.reseller[k];
+          if (t && t[p.id] != null && t[p.id] !== '') return +t[p.id];
+        }
+      }
+      if (cur === 'HKD') return p.priceHKD || Math.round(p.price * 0.25);
+      return p.price;
+    }
 
     if (group === 'Senco' && cur === 'HKD' && p.id === 'kahoot') {
       return qty >= 25 ? 900 : 1010;
@@ -1216,6 +1256,15 @@ class Component extends DCLogic {
       } else if (internal && subtotal > 0) {
         discount = Math.min(subtotal, parseInt(internal[1], 10));
         appliedRule = zhT ? '專案折扣' : 'Project discount';
+      } else if (this.remotePricing() && this.remotePricing().codes) {
+        // Sheet 模式：沒有群組——這個代碼的現折金額與專屬價都來自「網站_經銷商」那一列
+        const info = this.remoteCodeInfo();
+        if (info && info.discount > 0 && subtotal > 0) {
+          discount = Math.min(subtotal, info.discount);
+          appliedRule = zhT ? '專屬代碼優惠（現折 ' + this.fmt(discount) + '）' : 'Referral code discount (' + this.fmt(discount) + ' off)';
+        } else if (info && info.mode) {
+          appliedRule = zhT ? '已套用經銷專屬價' : 'Reseller pricing applied';
+        }
       } else if (group === 'Influencer' && subtotal > 0) {
         discount = Math.min(subtotal, 300); appliedRule = zhT ? '專屬代碼優惠（現折 ' + this.fmt(discount) + '）' : 'Referral code discount (' + this.fmt(discount) + ' off)';
       } else if (group === 'Senco') {
@@ -1254,6 +1303,78 @@ class Component extends DCLogic {
 
   GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwrz5nz9VtFN93rEHa5s2-biA4qQIVcx0kN5TDoPbPiwoDT8FAVu7632EASD9hV5E64iw/exec';
 
+  // ===== sheet-pricing 2026-08-27：價格／商品目錄改由 Google Sheet 管理 =====
+  // 開頁永遠先用本檔內建的價格立刻顯示（速度與舊版相同），背景再向 Apps Script
+  // 抓「網站_商品／網站_經銷價／網站_代碼」三個分頁的最新資料，抓到才無感套用，
+  // 並快取在訪客瀏覽器（下次開頁零延遲）。抓不到 → 全站行為與舊版完全相同。
+  PRICING_CACHE_KEY = 'chq_pricing_v1';
+
+  remotePricing() { return this.state.remotePricing || null; }
+
+  // 目前輸入的代碼在「網站_經銷商」分頁的設定：{ discount: 現折金額, mode: 有沒有專屬價 }
+  remoteCodeInfo() {
+    const R = this.remotePricing();
+    if (!R || !R.codes) return null;
+    const c = (this.state.referral || '').trim();
+    return (c && R.codes[c]) || null;
+  }
+
+  ensurePricing() {
+    if (this._pricingStarted) return;
+    this._pricingStarted = true;
+    try {
+      const c = localStorage.getItem(this.PRICING_CACHE_KEY);
+      if (c) {
+        const j = JSON.parse(c);
+        if (j && j.products) setTimeout(() => this.setState({ remotePricing: j }), 0);
+      }
+    } catch (e) {}
+    this.fetchPricing();
+    // 分頁開很久才切回來（例如報價單放了一天）→ 回前景就再抓一次最新價
+    try {
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) this.refreshPricing(false);
+      });
+    } catch (e) {}
+  }
+
+  // force=true 一定重抓（進報價單前用）；false 則 5 分鐘內抓過就不重複抓
+  refreshPricing(force) {
+    if (!force && this._pricingFetchedAt && Date.now() - this._pricingFetchedAt < 5 * 60 * 1000) return;
+    this.fetchPricing();
+  }
+
+  fetchPricing() {
+    this._pricingFetchedAt = Date.now();
+    fetch(this.GOOGLE_SCRIPT_URL + '?action=pricing')
+      .then(r => r.json())
+      .then(j => {
+        if (j && j.ok && j.products) {
+          const data = { products: j.products, reseller: j.reseller || {}, codes: j.codes || {} };
+          this.setState({ remotePricing: data });
+          try { localStorage.setItem(this.PRICING_CACHE_KEY, JSON.stringify(data)); } catch (e) {}
+        }
+      })
+      .catch(e => console.warn('pricing sheet unreachable, using built-in prices', e));
+  }
+
+  // 把「網站_原價」分頁的價格蓋到內建目錄上。只動價格，名稱／文案／版面完全不碰。
+  applyRemoteProducts(list) {
+    const R = this.remotePricing();
+    if (!R || !R.products) return list;
+    return list.map(p => {
+      const o = R.products[p.id];
+      if (!o) return p;
+      const q = { ...p };
+      if (o.priceTWD !== '' && o.priceTWD != null) q.price = +o.priceTWD;
+      if (o.priceHKD !== '' && o.priceHKD != null) q.priceHKD = +o.priceHKD;
+      if (o.priceAUD) q.priceAUD = +o.priceAUD;
+      if (o.priceGBP) q.priceGBP = +o.priceGBP;
+      if (o.priceUSD) q.priceUSD = +o.priceUSD;
+      return q;
+    });
+  }
+
   async submitOrder(orderId, tot) {
     const items = this.products().filter(p => (this.state.cart[p.id] || 0) > 0).map(p => {
       const qty = this.state.cart[p.id];
@@ -1280,6 +1401,7 @@ class Component extends DCLogic {
   }
 
   renderVals() {
+    this.ensurePricing();
     const st = this.state, tot = this.totals(), r = this.REGIONS[st.region], t = this.dict();
     const activeStep = Math.max(0, st.step - 1);
     const zh = this.zh;
@@ -1406,8 +1528,8 @@ class Component extends DCLogic {
         ? { href: 'https://lin.ee/luo4Dgq', label: '加入 LINE 真人客服' }
         : { href: 'https://api.whatsapp.com/message/OOAOI3R5DAQVJ1?autoload=1&app_absent=0', label: 'Message us on WhatsApp' };
 
-    const referralGroup = this.agentGroup();
-    const badgeOn = tot.discount > 0 || !!referralGroup;
+    const R0 = this.remotePricing();
+    const badgeOn = tot.discount > 0 || !!(R0 && R0.codes ? this.remoteCodeInfo() : this.agentGroup());
 
     const regionCells = Object.keys(this.REGIONS).map((code, i, arr) => {
       const cfg = this.REGIONS[code];
@@ -1465,7 +1587,7 @@ class Component extends DCLogic {
       goIntro: () => this.setState({ step: 0 }),
       goProducts: () => this.setState({ step: 1 }),
       goForm: () => this.setState({ step: 2 }),
-      goQuote: () => this.setState({ step: 3 }),
+      goQuote: () => { this.refreshPricing(true); this.setState({ step: 3 }); },
       printQuote: () => {
         // 列印前把分頁標題換成「抬頭 報價單 QT-xxxx」，Chrome 的預設檔名與頁首才不會是 futurekn.store
         const prevTitle = document.title;
