@@ -716,6 +716,8 @@ class Component extends DCLogic {
     { key: 'edcafe_campus', test: id => id === 'edcafe_pro' || /^edcafe_campus_/.test(id), name: () => 'Edcafe AI Pro' },
     { key: 'edcafe_prem_campus', test: id => id === 'edcafe_premium' || /^edcafe_prem_campus_/.test(id), name: () => 'Edcafe AI Premium' },
     { key: 'quizlet', test: id => /^quizlet_\d+$/.test(id), name: () => this.zh ? 'Quizlet 教育版' : 'Quizlet for Education' },
+    { key: 'padlet_plan', test: id => id === 'padlet_platinum' || id === 'padlet', plan: true,
+      name: () => 'Padlet' },
     { key: 'bundle_ke', test: id => /^bundle_ke_/.test(id), bundle: true,
       name: () => this.zh ? 'Kahoot + Edcafe AI Pro 校園版' : 'Kahoot + Edcafe AI Pro' },
     { key: 'combo_ew', test: id => /^combo_ew_/.test(id), bundle: true,
@@ -734,17 +736,21 @@ class Component extends DCLogic {
       const members = list.filter(x => rule.test(x.id));
       const seats = id => { const m = String(id).match(/_(\d+)$/); return m ? +m[1] : 1; };
       const opts = members.map(m => ({
-        id: m.id, seats: seats(m.id),
-        label: rule.bundle
+        id: m.id, seats: seats(m.id), order: m.tierOrder || 0,
+        label: rule.plan
+          ? (this.zh ? m.tierLabel : (m.tierLabelEn || m.tierLabel))
+          : rule.bundle
           ? (this.zh ? '各 ' + seats(m.id) + ' 組' : seats(m.id) + ' each')
           : (this.zh ? seats(m.id) + ' 套' : seats(m.id) + (seats(m.id) === 1 ? ' seat' : ' seats')),
         qty: this.state.cart[m.id] || 0
-      })).sort((a, b) => a.seats - b.seats);
+      })).sort((a, b) => a.order - b.order || a.seats - b.seats);
       const activeId = (this.state.tier || {})[rule.key];
       const active = members.find(m => m.id === activeId) || members.find(m => m.id === opts[0].id);
       const act = opts.find(o => o.id === active.id);
       out.push({ ...active, name: rule.name(), tierKey: rule.key, tierOptions: opts, bundleTier: !!rule.bundle,
-        seatNote: act ? (rule.bundle
+        seatNote: act ? (rule.plan
+          ? (this.zh ? '　·　' + act.label : '  ·  ' + act.label)
+          : rule.bundle
           ? (this.zh ? '　·　各 ' + act.seats + ' 組' : '  ·  ' + act.seats + ' each')
           : (this.zh ? '　·　' + act.seats + ' 套' : '  ·  ' + act.seats + ' seats')) : '' });
     });
@@ -988,7 +994,12 @@ class Component extends DCLogic {
         features: ['22 種專業範本', '搶先體驗新範本', '列印活動'],
         details: ['包含所有標準版功能', '22 種專業範本', '搶先體驗新範本', 'AI 內容產生器', '列印活動', '無限活動', '無限制社群搜尋'],
         video: 'https://youtube.com/playlist?list=PLU-8o76TOvQX7dKPKPDDDTEiVqaLRfOgs' },
-      { id: 'padlet', brand: 'Padlet', name: 'Padlet 學校版', price: 3000, category: 'other', section: 'official', origin: '美國', minQty: 10, logos: ['padlet-logo-3x.png'],
+      { id: 'padlet_platinum', brand: 'Padlet', name: 'Padlet 白金版', price: 4500, category: 'other', section: 'official', origin: '美國', tierOrder: 1, tierLabel: '白金版', tierLabelEn: 'Platinum', logos: ['padlet-logo-3x.png'],
+        desc: '創意協作數位布告欄，適合個人教師使用。',
+        features: ['個人帳號授權', '每人每年 NT$4,500'],
+        details: ['Padlet 白金版帳號 1 套／年'],
+        video: 'https://youtube.com/playlist?list=PLU-8o76TOvQXBLq544ntgx1pimWwfiuSS' },
+      { id: 'padlet', brand: 'Padlet', name: 'Padlet 學校版', price: 3000, category: 'other', section: 'official', origin: '美國', minQty: 10, displayCartTotal: true, tierOrder: 2, tierLabel: '學校版', tierLabelEn: 'Schools', logos: ['padlet-logo-3x.png'],
         desc: '創意協作數位布告欄，版型豐富，最低採購 10 組。',
         features: ['無限 Padlets · 無限學生', '1GB 檔案上傳 · 30 分鐘錄影', 'LMS 整合 · SSO 支援'],
         details: ['無限個 Padlets', '1GB 檔案上傳', '無限學生', '30 分鐘影片錄製', 'API 存取權限', '角色權限管理', '使用者管理', '分析控制面板', '內容安全功能', 'LMS 整合', 'SSO 支援'],
@@ -1014,9 +1025,6 @@ class Component extends DCLogic {
       { id: 'chatgpt_plus', brand: 'ChatGPT', name: 'ChatGPT Plus', price: 9700, category: 'other', section: 'official', twOnly: true, origin: '美國', logos: ['chatgpt-logo-3x.png'],
         desc: 'OpenAI ChatGPT 進階版，適合教材生成與日常備課使用。',
         features: ['ChatGPT Plus 帳號 1 套／年'], details: ['ChatGPT Plus 帳號 1 套／年'] },
-      { id: 'chatgpt_go', brand: 'ChatGPT', name: 'ChatGPT GO', price: 3800, category: 'other', section: 'official', twOnly: true, origin: '美國', logos: ['chatgpt-logo-3x.png'],
-        desc: 'ChatGPT 入門付費方案，適合先導入小規模試用。',
-        features: ['ChatGPT GO 帳號 1 套／年'], details: ['ChatGPT GO 帳號 1 套／年'] },
       { id: 'ww_std_5', brand: 'Wordwall', name: 'WordWall 標準版 × 5 套', price: 6500, priceHKD: 1700, category: 'other', section: 'official', standalone: true, pack: true, origin: '英國', logos: ['wordwall-logo-3x.png'],
         desc: '', features: ['WordWall Standard 5 套', '12 種標準範本'], details: ['WordWall Standard 帳號 5 套', '無限活動與社群搜尋', 'AI 內容產生器'] },
       { id: 'ww_std_10', brand: 'Wordwall', name: 'WordWall 標準版 × 10 套', price: 10000, priceHKD: 2500, category: 'other', section: 'official', standalone: true, pack: true, origin: '英國', logos: ['wordwall-logo-3x.png'],
@@ -1080,7 +1088,7 @@ class Component extends DCLogic {
       return this.allProducts().filter(p => {
         if (p.twOnly && this.currency !== 'TWD') return false;
         if (p.hkOnly && !hkR) return false;
-        if (hkR && p.id === 'padlet') return false;
+        if (hkR && (p.id === 'padlet' || p.id === 'padlet_platinum')) return false;
         if (info && info.mode && (p.pack || p.section === 'bundle') && !priced(p.id)) return false;
         return true;
       });
@@ -1094,7 +1102,7 @@ class Component extends DCLogic {
     const out = this.allProducts().filter(p => {
       if (p.twOnly && this.currency !== 'TWD') return false;
       if (p.hkOnly && !hk) return false;
-      if (hk && p.id === 'padlet') return false;
+      if (hk && (p.id === 'padlet' || p.id === 'padlet_platinum')) return false;
       const wwPack = /^ww_(std|pro)_(\d+)$/.exec(p.id);
       if (edu) {
         // 教育局專案價：WordWall 只開 50 套
@@ -1108,7 +1116,7 @@ class Component extends DCLogic {
     // 把 WordWall 50 套卡片擺回 Padlet 前面，維持原本的排列順序
     const ww = out.filter(p => is50(p.id));
     const rest = out.filter(p => !is50(p.id));
-    const at = rest.findIndex(p => p.id === 'padlet');
+    const at = rest.findIndex(p => p.id === 'padlet_platinum' || p.id === 'padlet');
     const i = at < 0 ? rest.length : at;
     return rest.slice(0, i).concat(ww, rest.slice(i));
   }
@@ -1449,6 +1457,10 @@ class Component extends DCLogic {
           display: 'flex', flexDirection: 'column', flex: '1 1 auto', minHeight: '138px', height: '100%',
           padding: '16px 18px 14px', boxSizing: 'border-box'
         };
+        const cardQty = qty || p.minQty || 1;
+        const cardPrice = p.displayCartTotal
+          ? this.priceOf(p, cardQty) * cardQty
+          : this.lineOf(p, cardQty).packPrice;
         return {
           ...p, qty, badge: p.badge || '', desc: p.standalone ? '' : (p.desc || ''),
           details: p.details || p.features || [],
@@ -1501,11 +1513,12 @@ class Component extends DCLogic {
             }
           })),
           // 卡片價格＝拆算後的整包價，才不會出現卡片 149,990、報價單 149,975 對不起來
-          priceLabel: this.fmt(this.lineOf(p, Math.max(1, qty)).packPrice),
+          priceLabel: this.fmt(cardPrice),
           setQty: (e) => {
             const raw = parseInt(String(e.target.value).replace(/[^0-9]/g, ''), 10);
             const n = isNaN(raw) ? 0 : Math.max(0, raw);
-            this.setState(s => ({ cart: { ...s.cart, [p.id]: n } }));
+            const qty = n === 0 ? 0 : Math.max(p.minQty || 1, n);
+            this.setState(s => ({ cart: { ...s.cart, [p.id]: qty } }));
           },
           inc: () => this.changeQty(p, 1),
           dec: () => this.changeQty(p, -1),
