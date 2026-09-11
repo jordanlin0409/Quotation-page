@@ -194,7 +194,7 @@
         </div>
         <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
           <div style="height: 30px; margin-bottom: 12px; background: url(images/gemini-logo-3x.png) left center / auto 24px no-repeat;"></div>
-          <div style="font-size: 14.5px; font-weight: 900;">Google AI Pro</div>
+          <div style="font-size: 14.5px; font-weight: 900;">Gemini</div>
           <div style="display: inline-block; font-size: 11.5px; font-weight: 900; padding: 2px 6px; margin-top: 6px; border: 1px solid var(--color-divider); color: var(--color-neutral-700); white-space: nowrap;">官方代理商</div>
         </div>
         <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
@@ -302,7 +302,7 @@
         </div>
         <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
           <div style="height: 30px; margin-bottom: 12px; background: url(images/gemini-logo-3x.png) left center / auto 24px no-repeat;"></div>
-          <div style="font-size: 14.5px; font-weight: 900;">Google AI Pro</div>
+          <div style="font-size: 14.5px; font-weight: 900;">Gemini</div>
           <div style="display: inline-block; font-size: 11.5px; font-weight: 900; padding: 2px 6px; margin-top: 6px; border: 1px solid var(--color-divider); color: var(--color-neutral-700); white-space: nowrap;">Authorised distributor</div>
         </div>
         <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
@@ -718,6 +718,8 @@ class Component extends DCLogic {
     { key: 'quizlet', test: id => /^quizlet_\d+$/.test(id), name: () => this.zh ? 'Quizlet 教育版' : 'Quizlet for Education' },
     { key: 'padlet_plan', test: id => id === 'padlet_platinum' || id === 'padlet', plan: true,
       name: () => 'Padlet' },
+    { key: 'gemini_plan', test: id => id === 'gemini_personal' || id === 'gemini_pro', plan: true,
+      name: () => 'Gemini' },
     { key: 'bundle_ke', test: id => /^bundle_ke_/.test(id), bundle: true,
       name: () => this.zh ? 'Kahoot + Edcafe AI Pro 校園版' : 'Kahoot + Edcafe AI Pro' },
     { key: 'combo_ew', test: id => /^combo_ew_/.test(id), bundle: true,
@@ -900,7 +902,11 @@ class Component extends DCLogic {
       desc: 'Everything in Standard plus 22 premium templates and printing.',
       features: ['22 premium templates', 'Early access to new templates'],
       details: ['All Standard features', '22 premium templates', 'Early access to new templates', 'AI content generator', 'Print activities', 'Unlimited activities', 'Unlimited community search'] },
-    gemini_pro: { name: 'Google AI Pro for Education', origin: 'United States',
+    gemini_personal: { name: 'Gemini Personal', origin: 'United States',
+      desc: 'Gemini AI Pro + NotebookLM AI Pro, integrates with Edcafe.',
+      features: ['Gemini in Workspace', 'Advanced text generation'],
+      details: ['Advanced AI text generation', 'Integrates with Edcafe', 'For advanced teachers and creators', 'Faster material preparation and grading'] },
+    gemini_pro: { name: 'Gemini Education', origin: 'United States',
       desc: 'Gemini AI Pro + NotebookLM AI Pro, integrates with Edcafe.',
       features: ['Gemini in Workspace', 'Advanced text generation'],
       details: ['Advanced AI text generation', 'Integrates with Edcafe', 'For advanced teachers and creators', 'Faster material preparation and grading'] },
@@ -1004,7 +1010,12 @@ class Component extends DCLogic {
         features: ['無限 Padlets · 無限學生', '1GB 檔案上傳 · 30 分鐘錄影', 'LMS 整合 · SSO 支援'],
         details: ['無限個 Padlets', '1GB 檔案上傳', '無限學生', '30 分鐘影片錄製', 'API 存取權限', '角色權限管理', '使用者管理', '分析控制面板', '內容安全功能', 'LMS 整合', 'SSO 支援'],
         video: 'https://youtube.com/playlist?list=PLU-8o76TOvQXBLq544ntgx1pimWwfiuSS' },
-      { id: 'gemini_pro', brand: 'Google', name: 'Google AI Pro for Education', price: 8500, priceHKD: 2000, category: 'other', section: 'official', origin: '美國', logos: ['gemini-logo-3x.png'],
+      { id: 'gemini_personal', brand: 'Google', name: 'Gemini 個人版', price: 8500, priceHKD: 2000, category: 'other', section: 'official', origin: '美國', tierOrder: 1, tierLabel: '個人版', tierLabelEn: 'Personal', logos: ['gemini-logo-3x.png'],
+        desc: 'Gemini AI Pro + NotebookLM AI Pro，可與 Edcafe 整合。',
+        features: ['Gemini in Workspace', '進階文本生成', '提升教材產出與批改效率'],
+        details: ['AI 文本生成加值功能', '可與 Edcafe 系統整合', '適合進階教師與創作者', '提升教材產出與批改品質'],
+        video: 'https://youtu.be/2fTqduml_CY' },
+      { id: 'gemini_pro', brand: 'Google', name: 'Gemini 教育版', price: 8500, priceHKD: 2000, category: 'other', section: 'official', origin: '美國', tierOrder: 2, tierLabel: '教育版', tierLabelEn: 'Education', logos: ['gemini-logo-3x.png'],
         desc: 'Gemini AI Pro + NotebookLM AI Pro，可與 Edcafe 整合。',
         features: ['Gemini in Workspace', '進階文本生成', '提升教材產出與批改效率'],
         details: ['AI 文本生成加值功能', '可與 Edcafe 系統整合', '適合進階教師與創作者', '提升教材產出與批改品質'],
