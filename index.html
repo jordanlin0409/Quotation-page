@@ -1074,6 +1074,7 @@ class Component extends DCLogic {
 
   products() {
     // Sheet 模式：沒有群組——每個代碼獨立。量販包/組合包只顯示「這家有填價」的；
+    // 香港／台灣輸入經銷代碼後，所有商品都只顯示該經銷商有填當地價格的項目。
     // 一般客人（沒輸入代碼）看到全部。
     const R = this.remotePricing();
     if (R && R.reseller && R.codes) {
@@ -1089,7 +1090,7 @@ class Component extends DCLogic {
         if (p.twOnly && this.currency !== 'TWD') return false;
         if (p.hkOnly && !hkR) return false;
         if (hkR && (p.id === 'padlet' || p.id === 'padlet_platinum')) return false;
-        if (info && info.mode && (p.pack || p.section === 'bundle') && !priced(p.id)) return false;
+        if (info && info.mode && (hkR || this.currency === 'TWD' || p.pack || p.section === 'bundle') && !priced(p.id)) return false;
         return true;
       });
     }
