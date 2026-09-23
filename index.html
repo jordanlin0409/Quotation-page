@@ -723,6 +723,8 @@ class Component extends DCLogic {
     { key: 'kahoot_campus', test: id => id === 'kahoot' || /^kahoot_\d+$/.test(id), name: () => 'Kahoot EDU Standard' },
     { key: 'edcafe_campus', test: id => id === 'edcafe_pro' || /^edcafe_campus_/.test(id), name: () => 'Edcafe AI Pro' },
     { key: 'edcafe_prem_campus', test: id => id === 'edcafe_premium' || /^edcafe_prem_campus_/.test(id), name: () => 'Edcafe AI Premium' },
+    { key: 'cp_campus', test: id => id === 'cp_pro' || /^cp_campus_/.test(id), name: () => this.zh ? 'ClassPoint 入門版' : 'ClassPoint Standard' },
+    { key: 'cp_prem_campus', test: id => id === 'cp_premium' || /^cp_prem_campus_/.test(id), name: () => this.zh ? 'ClassPoint 進階版' : 'ClassPoint Pro' },
     { key: 'quizlet', test: id => /^quizlet_\d+$/.test(id), name: () => this.zh ? 'Quizlet 教育版' : 'Quizlet for Education' },
     { key: 'padlet_plan', test: id => id === 'padlet_platinum' || id === 'padlet', plan: true,
       name: () => 'Padlet' },
@@ -769,8 +771,8 @@ class Component extends DCLogic {
 
   // 視覺對齊：粗體大寫的字標（Kahoot / Wordwall / Quizlet）調小，
   // 小寫或細筆畫的字標（padlet / Gemini）調大，讓每張卡的 logo 看起來一樣重
-  LOGO_H = { 'edcafe-logo-3x.png': 22, 'kahoot-logo-3x.png': 26, 'wordwall-logo-3x.png': 19, 'padlet-logo-3x.png': 26, 'gemini-logo-3x.png': 26, 'quizlet-logo-3x.png': 18, 'kami-logo-3x.png': 25, 'chatgpt-logo-3x.png': 22, 'claude-logo-3x.png': 22 };
-  LOGO_AR = { 'edcafe-logo-3x.png': 4.36, 'kahoot-logo-3x.png': 2.90, 'wordwall-logo-3x.png': 5.95, 'padlet-logo-3x.png': 3.23, 'gemini-logo-3x.png': 2.69, 'quizlet-logo-3x.png': 4.30, 'kami-logo-3x.png': 2.05, 'chatgpt-logo-3x.png': 4.35, 'claude-logo-3x.png': 4.65 };
+  LOGO_H = { 'edcafe-logo-3x.png': 22, 'kahoot-logo-3x.png': 26, 'wordwall-logo-3x.png': 19, 'padlet-logo-3x.png': 26, 'gemini-logo-3x.png': 26, 'quizlet-logo-3x.png': 18, 'classpoint-logo.svg': 21, 'kami-logo-3x.png': 25, 'chatgpt-logo-3x.png': 22, 'claude-logo-3x.png': 22 };
+  LOGO_AR = { 'edcafe-logo-3x.png': 4.36, 'kahoot-logo-3x.png': 2.90, 'wordwall-logo-3x.png': 5.95, 'padlet-logo-3x.png': 3.23, 'gemini-logo-3x.png': 2.69, 'quizlet-logo-3x.png': 4.30, 'classpoint-logo.svg': 4.85, 'kami-logo-3x.png': 2.05, 'chatgpt-logo-3x.png': 4.35, 'claude-logo-3x.png': 4.65 };
 
   AGENTS = {
     A: ['勁園351#','麗文$581','台奇資訊3351','仕揚科技2850','國眾電腦%480','新叡文教-+12','校園文化8103','宥林數位4824','奧斯丁國際6850','旭恩科技5555','先志2258','葉興資訊6841','吉邦數位8750','開駿實業6971','智識家1573','優學網Gary','首羿國際6840','神奕教育5816','極電資訊8710','炳昌企業8842','泰溥科技9852','長峰資訊2616','宏寶6842','全華圖書3318','宏菖文教4317','潤采數位5988'],
@@ -885,6 +887,32 @@ class Component extends DCLogic {
     edcafe_prem_campus_100: { name: 'Edcafe AI Premium Campus (100 seats)', badge: 'Campus plan', origin: 'Singapore / exclusive distributor',
       features: ['100 Edcafe AI Premium accounts', 'Unlimited AI generations'],
       details: ['100 Edcafe AI Premium accounts', 'Unlimited AI generations', 'Admin console'] },
+    cp_pro: { name: 'ClassPoint Standard', origin: 'Singapore / exclusive distributor',
+      desc: 'Run interactive lessons straight inside PowerPoint — no switching apps.',
+      features: ['Interactive quizzes inside PowerPoint', 'Annotation and draggable objects'],
+      details: ['Interactive quizzes inside PowerPoint', 'Annotation, laser pointer and draggable objects', 'Name picker, timer and class tools', 'Gamified stars, levels and leaderboard'] },
+    cp_premium: { name: 'ClassPoint Pro', origin: 'Singapore / exclusive distributor',
+      desc: 'Advanced interaction and class management — for whole-school rollouts and power users.',
+      features: ['Everything in Standard', 'Advanced question types and AI quiz generation'],
+      details: ['Everything in Standard', 'Advanced question types', 'AI quiz generation', 'Class and grade management', 'Unlimited usage'] },
+    cp_campus_35: { name: 'ClassPoint Standard Campus (35 seats)', badge: 'Campus plan', origin: 'Singapore / exclusive distributor',
+      features: ['35 ClassPoint Standard accounts', 'Admin console'],
+      details: ['35 ClassPoint Standard accounts', 'Admin console', 'Online training 1 hr'] },
+    cp_campus_50: { name: 'ClassPoint Standard Campus (50 seats)', badge: 'Campus plan', origin: 'Singapore / exclusive distributor',
+      features: ['50 ClassPoint Standard accounts', 'Admin console'],
+      details: ['50 ClassPoint Standard accounts', 'Admin console', 'Online training 2 hrs'] },
+    cp_campus_100: { name: 'ClassPoint Standard Campus (100 seats)', badge: 'Campus plan', origin: 'Singapore / exclusive distributor',
+      features: ['100 ClassPoint Standard accounts', 'Admin console'],
+      details: ['100 ClassPoint Standard accounts', 'Admin console', 'Online training 2 hrs x 2 sessions'] },
+    cp_prem_campus_25: { name: 'ClassPoint Pro Campus (25 seats)', badge: 'Campus plan', origin: 'Singapore / exclusive distributor',
+      features: ['25 ClassPoint Pro accounts', 'AI quiz generation'],
+      details: ['25 ClassPoint Pro accounts', 'AI quiz generation', 'Admin console'] },
+    cp_prem_campus_50: { name: 'ClassPoint Pro Campus (50 seats)', badge: 'Campus plan', origin: 'Singapore / exclusive distributor',
+      features: ['50 ClassPoint Pro accounts', 'AI quiz generation'],
+      details: ['50 ClassPoint Pro accounts', 'AI quiz generation', 'Admin console'] },
+    cp_prem_campus_100: { name: 'ClassPoint Pro Campus (100 seats)', badge: 'Campus plan', origin: 'Singapore / exclusive distributor',
+      features: ['100 ClassPoint Pro accounts', 'AI quiz generation'],
+      details: ['100 ClassPoint Pro accounts', 'AI quiz generation', 'Admin console'] },
     bundle_ke_10: { name: 'Kahoot + Edcafe AI Pro Campus · 10 each', origin: 'Norway / Singapore',
       features: ['Kahoot × 10', 'Edcafe AI Pro Campus × 10'],
       details: ['Kahoot × 10', 'Edcafe AI Pro Campus × 10', 'Admin console'] },
@@ -950,6 +978,7 @@ class Component extends DCLogic {
   allProducts() {
     const hk = this.currency === 'HKD';
     const origin = '新加坡 / ' + (this.region === 'HK' ? '香港獨家代理' : '台灣獨家代理');
+    const cpOrigin = origin;
     const EDCAFE_VIDEO = 'https://youtu.be/5UBQLFchuYA';
     const EDCAFE_NOTION = 'https://www.notion.so/azt156/20251129-ChatGPT-Edcafe-AI-2b99ae758af38069a431d5e3cbae6039';
     if (this.isIntl) return this.applyRemoteProducts([
@@ -987,6 +1016,26 @@ class Component extends DCLogic {
         desc: '', features: ['50 組 Edcafe AI Premium 帳號', '無限次 AI 生成', '後台帳號管理功能'] },
       { id: 'edcafe_prem_campus_100', brand: 'Edcafe AI', name: 'Edcafe AI Premium 校園版（100 組）', price: 0, priceHKD: 124900, category: 'edcafe_campus', section: 'edcafe', standalone: true, pack: true, hkOnly: true, origin, badge: '校園方案', logos: ['edcafe-logo-3x.png'],
         desc: '', features: ['100 組 Edcafe AI Premium 帳號', '無限次 AI 生成', '後台帳號管理功能'] },
+      { id: 'cp_pro', brand: 'ClassPoint', name: 'ClassPoint 入門版', price: 3300, priceHKD: 750, category: 'classpoint', section: 'edcafe', origin: cpOrigin, logos: ['classpoint-logo.svg'],
+        desc: '直接在 PowerPoint 裡上互動課，不用切換軟體。',
+        features: ['簡報中直接出題與即時作答', '即時註記與可拖曳物件', '遊戲化星星與排行榜'],
+        details: ['在 PowerPoint 中直接進行互動測驗', '即時註記、雷射筆與可拖曳物件', '抽籤、計時器與班級管理小工具', '遊戲化星星、等級與排行榜'] },
+      { id: 'cp_premium', brand: 'ClassPoint', name: 'ClassPoint 進階版', price: 6500, priceHKD: 1400, category: 'classpoint', section: 'edcafe', origin: cpOrigin, logos: ['classpoint-logo.svg'],
+        desc: '解鎖進階互動與班級管理，適合全校導入與重度使用的教師。',
+        features: ['包含入門版全部功能', '進階互動題型與班級管理', 'AI 測驗生成'],
+        details: ['包含入門版全部功能', '進階互動題型', 'AI 測驗生成', '班級與成績管理', '不限使用額度'] },
+      { id: 'cp_campus_35', brand: 'ClassPoint', name: 'ClassPoint 入門版校園版（35 組）', price: 109990, priceHKD: 24990, category: 'classpoint_campus', section: 'edcafe', standalone: true, pack: true, origin: cpOrigin, badge: '校園方案', logos: ['classpoint-logo.svg'],
+        desc: '', features: ['35 組 ClassPoint 入門版帳號', '後台帳號管理功能', '線上研習 1 HR'] },
+      { id: 'cp_campus_50', brand: 'ClassPoint', name: 'ClassPoint 入門版校園版（50 組）', price: 149990, priceHKD: 34950, category: 'classpoint_campus', section: 'edcafe', standalone: true, pack: true, origin: cpOrigin, badge: '校園方案', logos: ['classpoint-logo.svg'],
+        desc: '', features: ['50 組 ClassPoint 入門版帳號', '後台帳號管理功能', hk ? '線上研習 2 HR' : '實體研習 2 HR'] },
+      { id: 'cp_campus_100', brand: 'ClassPoint', name: 'ClassPoint 入門版校園版（100 組）', price: 64900, priceHKD: 64900, category: 'classpoint_campus', section: 'edcafe', standalone: true, pack: true, hkOnly: true, origin: cpOrigin, badge: '校園方案', logos: ['classpoint-logo.svg'],
+        desc: '', features: ['100 組 ClassPoint 入門版帳號', '後台帳號管理功能', '線上研習 2 HR ×2 場'] },
+      { id: 'cp_prem_campus_25', brand: 'ClassPoint', name: 'ClassPoint 進階版校園版（25 組）', price: 149990, priceHKD: 33490, category: 'classpoint_campus', section: 'edcafe', standalone: true, pack: true, origin: cpOrigin, badge: '校園方案', logos: ['classpoint-logo.svg'],
+        desc: '', features: ['25 組 ClassPoint 進階版帳號', '進階互動題型與 AI 測驗生成', '後台帳號管理功能'] },
+      { id: 'cp_prem_campus_50', brand: 'ClassPoint', name: 'ClassPoint 進階版校園版（50 組）', price: 0, priceHKD: 64950, category: 'classpoint_campus', section: 'edcafe', standalone: true, pack: true, hkOnly: true, origin: cpOrigin, badge: '校園方案', logos: ['classpoint-logo.svg'],
+        desc: '', features: ['50 組 ClassPoint 進階版帳號', '進階互動題型與 AI 測驗生成', '後台帳號管理功能'] },
+      { id: 'cp_prem_campus_100', brand: 'ClassPoint', name: 'ClassPoint 進階版校園版（100 組）', price: 0, priceHKD: 124900, category: 'classpoint_campus', section: 'edcafe', standalone: true, pack: true, hkOnly: true, origin: cpOrigin, badge: '校園方案', logos: ['classpoint-logo.svg'],
+        desc: '', features: ['100 組 ClassPoint 進階版帳號', '進階互動題型與 AI 測驗生成', '後台帳號管理功能'] },
       { id: 'bundle_ke_10', brand: 'Kahoot! + Edcafe AI', name: 'Kahoot + Edcafe AI Pro 校園版 各 10 組', price: 75900, priceHKD: 19450, category: 'bundle', section: 'bundle', standalone: true, origin, logos: ['kahoot-logo-3x.png', 'edcafe-logo-3x.png'],
         desc: '', features: ['Kahoot 10 組', 'Edcafe AI Pro 校園版 10 組', '後台帳號管理功能'] },
       { id: 'bundle_ke_20', brand: 'Kahoot! + Edcafe AI', name: 'Kahoot + Edcafe AI Pro 校園版 各 20 組', price: 149990, priceHKD: 36500, category: 'bundle', section: 'bundle', standalone: true, origin, logos: ['kahoot-logo-3x.png', 'edcafe-logo-3x.png'],
@@ -1110,7 +1159,7 @@ class Component extends DCLogic {
         if (p.hkOnly && !hkR) return false;
         if (hkR && (p.id === 'padlet' || p.id === 'padlet_platinum')) return false;
         if (info && info.mode && (hkR || this.currency === 'TWD' || p.pack || p.section === 'bundle') && !priced(p.id)
-            && !(this.RESELLER_LLM[p.id] && this.isResellerCode())) return false;
+            && !((this.RESELLER_LLM[p.id] || this.CLASSPOINT_SINGLE[p.id]) && this.isResellerCode())) return false;
         return true;
       });
     }
@@ -1147,6 +1196,18 @@ class Component extends DCLogic {
   // Sheet「網站_經銷商」那一列有填價就以 Sheet 為準，沒填才用這裡的 9,300。
   RESELLER_LLM = { claude_pro: 9300, chatgpt_plus: 9300 };
   RESELLER_LLM_MIN = 2;
+
+  // ===== 2026-09-23 =====
+  // 經銷商專屬：ClassPoint 單套（入門版／進階版）一律原價八折。校園版級距包比照 Edcafe——
+  // Sheet「網站_經銷價」那一列有填才看得到、才有專屬價。
+  CLASSPOINT_SINGLE = { cp_pro: 1, cp_premium: 1 };
+  CLASSPOINT_RESELLER_RATE = 0.8;
+
+  // 該商品在目前幣別的「原價」（不含任何折扣）
+  listPriceOf(p) {
+    if (this.currency === 'HKD') return p.priceHKD || Math.round(p.price * 0.25);
+    return p.price;
+  }
 
   // 內部業務專用代碼：金額改成可自行輸入（數量仍用點選）
   INTERNAL_PRICE_CODE = /^經典人文教育股份有限公司(Remi|Jordan)$/i;
@@ -1233,6 +1294,7 @@ class Component extends DCLogic {
         }
       }
       if (this.RESELLER_LLM[p.id] && this.isResellerCode()) return this.RESELLER_LLM[p.id];
+      if (this.CLASSPOINT_SINGLE[p.id] && this.isResellerCode()) return Math.round(this.listPriceOf(p) * this.CLASSPOINT_RESELLER_RATE);
       if (cur === 'HKD') return p.priceHKD || Math.round(p.price * 0.25);
       return p.price;
     }
@@ -1242,6 +1304,7 @@ class Component extends DCLogic {
     }
     if (group && group !== 'Influencer') {
       if (this.RESELLER_LLM[p.id] && this.isResellerCode()) return this.RESELLER_LLM[p.id];
+      if (this.CLASSPOINT_SINGLE[p.id] && this.isResellerCode()) return Math.round(this.listPriceOf(p) * this.CLASSPOINT_RESELLER_RATE);
       if (p.id === 'kami' && cur === 'TWD') return 4600;
       if (group === 'D') {
         if (cur === 'HKD') {
@@ -1325,12 +1388,99 @@ class Component extends DCLogic {
     return { unit, qty: seats * qty, amount: unit * seats * qty, seats, packPrice: unit * seats, split: true };
   }
 
+
+  // ===== bundle-split 2026-09-23：組合包在報價單／採購明細上拆成「每個軟體各一列」 =====
+  // 例：Kahoot + Edcafe AI Pro 各 10 組 75,900 → Kahoot 4,378 × 10 ＋ Edcafe AI Pro 3,211 × 10。
+  // 分攤依據＝各軟體「原價」的比例（不吃經銷折扣，比例才穩定）；單價一律無條件捨去成整數，
+  // 捨去後剩的零頭再以「一套的錢」為單位補回去，所以各列相加＝小計，畫面上不會有小數點。
+  // 台灣區數量欄寫總套數（10）；香港／英文版沿用「份數」，套數寫在品名裡。
+  BUNDLE_PARTS = {
+    bundle_ke_10: [['kahoot', 10], ['edcafe_pro', 10, 'campus']],
+    bundle_ke_20: [['kahoot', 20], ['edcafe_pro', 20, 'campus']],
+    bundle_ke_50: [['kahoot', 50], ['edcafe_pro', 50, 'campus']],
+    combo_ew_10: [['edcafe_pro', 10], ['wordwall_pro', 10]],
+    combo_ew_20: [['edcafe_pro', 20], ['wordwall_pro', 20]],
+    combo_kw_10: [['kahoot', 10], ['wordwall_pro', 10]],
+    combo_kw_20: [['kahoot', 20], ['wordwall_pro', 20]]
+  };
+
+  PART_NAMES = {
+    kahoot: { zh: 'Kahoot EDU Standard 教師版', en: 'Kahoot EDU Standard' },
+    edcafe_pro: { zh: 'Edcafe AI Pro', en: 'Edcafe AI Pro' },
+    'edcafe_pro|campus': { zh: 'Edcafe AI Pro 校園版', en: 'Edcafe AI Pro Campus' },
+    wordwall_pro: { zh: 'WordWall 專業版', en: 'WordWall Pro' }
+  };
+
+  // 分攤用的基準＝該軟體單套「原價」（不套用任何經銷／專案折扣，比例才不會跟著代碼跳動）
+  basePriceOf(id) {
+    const c = this.allProducts().find(x => x.id === id);
+    if (!c) return 0;
+    if (this.currency === 'HKD') return c.priceHKD || Math.round(c.price * 0.25);
+    return c.price;
+  }
+
+  // 同一個軟體可能同時出現在兩個組合包裡（例：Kahoot 在 ke 與 kw 都有），
+  // 所以品名要把「來自哪個組合包」寫出來，客戶才分得清楚
+  partNameOf(part, seats, bundle) {
+    const key = part[2] ? part[0] + '|' + part[2] : part[0];
+    const n = this.PART_NAMES[key] || { zh: part[0], en: part[0] };
+    const tag = (bundle.brand || '').replace(/!/g, '');
+    return this.zh
+      ? n.zh + '（' + tag + ' 組合包）'
+      : n.en + ' x ' + seats + ' (' + tag + ' bundle)';
+  }
+
+  // 報價單／採購明細的列：組合包回傳多列，其餘商品維持一列。
+  // unit＝單價、qty＝數量、amount＝金額；packUnit／packQty 給右側明細的「整包價 × 份數」用
+  rowsOf(p, qty) {
+    const L = this.lineOf(p, qty);
+    const parts = this.BUNDLE_PARTS[p.id];
+    if (!parts || !qty) {
+      return [{ name: p.name, unit: L.unit, qty: L.qty, amount: L.amount, packUnit: L.packPrice, packQty: qty }];
+    }
+    const total = L.amount;
+    const ws = parts.map(pt => this.basePriceOf(pt[0]) * pt[1]);
+    const W = ws.reduce((a, b) => a + b, 0) || 1;
+    const rows = parts.map((pt, i) => {
+      const seats = this.zh ? pt[1] : 1;
+      const rowQty = seats * qty;
+      const alloc = total * ws[i] / W;
+      const unit = Math.max(0, Math.floor(alloc / rowQty));
+      return { name: this.partNameOf(pt, pt[1], p), unit, qty: rowQty, amount: unit * rowQty,
+               packUnit: unit * seats, packQty: qty, _loss: alloc - unit * rowQty };
+    });
+    // 捨去後剩下的零頭：只能以「一套的錢」為單位補，單價才會是整數、每一列才除得進去
+    //（學校要把每項單價填進政府表單，所以絕不允許單價 × 數量 ≠ 金額）
+    const bump = i => {
+      const r = rows[i];
+      r.unit += 1; r.amount += r.qty; r.packUnit = r.unit * (this.zh ? parts[i][1] : 1);
+    };
+    let left = total - rows.reduce((s, r) => s + r.amount, 0);
+    // 先從「被捨掉最多」的那一列開始補，補到補不動為止
+    rows.map((r, i) => i).sort((a, b) => rows[b]._loss - rows[a]._loss).forEach(i => {
+      if (rows[i].qty > 0 && left >= rows[i].qty) { bump(i); left -= rows[i].qty; }
+    });
+    // 還有剩（補不滿一套）→ 取離原價最近的那一邊：往下就是少 left，往上就是多 (該列套數 − left)
+    if (left > 0) {
+      let best = -1;
+      rows.forEach((r, i) => { if (r.qty > 0 && (best < 0 || r.qty < rows[best].qty)) best = i; });
+      if (best >= 0 && rows[best].qty - left < left) bump(best);
+    }
+    rows.forEach(r => { delete r._loss; });
+    return rows;
+  }
+
+  // 這個商品真正計入小計的金額（組合包＝拆開後各列相加，報價單加總才對得起來）
+  amountOf(p, qty) {
+    return this.rowsOf(p, qty).reduce((s, r) => s + r.amount, 0);
+  }
+
   totals() {
     let subtotal = 0, edcafeCount = 0, itemCount = 0, other = 0;
     this.products().forEach(p => {
       const qty = this.state.cart[p.id] || 0;
       if (!qty) return;
-      const amount = this.lineOf(p, qty).amount;
+      const amount = this.amountOf(p, qty);
       subtotal += amount; itemCount += qty;
       if (p.standalone) return;
       if (p.category === 'edcafe') edcafeCount += qty;
@@ -1472,9 +1622,11 @@ class Component extends DCLogic {
   }
 
   async submitOrder(orderId, tot) {
-    const items = this.products().filter(p => (this.state.cart[p.id] || 0) > 0).map(p => {
-      const qty = this.state.cart[p.id];
-      return { name: p.name + ' x ' + qty, price: this.fmt(this.priceOf(p, qty) * qty) };
+    const items = [];
+    this.products().filter(p => (this.state.cart[p.id] || 0) > 0).forEach(p => {
+      this.rowsOf(p, this.state.cart[p.id]).forEach(R => {
+        items.push({ name: R.name + ' x ' + R.qty, price: this.fmt(R.amount) });
+      });
     });
     const payload = {
       orderId, region: this.state.region, currency: this.currency,
@@ -1503,8 +1655,8 @@ class Component extends DCLogic {
     const zh = this.zh;
 
     const groupTitles = !this.zh
-      ? { edcafe: 'Exclusive distributor — Edcafe AI', official: 'Authorised distributor — EdTech software', llm: 'LLM reseller', bundle: 'Bundles — mix brands and save more' }
-      : { edcafe: '獨家代理　Edcafe AI', official: '官方授權代理　教育科技軟體', llm: '大語言模型經銷商　ChatGPT ／ Claude ／ Gemini', bundle: '組合包　跨品牌搭配最優惠' };
+      ? { edcafe: 'Exclusive distributor — Edcafe AI & ClassPoint', official: 'Authorised distributor — EdTech software', llm: 'LLM reseller', bundle: 'Bundles — mix brands and save more' }
+      : { edcafe: '獨家代理　Edcafe AI　ClassPoint', official: '官方授權代理　教育科技軟體', llm: '大語言模型經銷商　ChatGPT ／ Claude ／ Gemini', bundle: '組合包　跨品牌搭配最優惠' };
 
     const brandRank = p => (/Kahoot/.test(p.brand) ? 1 : /Wordwall/.test(p.brand) ? 2 : 0);
     const groups = ['edcafe', 'official', 'llm', 'bundle'].map(key => ({
@@ -1513,7 +1665,7 @@ class Component extends DCLogic {
         .map(p => {
         const qty = st.cart[p.id] || 0;
         const flipped = !!st.flipped[p.id];
-        const isEdcafe = /Edcafe/i.test(p.brand || '');
+        const isEdcafe = p.section === 'edcafe'; // 獨家代理區的卡片（Edcafe AI／ClassPoint）
         const links = [];
         if (p.video) links.push({ href: p.video, label: zh ? '教學影片' : 'Tutorial' });
         if (p.notion) links.push({ href: p.notion, label: zh ? 'Notion 筆記' : 'Notion' });
@@ -1525,6 +1677,8 @@ class Component extends DCLogic {
         const cardQty = qty || minQ;
         const cardPrice = p.displayCartTotal
           ? this.priceOf(p, cardQty) * cardQty
+          : this.BUNDLE_PARTS[p.id]
+          ? this.amountOf(p, cardQty) / cardQty
           : this.lineOf(p, cardQty).packPrice;
         const editPrice = this.customPriceMode();
         const customRaw = (st.customPrice || {})[p.id];
@@ -1618,15 +1772,18 @@ class Component extends DCLogic {
     })).filter(g => g.items.length > 0);
 
     // 報價單表格：多套包拆成「每套單價 × 總套數」
-    const lines = this.products().filter(p => (st.cart[p.id] || 0) > 0).map(p => {
-      const L = this.lineOf(p, st.cart[p.id]);
-      return { name: p.name, unit: this.fmt(L.unit), qty: L.qty, amount: this.fmt(L.amount) };
+    const lines = [];
+    this.products().filter(p => (st.cart[p.id] || 0) > 0).forEach(p => {
+      this.rowsOf(p, st.cart[p.id]).forEach(R => {
+        lines.push({ name: R.name, unit: this.fmt(R.unit), qty: R.qty, amount: this.fmt(R.amount) });
+      });
     });
     // 右側採購明細小卡：維持「整包價 × 份數」的寫法（金額與報價單一致）
-    const cartLines = this.products().filter(p => (st.cart[p.id] || 0) > 0).map(p => {
-      const qty = st.cart[p.id];
-      const L = this.lineOf(p, qty);
-      return { name: p.name, unit: this.fmt(L.packPrice), qty, amount: this.fmt(L.amount) };
+    const cartLines = [];
+    this.products().filter(p => (st.cart[p.id] || 0) > 0).forEach(p => {
+      this.rowsOf(p, st.cart[p.id]).forEach(R => {
+        cartLines.push({ name: R.name, unit: this.fmt(R.packUnit), qty: R.packQty, amount: this.fmt(R.amount) });
+      });
     });
 
     const notes = [];
