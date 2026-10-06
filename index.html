@@ -1169,6 +1169,7 @@ class Component extends DCLogic {
         if (p.hkOnly && !hkR) return false;
         if (hkR && (p.id === 'padlet' || p.id === 'padlet_platinum')) return false;
         if (info && info.mode && (hkR || this.currency === 'TWD' || p.pack || p.section === 'bundle') && !priced(p.id)
+            && !(this.MIRROR_PRICE[p.id] && priced(this.MIRROR_PRICE[p.id]))
             && !((this.RESELLER_LLM[p.id] || this.CLASSPOINT_SINGLE[p.id]) && this.isResellerCode())) return false;
         return true;
       });
@@ -1200,6 +1201,13 @@ class Component extends DCLogic {
     const i = at < 0 ? rest.length : at;
     return rest.slice(0, i).concat(ww, rest.slice(i));
   }
+
+  // ===== 2026-10-06 =====
+  // Jordan 指示：Gemini 個人版賣給經銷商的價格「跟教育版一樣」。Sheet「網站_經銷商」
+  // 沒有 gemini_personal 這一欄，所以直接鏡射同一列的 gemini_pro：有填 gemini_pro 就
+  // 跟著那個價、也跟著看得到；gemini_pro 留空的代碼，個人版一樣留空、一樣看不到。
+  // 自己那一欄（未來若在 Sheet 新增）優先，鏡射只是沒填時的來源。
+  MIRROR_PRICE = { gemini_personal: 'gemini_pro' };
 
   // ===== 2026-09-20 =====
   // 經銷商專屬：Claude Pro／ChatGPT Plus 一律 9,300／套、最少 2 套起（訂單 18,600 起跳，每多一套 +9,300）。
@@ -1302,6 +1310,13 @@ class Component extends DCLogic {
           const t = R.reseller[k];
           if (t && t[p.id] != null && t[p.id] !== '') return +t[p.id];
         }
+        const mir = this.MIRROR_PRICE[p.id];
+        if (mir) {
+          for (const k of keys) {
+            const t = R.reseller[k];
+            if (t && t[mir] != null && t[mir] !== '') return +t[mir];
+          }
+        }
       }
       if (this.RESELLER_LLM[p.id] && this.isResellerCode()) return this.RESELLER_LLM[p.id];
       if (this.CLASSPOINT_SINGLE[p.id] && this.isResellerCode()) return Math.round(this.listPriceOf(p) * this.CLASSPOINT_RESELLER_RATE);
@@ -1350,13 +1365,13 @@ class Component extends DCLogic {
         if (p.id === 'ww_std_50') return 510 * 50;
         if (p.id === 'ww_pro_50') return 760 * 50;
         if (p.id === 'padlet') return 2500;
-        if (p.id === 'gemini_pro') return 7820;
+        if (p.id === 'gemini_pro' || p.id === 'gemini_personal') return 7820;
       }
       if (['A', 'Hardware', 'Restricted'].includes(group) && cur === 'TWD') {
         if (p.id === 'edcafe_pro') return group === 'Hardware' ? 2475 : 2640;
         if (p.id === 'edcafe_premium') return group === 'Hardware' ? 4875 : 5200;
         if (p.id === 'kahoot') return 3600;
-        if (p.id === 'gemini_pro') return 7820;
+        if (p.id === 'gemini_pro' || p.id === 'gemini_personal') return 7820;
         if (group !== 'Restricted' && p.id === 'padlet') return 2500;
       }
     }
