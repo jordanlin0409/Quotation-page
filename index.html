@@ -437,7 +437,12 @@
                             <span style="{{ lg.style }}"></span>
                           </sc-for>
                         </div>
-                        <h3 style="{{ p.nameStyle }}">{{ p.name }}</h3>
+                        <sc-if value="{{ p.nameFixed }}" hint-placeholder-val="{{ true }}">
+                          <h3 style="{{ p.nameStyle }}">{{ p.name }}</h3>
+                        </sc-if>
+                        <sc-if value="{{ p.nameEditable }}" hint-placeholder-val="{{ false }}">
+                          <input type="text" value="{{ p.nameInput }}" onChange="{{ p.setName }}" placeholder="{{ p.name }}" style="flex: 1 1 auto; min-width: 0; width: 100%; height: 30px; font-family: inherit; font-size: 14px; font-weight: 900; line-height: 1.3; color: var(--color-text); background: var(--color-bg); border: 2px solid var(--color-accent); padding: 0 6px; box-sizing: border-box;">
+                        </sc-if>
                       </div>
                       <sc-if value="{{ p.hasTiers }}" hint-placeholder-val="{{ false }}">
                         <div style="margin-top: 12px; flex: none;">
@@ -715,7 +720,7 @@
 class Component extends DCLogic {
   state = {
     step: 0, region: '', referral: '', showConfirm: false, flipped: {}, tier: {},
-    cart: {}, customPrice: {},
+    cart: {}, customPrice: {}, customName: {},
     form: { name: '', email: '', title: '', taxId: '', date: new Date().toISOString().split('T')[0], note: '' }
   };
 
@@ -1457,6 +1462,12 @@ class Component extends DCLogic {
   // unit＝單價、qty＝數量、amount＝金額；packUnit／packQty 給右側明細的「整包價 × 份數」用
   rowsOf(p, qty) {
     const L = this.lineOf(p, qty);
+    // 內部業務代碼（Remi／Jordan）：有填自訂品名 → 整個商品用自訂名稱寫成一列
+    //（組合包也不再拆列，金額＝原本各列相加，所以小計完全不變）
+    if (this.customPriceMode()) {
+      const cn = String((this.state.customName || {})[p.id] || '').trim();
+      if (cn) return [{ name: cn, unit: L.unit, qty: L.qty, amount: L.amount, packUnit: L.packPrice, packQty: qty }];
+    }
     const parts = this.BUNDLE_PARTS[p.id];
     if (!parts || !qty) {
       return [{ name: p.name, unit: L.unit, qty: L.qty, amount: L.amount, packUnit: L.packPrice, packQty: qty }];
@@ -1768,6 +1779,14 @@ class Component extends DCLogic {
           setPrice: e => {
             const v = String(e.target.value).replace(/[^0-9.]/g, '');
             this.setState(s => ({ customPrice: { ...s.customPrice, [p.id]: v } }));
+          },
+          // 內部業務代碼：品名也改成可打字的輸入框（留空＝照原名；報價單／明細／送單都吃自訂名）
+          nameFixed: !editPrice,
+          nameEditable: editPrice,
+          nameInput: String((st.customName || {})[p.id] || ''),
+          setName: e => {
+            const v = String(e.target.value);
+            this.setState(s => ({ customName: { ...s.customName, [p.id]: v } }));
           },
           setQty: (e) => {
             const raw = parseInt(String(e.target.value).replace(/[^0-9]/g, ''), 10);
