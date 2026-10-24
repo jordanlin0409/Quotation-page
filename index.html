@@ -127,7 +127,7 @@
 
   .cv-nav { position: sticky; top: 0; z-index: 40; background: rgba(255,255,255,0.96); backdrop-filter: blur(8px); border-bottom: 1px solid #e6e6e6; }
   .cv-nav .cv-wrap { display: flex; align-items: center; gap: 16px; height: 76px; }
-  .cv-brand { font-weight: 900; font-size: 16px; line-height: 1.15; }
+  .cv-brand { font-weight: 900; font-size: 19px; line-height: 1.15; letter-spacing: 0.02em; }
   .cv-brand small { display: block; font-size: 10px; letter-spacing: 0.12em; color: #8a8a8a; font-weight: 700; margin-top: 3px; text-transform: uppercase; }
   .cv-short { display: none; }
   .cv-navr { margin-left: auto; display: flex; align-items: center; gap: 8px; flex: none; }
@@ -146,8 +146,7 @@
   .cv-herotop { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 72px; align-items: end; padding-top: 56px; padding-bottom: 40px; }
   .cv-band { padding-bottom: 32px; }
   .cv-proc { padding-bottom: 52px; }
-  .cv-eyebrow { font-size: 12px; font-weight: 900; letter-spacing: 0.22em; color: #6e6e6e; margin-bottom: 18px; text-transform: uppercase; }
-  .cv-h1 { font-size: clamp(40px, 4vw, 60px); line-height: 1.1; letter-spacing: -0.035em; margin: 0 0 22px; font-weight: 900; color: #101010; text-wrap: balance; }
+  .cv-h1 { font-size: clamp(36px, 3.6vw, 56px); line-height: 1.15; letter-spacing: -0.035em; margin: 0 0 22px; font-weight: 900; color: #101010; text-wrap: balance; word-break: keep-all; }
   .cv-h1b { display: block; color: #6e6e6e; word-break: keep-all; }
   .cv-lead { font-size: 17.5px; line-height: 1.8; color: #4f4f4f; margin: 0 0 28px; max-width: 40em; text-wrap: pretty; }
   .cv-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
@@ -194,7 +193,7 @@
   .cv-h2 { font-size: 36px; line-height: 1.15; letter-spacing: -0.03em; margin: 0; font-weight: 900; }
   .cv-headp { font-size: 15.5px; font-weight: 700; color: #4f4f4f; margin: 0; }
 
-  .cv-regions { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+  .cv-regions { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
   .cv-rcard { display: flex; flex-direction: column; align-items: flex-start; text-align: left; font-family: inherit; cursor: pointer;
     background: #fff; color: #101010; border: 1.5px solid #101010; padding: 22px 20px 18px; min-height: 184px; box-sizing: border-box;
     transition: transform 0.15s ease, box-shadow 0.15s ease; }
@@ -202,7 +201,7 @@
   .cv-flag { display: block; width: 54px; height: 36px; border: 1px solid #dcdcdc; background-size: cover; background-position: center; }
   .cv-rname { font-size: 21px; font-weight: 900; letter-spacing: -0.02em; margin-top: 16px; }
   .cv-rsub { font-size: 13px; color: #8a8a8a; font-weight: 700; margin-top: 4px; min-height: 1em; }
-  .cv-rfoot { margin-top: auto; padding-top: 16px; width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .cv-rfoot { margin-top: auto; padding-top: 16px; width: 100%; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 8px; }
   .cv-rcur { font-size: 11.5px; font-weight: 900; letter-spacing: 0.1em; padding: 3px 7px; border: 1px solid #cfcfcf; }
   .cv-rcta { font-size: 13px; font-weight: 900; white-space: nowrap; }
 
@@ -233,7 +232,7 @@
   }
   @media screen and (max-width: 1080px) {
     .cv-herotop { grid-template-columns: 1fr; gap: 32px; }
-    .cv-regions { grid-template-columns: repeat(3, 1fr); }
+    .cv-regions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .cv-steps { grid-template-columns: repeat(3, 1fr); }
     .cv-step::after { content: none; }
     .cv-infogrid { grid-template-columns: 1fr; gap: 40px; }
@@ -270,7 +269,7 @@
     #cv-regions { scroll-margin-top: 66px; }
     .cv-h2 { font-size: 28px; }
     .cv-head { margin-bottom: 20px; }
-    .cv-regions { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .cv-regions { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
     .cv-rcard { min-height: 168px; padding: 18px 16px 14px; }
     .cv-rname { font-size: 19px; margin-top: 14px; }
     .cv-p { font-size: 16px; }
@@ -279,6 +278,7 @@
   }
   @media screen and (max-width: 359px) {
     .cv-brand { font-size: 14px; }
+    .cv-h1 { font-size: 30px; }
     .cv-nav .cv-cbtn { width: 34px; height: 34px; }
     .cv-nav .cv-ico { width: 20px; height: 20px; }
     .cv-lang button { padding: 0 7px; height: 31px; font-size: 12px; }
@@ -322,7 +322,7 @@
     <div class="cv">
       <nav class="cv-nav">
         <div class="cv-wrap">
-          <div class="cv-brand"><span class="cv-full">{{ cv.brand }}</span><span class="cv-short">{{ cv.brandShort }}</span><small>{{ cv.brandSub }}</small></div>
+          <div class="cv-brand"><span class="cv-full">{{ cv.navBrand }}</span><span class="cv-short">{{ cv.brandShort }}</span></div>
           <div class="cv-navr">
             <a class="cv-cbtn cv-line" href="https://lin.ee/luo4Dgq" target="_blank" title="LINE"><span class="cv-ico" style="background-image: url(images/icon-line.svg);"></span><span class="cv-lbl">LINE</span></a>
             <a class="cv-cbtn cv-wa" href="https://api.whatsapp.com/message/OOAOI3R5DAQVJ1?autoload=1&amp;app_absent=0" target="_blank" title="WhatsApp"><span class="cv-ico" style="background-image: url(images/icon-whatsapp.svg);"></span><span class="cv-lbl">WhatsApp</span></a>
@@ -338,7 +338,6 @@
       <header class="cv-hero">
         <div class="cv-wrap cv-herotop">
           <div>
-            <div class="cv-eyebrow">{{ cv.eyebrow }}</div>
             <h1 class="cv-h1">{{ cv.h1 }}<span class="cv-h1b">{{ cv.h1b }}</span></h1>
             <p class="cv-lead">{{ cv.lead }}</p>
             <div class="cv-ctas">
@@ -1756,16 +1755,15 @@ class Component extends DCLogic {
     ['padlet-logo-3x.png', 36, 'Padlet', '', 'edu', 3.23],
     ['kami-logo-3x.png', 34, 'Kami', '', 'edu', 2.05],
     ['quizlet-logo-3x.png', 28, 'Quizlet', '', 'edu', 4.30],
+    ['gemini-logo-3x.png', 38, 'Gemini', 'o', 'llm', 2.69],
     ['chatgpt-logo-3x.png', 32, 'ChatGPT', '', 'llm', 4.35],
-    ['claude-logo-3x.png', 31, 'Claude', '', 'llm', 4.65],
-    ['gemini-logo-3x.png', 38, 'Gemini', 'o', 'llm', 2.69]
+    ['claude-logo-3x.png', 31, 'Claude', '', 'llm', 4.65]
   ];
 
   COVER_TEXT = {
     zh: {
-      brand: '經典人文教育股份有限公司', brandShort: '經典人文教育', brandSub: 'Classic Humanities Education',
-      eyebrow: 'Classic Humanities Education',
-      h1: '一站式教育軟體採購', h1b: '最優惠的價格，買貴退差價',
+      brand: '經典人文教育股份有限公司', navBrand: '經典人文教育', brandShort: '經典人文教育',
+      h1: '每周提供免費研習，最優惠的價格', h1b: '買貴退差價',
       lead: '深耕教育三十年，以辦學者的視角協助學校導入 AI 教學。以最好的服務，提供一站式教育軟體採購；最優惠的價格，可匹配市場上任何價格，歡迎比價，買貴退差價。',
       cta1: '選擇地區，開始選購 ↓', cta2: 'LINE 洽詢', cta2Href: 'https://lin.ee/luo4Dgq',
       stats: [['30+', '年辦學經驗'], ['10', '個代理品牌'], ['2', '項官方獨家代理'], ['5', '個服務地區']],
@@ -1794,9 +1792,8 @@ class Component extends DCLogic {
       taxId: '統一編號 89187632'
     },
     en: {
-      brand: 'Classic Humanities Education Co., Ltd.', brandShort: 'Classic Humanities', brandSub: '經典人文教育股份有限公司',
-      eyebrow: 'Classic Humanities Education',
-      h1: 'One-stop educational software', h1b: 'We match any price',
+      brand: 'Classic Humanities Education Co., Ltd.', navBrand: 'Classic Humanities Education', brandShort: 'Classic Humanities',
+      h1: 'Free workshops every week, the best prices', h1b: 'We match any price',
       lead: "Thirty years in education, guiding schools into AI teaching from an operator's perspective. One-stop educational software with the best service and the most competitive pricing — we match any price on the market, price comparison welcome.",
       cta1: 'Choose your region ↓', cta2: 'WhatsApp us', cta2Href: 'https://api.whatsapp.com/message/OOAOI3R5DAQVJ1?autoload=1&app_absent=0',
       stats: [['30+', 'years running schools'], ['10', 'software brands'], ['2', 'exclusive distributorships'], ['5', 'regions served']],
