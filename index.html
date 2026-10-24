@@ -171,6 +171,10 @@
 
   .cv-sec { padding: 88px 0; background: #fff; }
   .cv-grey { background: #f4f4f4; }
+  .cv-top { padding: 44px 0 52px; }
+  .cv-top .cv-head { margin-bottom: 24px; }
+  .cv-top .cv-h2 { font-size: 32px; }
+  .cv-hero { border-top: 1px solid #dcdcdc; }
   #cv-regions { scroll-margin-top: 76px; }
   .cv-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 36px; flex-wrap: wrap; }
   .cv-kick { font-size: 11.5px; font-weight: 900; letter-spacing: 0.22em; color: #8a8a8a; margin-bottom: 12px; }
@@ -247,6 +251,8 @@
     .cv-btn-w, .cv-btn-o { flex: 1 1 100%; justify-content: center; }
     .cv-num { font-size: 40px; }
     .cv-sec { padding: 56px 0; }
+    .cv-top { padding: 30px 0 36px; }
+    .cv-top .cv-h2 { font-size: 26px; }
     #cv-regions { scroll-margin-top: 66px; }
     .cv-h2 { font-size: 30px; }
     .cv-head { margin-bottom: 24px; }
@@ -254,7 +260,10 @@
     .cv-rcard { min-height: 190px; padding: 20px 16px 16px; }
     .cv-rname { font-size: 19px; margin-top: 16px; }
     .cv-brands { grid-template-columns: 1fr 1fr; }
-    .cv-tile { padding: 22px 16px 18px; min-height: 136px; }
+    .cv-tile { padding: 16px 14px 14px; min-height: 0; }
+    .cv-logo { height: 28px; }
+    .cv-bname { margin-top: 10px; font-size: 14.5px; }
+    .cv-tag { margin-top: 6px; }
     .cv-about .cv-wrap { grid-template-columns: 1fr; gap: 20px; }
     .cv-p { font-size: 16px; }
     .cv-svcs { grid-template-columns: 1fr; }
@@ -318,6 +327,27 @@
         </div>
       </nav>
 
+      <section class="cv-sec cv-top">
+        <div class="cv-wrap">
+          <div class="cv-head">
+            <div>
+              <div class="cv-kick">PARTNERS</div>
+              <h2 class="cv-h2">{{ cv.brandsTitle }}</h2>
+            </div>
+          </div>
+          <div class="cv-brands">
+            <sc-for list="{{ cvBrands }}" as="b" hint-placeholder-count="10">
+              <div class="cv-tile">
+                <div class="cv-logo" style="{{ b.logoStyle }}"></div>
+                <div class="cv-bname">{{ b.name }}</div>
+                <sc-if value="{{ b.tagX }}" hint-placeholder-val="{{ false }}"><span class="cv-tag cv-tagx">{{ b.tag }}</span></sc-if>
+                <sc-if value="{{ b.tagO }}" hint-placeholder-val="{{ false }}"><span class="cv-tag cv-tago">{{ b.tag }}</span></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+
       <header class="cv-hero">
         <div class="cv-wrap">
           <div>
@@ -368,27 +398,6 @@
                 <span class="cv-rsub">{{ r.sub }}</span>
                 <span class="cv-rfoot"><span class="cv-rcur" style="{{ r.curStyle }}">{{ r.currency }}</span><span class="cv-rcta">{{ r.cta }}</span></span>
               </button>
-            </sc-for>
-          </div>
-        </div>
-      </section>
-
-      <section class="cv-sec cv-grey">
-        <div class="cv-wrap">
-          <div class="cv-head">
-            <div>
-              <div class="cv-kick">PARTNERS</div>
-              <h2 class="cv-h2">{{ cv.brandsTitle }}</h2>
-            </div>
-          </div>
-          <div class="cv-brands">
-            <sc-for list="{{ cvBrands }}" as="b" hint-placeholder-count="10">
-              <div class="cv-tile">
-                <div class="cv-logo" style="{{ b.logoStyle }}"></div>
-                <div class="cv-bname">{{ b.name }}</div>
-                <sc-if value="{{ b.tagX }}" hint-placeholder-val="{{ false }}"><span class="cv-tag cv-tagx">{{ b.tag }}</span></sc-if>
-                <sc-if value="{{ b.tagO }}" hint-placeholder-val="{{ false }}"><span class="cv-tag cv-tago">{{ b.tag }}</span></sc-if>
-              </div>
             </sc-for>
           </div>
         </div>
