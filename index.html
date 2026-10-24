@@ -78,7 +78,7 @@
     .m-hero h1 { font-size: 28px !important; }
     .m-hero h2 { font-size: 23px !important; }
     .m-hero p { font-size: 16px !important; }
-    .m-contact { border-left: 0 !important; padding-left: 0 !important; }
+    .m-contact { border-left: 0 !important; padding-left: 0 !important; justify-content: flex-start !important; }
     .m-brands, .m-regions { grid-template-columns: repeat(2, 1fr) !important; }
     .m-brands > div, .m-regions > button { min-width: 0 !important; }
     .m-brands > div > div { white-space: normal !important; }
@@ -157,14 +157,15 @@
   <sc-if value="{{ atIntro }}" hint-placeholder-val="{{ true }}">
     <section class="m-sec" style="max-width: 1080px; margin: 0 auto; padding: 0 40px;">
       <div class="m-band" style="background: var(--color-surface); margin: 0 -40px; padding: 44px 40px 36px;">
-        <div class="m-hero" style="display: grid; grid-template-columns: 1fr 200px; gap: 40px; align-items: start;">
+        <div class="m-hero" style="display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: start;">
         <div>
         <h1 style="font-size: 44px; line-height: 1.2; letter-spacing: -0.03em; margin: 0 0 14px;">經典人文教育股份有限公司</h1>
         <p style="font-size: 19px; line-height: 1.7; margin: 0; max-width: 40em; text-wrap: pretty; color: var(--color-neutral-700);">深耕教育三十年，以辦學者的視角協助學校導入 AI 教學。以最好的服務，提供一站式教育軟體採購；最優惠的價格，可匹配市場上任何價格，歡迎比價，買貴退差價。</p>
         </div>
-        <div class="m-contact" style="display: grid; gap: 8px; border-left: 1px solid var(--color-divider); padding-left: 20px;">
-          <a href="https://lin.ee/luo4Dgq" target="_blank" style="font-size: 14px; font-weight: 900; padding: 9px 12px; background: var(--color-accent); color: #fff;" style-hover="background: var(--color-accent-600)">LINE 客服</a>
-          <a href="mailto:jordanlin@futurekn.com" style="font-size: 12px; font-weight: 900; padding: 9px 10px; border: 1px solid var(--color-divider); color: var(--color-text); white-space: nowrap; background: #fff;" style-hover="background: var(--color-neutral-200)">jordanlin@futurekn.com</a>
+        <div class="m-contact" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end;">
+          <a href="https://lin.ee/luo4Dgq" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px 0 12px; color: #fff; font-size: 14.5px; font-weight: 900; white-space: nowrap; background: #06C755;" style-hover="background: #05b34c"><span style="width: 22px; height: 22px; flex: none; background: url(images/icon-line.svg) center / contain no-repeat;"></span>LINE</a>
+          <a href="https://api.whatsapp.com/message/OOAOI3R5DAQVJ1?autoload=1&amp;app_absent=0" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px 0 12px; color: #fff; font-size: 14.5px; font-weight: 900; white-space: nowrap; background: #25D366;" style-hover="background: #1fbf5b"><span style="width: 22px; height: 22px; flex: none; background: url(images/icon-whatsapp.svg) center / contain no-repeat;"></span>WhatsApp</a>
+          <a href="mailto:jordanlin@futurekn.com" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px 0 12px; color: #fff; font-size: 14.5px; font-weight: 900; white-space: nowrap; background: #101010;" style-hover="background: #333333"><span style="width: 22px; height: 22px; flex: none; background: url(images/icon-mail.svg) center / contain no-repeat;"></span>Email</a>
         </div>
         </div>
 
@@ -270,14 +271,15 @@
       </div>
 
       <div class="m-band" style="background: var(--color-surface); margin: 34px -40px 0; padding: 40px 40px 36px;">
-        <div class="m-hero" style="display: grid; grid-template-columns: 1fr 200px; gap: 40px; align-items: start;">
+        <div class="m-hero" style="display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: start;">
         <div>
           <h2 style="font-size: 34px; line-height: 1.2; letter-spacing: -0.03em; margin: 0 0 12px;">Classic Humanities Education Co., Ltd.</h2>
           <p style="font-size: 17.5px; line-height: 1.7; margin: 0; max-width: 44em; text-wrap: pretty; color: var(--color-neutral-700);">Thirty years in education, guiding schools into AI teaching from an operator's perspective. One-stop educational software with the best service and the most competitive pricing — we match any price on the market, price comparison welcome.</p>
         </div>
-        <div class="m-contact" style="display: grid; gap: 8px; border-left: 1px solid var(--color-divider); padding-left: 20px;">
-          <a href="https://api.whatsapp.com/message/OOAOI3R5DAQVJ1?autoload=1&amp;app_absent=0" target="_blank" style="font-size: 14px; font-weight: 900; padding: 9px 12px; background: var(--color-accent); color: #fff;" style-hover="background: var(--color-accent-600)">WhatsApp</a>
-          <a href="mailto:jordanlin@futurekn.com" style="font-size: 12px; font-weight: 900; padding: 9px 10px; border: 1px solid var(--color-divider); color: var(--color-text); white-space: nowrap; background: #fff;" style-hover="background: var(--color-neutral-200)">jordanlin@futurekn.com</a>
+        <div class="m-contact" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end;">
+          <a href="https://lin.ee/luo4Dgq" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px 0 12px; color: #fff; font-size: 14.5px; font-weight: 900; white-space: nowrap; background: #06C755;" style-hover="background: #05b34c"><span style="width: 22px; height: 22px; flex: none; background: url(images/icon-line.svg) center / contain no-repeat;"></span>LINE</a>
+          <a href="https://api.whatsapp.com/message/OOAOI3R5DAQVJ1?autoload=1&amp;app_absent=0" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px 0 12px; color: #fff; font-size: 14.5px; font-weight: 900; white-space: nowrap; background: #25D366;" style-hover="background: #1fbf5b"><span style="width: 22px; height: 22px; flex: none; background: url(images/icon-whatsapp.svg) center / contain no-repeat;"></span>WhatsApp</a>
+          <a href="mailto:jordanlin@futurekn.com" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px 0 12px; color: #fff; font-size: 14.5px; font-weight: 900; white-space: nowrap; background: #101010;" style-hover="background: #333333"><span style="width: 22px; height: 22px; flex: none; background: url(images/icon-mail.svg) center / contain no-repeat;"></span>Email</a>
         </div>
         </div>
 
