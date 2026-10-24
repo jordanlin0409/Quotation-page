@@ -130,7 +130,8 @@
   .cv-brand { font-weight: 900; font-size: 16px; line-height: 1.15; }
   .cv-brand small { display: block; font-size: 10px; letter-spacing: 0.12em; color: #8a8a8a; font-weight: 700; margin-top: 3px; text-transform: uppercase; }
   .cv-short { display: none; }
-  .cv-navr { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .cv-navr { margin-left: auto; display: flex; align-items: center; gap: 8px; flex: none; }
+  .cv-navr > * { flex: none; }
   .cv-cbtn { display: inline-flex; align-items: center; gap: 9px; height: 46px; padding: 0 18px 0 13px; font-size: 15px; font-weight: 900; white-space: nowrap; box-sizing: border-box; }
   .cv-cbtn, .cv-cbtn:hover { color: #fff; }
   .cv-ico { width: 26px; height: 26px; flex: none; background-position: center; background-size: contain; background-repeat: no-repeat; }
@@ -139,7 +140,7 @@
   .cv-mail { background: #101010; } .cv-mail:hover { background: #333; }
   .cv-mailw { background: #101010; } .cv-mailw:hover { background: #333; }
   .cv-lang { display: flex; border: 1.5px solid #101010; margin-left: 8px; }
-  .cv-lang button { font-family: inherit; font-size: 13.5px; font-weight: 900; padding: 0 14px; height: 43px; border: 0; cursor: pointer; }
+  .cv-lang button { font-family: inherit; font-size: 13.5px; font-weight: 900; padding: 0 14px; height: 43px; border: 0; cursor: pointer; white-space: nowrap; }
 
   .cv-hero { background: #f4f4f4; color: #101010; border-bottom: 1px solid #dcdcdc; }
   .cv-hero .cv-wrap { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 72px; align-items: end; padding-top: 96px; padding-bottom: 64px; }
@@ -225,7 +226,9 @@
 
   @media screen and (max-width: 1080px) {
     .cv-regions { grid-template-columns: repeat(3, 1fr); }
-    .cv-brands { grid-template-columns: repeat(4, 1fr); }
+    .cv-tile { padding: 24px 14px 20px; }
+    .cv-tag { white-space: normal; }
+    .cv-logo { height: 26px; background-size: contain !important; }
     .cv-svcs { grid-template-columns: repeat(2, 1fr); }
     .cv-hero .cv-wrap { grid-template-columns: 1fr; gap: 48px; }
     .cv-steps { grid-template-columns: repeat(3, 1fr); }
