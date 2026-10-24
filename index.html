@@ -123,7 +123,7 @@
   html { scroll-behavior: smooth; }
   .cv { color: #101010; }
   .cv a { text-decoration: none; }
-  .cv-wrap { max-width: 1280px; margin: 0 auto; padding: 0 40px; box-sizing: border-box; }
+  .cv-wrap { max-width: 1560px; margin: 0 auto; padding: 0 clamp(20px, 3.5vw, 56px); box-sizing: border-box; }
 
   .cv-nav { position: sticky; top: 0; z-index: 40; background: rgba(255,255,255,0.96); backdrop-filter: blur(8px); border-bottom: 1px solid #e6e6e6; }
   .cv-nav .cv-wrap { display: flex; align-items: center; gap: 16px; height: 76px; }
@@ -137,102 +137,103 @@
   .cv-ico { width: 26px; height: 26px; flex: none; background-position: center; background-size: contain; background-repeat: no-repeat; }
   .cv-line { background: #06C755; } .cv-line:hover { background: #05b34c; }
   .cv-wa { background: #25D366; } .cv-wa:hover { background: #1fbf5b; }
-  .cv-mail { background: #101010; } .cv-mail:hover { background: #333; }
-  .cv-mailw { background: #101010; } .cv-mailw:hover { background: #333; }
+  .cv-mail, .cv-mailw { background: #101010; } .cv-mail:hover, .cv-mailw:hover { background: #333; }
   .cv-lang { display: flex; border: 1.5px solid #101010; margin-left: 8px; }
   .cv-lang button { font-family: inherit; font-size: 13.5px; font-weight: 900; padding: 0 14px; height: 43px; border: 0; cursor: pointer; white-space: nowrap; }
 
+  /* 灰底大區塊：標題＋數字 → 代理軟體 → 採購流程 */
   .cv-hero { background: #f4f4f4; color: #101010; border-bottom: 1px solid #dcdcdc; }
-  .cv-hero .cv-wrap { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 72px; align-items: end; padding-top: 96px; padding-bottom: 64px; }
-  .cv-hero .cv-proc { display: block; padding-top: 0; padding-bottom: 72px; }
-  .cv-prochead { display: flex; align-items: baseline; gap: 14px; border-top: 1px solid #cfcfcf; padding-top: 28px; margin-bottom: 20px; }
-  .cv-prochead .cv-kick { margin: 0; }
-  .cv-proct { font-size: 20px; font-weight: 900; }
-  .cv-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
-  .cv-step { position: relative; background: #fff; border: 1px solid #dcdcdc; padding: 20px 18px 22px; display: flex; flex-direction: column; gap: 14px; }
-  .cv-step::after { content: "→"; position: absolute; top: 22px; right: -14px; width: 14px; text-align: center; font-size: 15px; font-weight: 900; color: #101010; }
-  .cv-step:last-child::after { content: none; }
-  .cv-stepn { align-self: flex-start; font-size: 12px; font-weight: 900; letter-spacing: 0.16em; padding: 4px 8px; background: #101010; color: #fff; }
-  .cv-stept { font-size: 17px; font-weight: 900; }
-  .cv-stepd { font-size: 13.5px; line-height: 1.65; color: #4f4f4f; margin-top: 6px; text-wrap: pretty; }
-  .cv-eyebrow { font-size: 12px; font-weight: 900; letter-spacing: 0.22em; color: #6e6e6e; margin-bottom: 22px; text-transform: uppercase; }
-  .cv-h1 { font-size: clamp(40px, 4.4vw, 60px); line-height: 1.1; letter-spacing: -0.035em; margin: 0 0 26px; font-weight: 900; color: #101010; text-wrap: balance; }
+  .cv-herotop { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 72px; align-items: end; padding-top: 56px; padding-bottom: 40px; }
+  .cv-band { padding-bottom: 32px; }
+  .cv-proc { padding-bottom: 52px; }
+  .cv-eyebrow { font-size: 12px; font-weight: 900; letter-spacing: 0.22em; color: #6e6e6e; margin-bottom: 18px; text-transform: uppercase; }
+  .cv-h1 { font-size: clamp(40px, 4vw, 60px); line-height: 1.1; letter-spacing: -0.035em; margin: 0 0 22px; font-weight: 900; color: #101010; text-wrap: balance; }
   .cv-h1b { display: block; color: #6e6e6e; word-break: keep-all; }
-  .cv-lead { font-size: 18px; line-height: 1.8; color: #4f4f4f; margin: 0 0 36px; max-width: 36em; text-wrap: pretty; }
+  .cv-lead { font-size: 17.5px; line-height: 1.8; color: #4f4f4f; margin: 0 0 28px; max-width: 40em; text-wrap: pretty; }
   .cv-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
-  .cv-btn-w, .cv-btn-o { display: inline-flex; align-items: center; height: 52px; padding: 0 24px; font-size: 15px; font-weight: 900; box-sizing: border-box; }
+  .cv-btn-w, .cv-btn-o { display: inline-flex; align-items: center; height: 50px; padding: 0 24px; font-size: 15px; font-weight: 900; box-sizing: border-box; }
   .cv-btn-w, .cv-btn-w:hover { background: #101010; color: #fff; }
   .cv-btn-w:hover { background: #000; }
   .cv-btn-o, .cv-btn-o:hover { border: 1.5px solid #101010; color: #101010; background: #fff; }
   .cv-btn-o:hover { background: #ebebeb; }
   .cv-stats { display: grid; grid-template-columns: 1fr 1fr; }
-  .cv-stat { border-top: 1px solid #cfcfcf; padding: 22px 0 26px; }
-  .cv-num { font-size: 52px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; }
-  .cv-statl { font-size: 13.5px; color: #6e6e6e; margin-top: 10px; font-weight: 700; }
+  .cv-stat { border-top: 1px solid #cfcfcf; padding: 18px 0 20px; }
+  .cv-num { font-size: 48px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; }
+  .cv-statl { font-size: 13.5px; color: #6e6e6e; margin-top: 8px; font-weight: 700; }
 
-  .cv-sec { padding: 88px 0; background: #fff; }
+  .cv-prochead { display: flex; align-items: baseline; gap: 14px; border-top: 1px solid #cfcfcf; padding-top: 22px; margin-bottom: 16px; }
+  .cv-prochead .cv-kick { margin: 0; }
+  .cv-proct { font-size: 20px; font-weight: 900; }
+
+  .cv-brands { display: grid; grid-template-columns: repeat(10, 1fr); gap: 1px; background: #e2e2e2; border: 1px solid #e2e2e2; }
+  .cv-tile { background: #fff; padding: 18px 14px 16px; box-sizing: border-box; display: flex; flex-direction: column; align-items: flex-start; min-width: 0; transition: background 0.15s ease; }
+  .cv-tile:hover { background: #fafafa; }
+  .cv-logo { height: 26px; width: 100%; background-position: left center; background-repeat: no-repeat; background-size: contain !important; }
+  .cv-bname { font-size: 14px; font-weight: 900; margin-top: 12px; }
+  .cv-tag { display: inline-block; font-size: 11px; font-weight: 900; line-height: 1.35; padding: 3px 6px; margin-top: 6px; }
+  .cv-tagx { background: #101010; color: #fff; }
+  .cv-tago { border: 1px solid #d0d0d0; color: #4f4f4f; }
+
+  .cv-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+  .cv-step { position: relative; background: #fff; border: 1px solid #dcdcdc; padding: 18px 16px 20px; display: flex; flex-direction: column; gap: 12px; }
+  .cv-step::after { content: "→"; position: absolute; top: 20px; right: -14px; width: 14px; text-align: center; font-size: 15px; font-weight: 900; color: #101010; }
+  .cv-step:last-child::after { content: none; }
+  .cv-stepn { align-self: flex-start; font-size: 12px; font-weight: 900; letter-spacing: 0.16em; padding: 4px 8px; background: #101010; color: #fff; }
+  .cv-stept { font-size: 17px; font-weight: 900; }
+  .cv-stepd { font-size: 13.5px; line-height: 1.65; color: #4f4f4f; margin-top: 6px; text-wrap: pretty; }
+
+  /* 白底：選擇地區 */
+  .cv-sec { padding: 64px 0; background: #fff; }
   .cv-grey { background: #f4f4f4; }
-  .cv-top { padding: 44px 0 52px; }
-  .cv-top .cv-head { margin-bottom: 24px; }
-  .cv-top .cv-h2 { font-size: 32px; }
-  .cv-hero { border-top: 1px solid #dcdcdc; }
   #cv-regions { scroll-margin-top: 76px; }
-  .cv-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 36px; flex-wrap: wrap; }
-  .cv-kick { font-size: 11.5px; font-weight: 900; letter-spacing: 0.22em; color: #8a8a8a; margin-bottom: 12px; }
-  .cv-h2 { font-size: 40px; line-height: 1.15; letter-spacing: -0.03em; margin: 0; font-weight: 900; }
+  .cv-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 28px; flex-wrap: wrap; }
+  .cv-kick { font-size: 11.5px; font-weight: 900; letter-spacing: 0.22em; color: #8a8a8a; margin-bottom: 10px; }
+  .cv-h2 { font-size: 36px; line-height: 1.15; letter-spacing: -0.03em; margin: 0; font-weight: 900; }
   .cv-headp { font-size: 15.5px; font-weight: 700; color: #4f4f4f; margin: 0; }
 
   .cv-regions { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
   .cv-rcard { display: flex; flex-direction: column; align-items: flex-start; text-align: left; font-family: inherit; cursor: pointer;
-    background: #fff; color: #101010; border: 1.5px solid #101010; padding: 26px 22px 22px; min-height: 230px; box-sizing: border-box;
+    background: #fff; color: #101010; border: 1.5px solid #101010; padding: 22px 20px 18px; min-height: 184px; box-sizing: border-box;
     transition: transform 0.15s ease, box-shadow 0.15s ease; }
   .cv-rcard:hover { transform: translate(-3px, -3px); box-shadow: 7px 7px 0 #101010; }
-  .cv-flag { display: block; width: 58px; height: 39px; border: 1px solid #dcdcdc; background-size: cover; background-position: center; }
-  .cv-rname { font-size: 22px; font-weight: 900; letter-spacing: -0.02em; margin-top: 22px; }
+  .cv-flag { display: block; width: 54px; height: 36px; border: 1px solid #dcdcdc; background-size: cover; background-position: center; }
+  .cv-rname { font-size: 21px; font-weight: 900; letter-spacing: -0.02em; margin-top: 16px; }
   .cv-rsub { font-size: 13px; color: #8a8a8a; font-weight: 700; margin-top: 4px; min-height: 1em; }
-  .cv-rfoot { margin-top: auto; padding-top: 20px; width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .cv-rfoot { margin-top: auto; padding-top: 16px; width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .cv-rcur { font-size: 11.5px; font-weight: 900; letter-spacing: 0.1em; padding: 3px 7px; border: 1px solid #cfcfcf; }
   .cv-rcta { font-size: 13px; font-weight: 900; white-space: nowrap; }
 
-  .cv-brands { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: #e2e2e2; border: 1px solid #e2e2e2; }
-  .cv-tile { background: #fff; padding: 30px 26px 26px; min-height: 160px; box-sizing: border-box; display: flex; flex-direction: column; align-items: flex-start; transition: background 0.15s ease; }
-  .cv-tile:hover { background: #fafafa; }
-  .cv-logo { height: 34px; width: 100%; background-position: left center; background-repeat: no-repeat; }
-  .cv-bname { font-size: 15.5px; font-weight: 900; margin-top: 20px; }
-  .cv-tag { display: inline-block; font-size: 11.5px; font-weight: 900; padding: 3px 7px; margin-top: 8px; white-space: nowrap; }
-  .cv-tagx { background: #101010; color: #fff; }
-  .cv-tago { border: 1px solid #d0d0d0; color: #4f4f4f; }
-
-  .cv-about .cv-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 72px; }
-  .cv-p { font-size: 18px; line-height: 1.85; margin: 0 0 16px; color: #333; text-wrap: pretty; }
-
-  .cv-svcs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: #dcdcdc; border: 1px solid #dcdcdc; }
-  .cv-svc { background: #fff; padding: 30px 26px 32px; }
-  .cv-svcn { font-size: 44px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: #101010; }
-  .cv-svc h3 { font-size: 18px; margin: 22px 0 10px; font-weight: 900; }
-  .cv-svc p { font-size: 15px; line-height: 1.75; margin: 0; color: #4f4f4f; }
-  .cv-certs { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 36px; }
-  .cv-certl { font-size: 13px; font-weight: 900; letter-spacing: 0.06em; margin-right: 6px; }
-  .cv-cert, .cv-cert:hover { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 900; padding: 12px 16px; border: 1.5px solid #101010; color: #101010; background: #fff; }
+  /* 灰底：關於我們（左）＋服務內容（右）並排 */
+  .cv-infogrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 64px; align-items: start; }
+  .cv-info .cv-h2 { margin-bottom: 20px; }
+  .cv-p { font-size: 17px; line-height: 1.85; margin: 0 0 14px; color: #333; text-wrap: pretty; }
+  .cv-svcs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: #dcdcdc; border: 1px solid #dcdcdc; }
+  .cv-svc { background: #fff; padding: 22px 22px 24px; }
+  .cv-svcn { font-size: 34px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: #101010; }
+  .cv-svc h3 { font-size: 17px; margin: 14px 0 8px; font-weight: 900; }
+  .cv-svc p { font-size: 14.5px; line-height: 1.7; margin: 0; color: #4f4f4f; }
+  .cv-certs { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 26px; }
+  .cv-certl { font-size: 13px; font-weight: 900; letter-spacing: 0.06em; margin-right: 4px; width: 100%; }
+  .cv-cert, .cv-cert:hover { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 900; padding: 11px 15px; border: 1.5px solid #101010; color: #101010; background: #fff; }
   .cv-cert:hover { background: #101010; color: #fff; }
 
-  .cv-foot { background: #fff; color: #101010; padding: 56px 0 28px; border-top: 2px solid #101010; }
+  .cv-foot { background: #fff; color: #101010; padding: 40px 0 24px; border-top: 2px solid #101010; }
   .cv-foot .cv-wrap { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
-  .cv-fname { font-size: 22px; font-weight: 900; letter-spacing: -0.01em; }
-  .cv-fsub { font-size: 13px; color: #6e6e6e; margin-top: 8px; }
+  .cv-fname { font-size: 20px; font-weight: 900; letter-spacing: -0.01em; }
+  .cv-fsub { font-size: 13px; color: #6e6e6e; margin-top: 6px; }
   .cv-fmail, .cv-fmail:hover { display: inline-block; font-size: 14px; color: #101010; margin-top: 6px; border-bottom: 1px solid #bdbdbd; }
   .cv-fbtns { display: flex; gap: 8px; flex-wrap: wrap; }
-  .cv-foot .cv-copy { display: block; font-size: 12px; color: #949494; margin-top: 40px; padding-top: 20px; border-top: 1px solid #dcdcdc; }
+  .cv-foot .cv-copy { display: block; font-size: 12px; color: #949494; margin-top: 28px; padding-top: 16px; border-top: 1px solid #dcdcdc; }
 
+  @media screen and (max-width: 1360px) {
+    .cv-brands { grid-template-columns: repeat(5, 1fr); }
+  }
   @media screen and (max-width: 1080px) {
+    .cv-herotop { grid-template-columns: 1fr; gap: 32px; }
     .cv-regions { grid-template-columns: repeat(3, 1fr); }
-    .cv-tile { padding: 24px 14px 20px; }
-    .cv-tag { white-space: normal; }
-    .cv-logo { height: 26px; background-size: contain !important; }
-    .cv-svcs { grid-template-columns: repeat(2, 1fr); }
-    .cv-hero .cv-wrap { grid-template-columns: 1fr; gap: 48px; }
     .cv-steps { grid-template-columns: repeat(3, 1fr); }
     .cv-step::after { content: none; }
+    .cv-infogrid { grid-template-columns: 1fr; gap: 40px; }
   }
   @media screen and (max-width: 768px) {
     .cv-wrap { padding: 0 16px; }
@@ -241,33 +242,33 @@
     .cv-short { display: inline; }
     .cv-brand { font-size: 15px; white-space: nowrap; flex: none; }
     .cv-navr { gap: 5px; }
-    .cv-nav .cv-cbtn { width: 40px; height: 40px; padding: 0; justify-content: center; flex: none; }
+    .cv-nav .cv-cbtn { width: 40px; height: 40px; padding: 0; justify-content: center; }
     .cv-nav .cv-ico { width: 24px; height: 24px; }
-    .cv-lang { margin-left: 2px; flex: none; }
+    .cv-lang { margin-left: 2px; }
     .cv-lang button { padding: 0 9px; height: 37px; font-size: 13px; }
-    .cv-hero .cv-wrap { padding-top: 56px; padding-bottom: 44px; gap: 36px; }
-    .cv-hero .cv-proc { padding-top: 0; padding-bottom: 52px; }
-    .cv-steps { grid-template-columns: 1fr; gap: 10px; }
-    .cv-step { flex-direction: row; align-items: flex-start; padding: 16px 16px 18px; }
+    .cv-herotop { padding-top: 40px; padding-bottom: 32px; gap: 28px; }
     .cv-h1 { font-size: 36px; }
     .cv-lead { font-size: 16px; }
     .cv-btn-w, .cv-btn-o { flex: 1 1 100%; justify-content: center; }
-    .cv-num { font-size: 40px; }
-    .cv-sec { padding: 56px 0; }
-    .cv-top { padding: 30px 0 36px; }
-    .cv-top .cv-h2 { font-size: 26px; }
-    #cv-regions { scroll-margin-top: 66px; }
-    .cv-h2 { font-size: 30px; }
-    .cv-head { margin-bottom: 24px; }
-    .cv-regions { grid-template-columns: 1fr 1fr; gap: 12px; }
-    .cv-rcard { min-height: 190px; padding: 20px 16px 16px; }
-    .cv-rname { font-size: 19px; margin-top: 16px; }
+    .cv-stats { grid-template-columns: repeat(4, 1fr); gap: 0 8px; }
+    .cv-stat { padding: 14px 0 6px; }
+    .cv-num { font-size: 30px; }
+    .cv-statl { font-size: 12px; line-height: 1.4; }
+    .cv-band { padding-bottom: 28px; }
+    .cv-proc { padding-bottom: 40px; }
     .cv-brands { grid-template-columns: 1fr 1fr; }
-    .cv-tile { padding: 16px 14px 14px; min-height: 0; }
-    .cv-logo { height: 28px; }
-    .cv-bname { margin-top: 10px; font-size: 14.5px; }
-    .cv-tag { margin-top: 6px; }
-    .cv-about .cv-wrap { grid-template-columns: 1fr; gap: 20px; }
+    .cv-tile { padding: 14px 14px 12px; }
+    .cv-logo { height: 26px; }
+    .cv-bname { margin-top: 10px; font-size: 14px; }
+    .cv-steps { grid-template-columns: 1fr; gap: 10px; }
+    .cv-step { flex-direction: row; align-items: flex-start; padding: 14px 16px 16px; }
+    .cv-sec { padding: 44px 0; }
+    #cv-regions { scroll-margin-top: 66px; }
+    .cv-h2 { font-size: 28px; }
+    .cv-head { margin-bottom: 20px; }
+    .cv-regions { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .cv-rcard { min-height: 168px; padding: 18px 16px 14px; }
+    .cv-rname { font-size: 19px; margin-top: 14px; }
     .cv-p { font-size: 16px; }
     .cv-svcs { grid-template-columns: 1fr; }
     .cv-foot .cv-wrap { flex-direction: column; align-items: flex-start; }
@@ -330,29 +331,8 @@
         </div>
       </nav>
 
-      <section class="cv-sec cv-top">
-        <div class="cv-wrap">
-          <div class="cv-head">
-            <div>
-              <div class="cv-kick">PARTNERS</div>
-              <h2 class="cv-h2">{{ cv.brandsTitle }}</h2>
-            </div>
-          </div>
-          <div class="cv-brands">
-            <sc-for list="{{ cvBrands }}" as="b" hint-placeholder-count="10">
-              <div class="cv-tile">
-                <div class="cv-logo" style="{{ b.logoStyle }}"></div>
-                <div class="cv-bname">{{ b.name }}</div>
-                <sc-if value="{{ b.tagX }}" hint-placeholder-val="{{ false }}"><span class="cv-tag cv-tagx">{{ b.tag }}</span></sc-if>
-                <sc-if value="{{ b.tagO }}" hint-placeholder-val="{{ false }}"><span class="cv-tag cv-tago">{{ b.tag }}</span></sc-if>
-              </div>
-            </sc-for>
-          </div>
-        </div>
-      </section>
-
       <header class="cv-hero">
-        <div class="cv-wrap">
+        <div class="cv-wrap cv-herotop">
           <div>
             <div class="cv-eyebrow">{{ cv.eyebrow }}</div>
             <h1 class="cv-h1">{{ cv.h1 }}<span class="cv-h1b">{{ cv.h1b }}</span></h1>
@@ -368,7 +348,20 @@
             </sc-for>
           </div>
         </div>
-        <div class="cv-wrap cv-proc">
+        <div class="cv-wrap cv-band">
+          <div class="cv-prochead"><span class="cv-kick">PARTNERS</span><span class="cv-proct">{{ cv.brandsTitle }}</span></div>
+          <div class="cv-brands">
+            <sc-for list="{{ cvBrands }}" as="b" hint-placeholder-count="10">
+              <div class="cv-tile">
+                <div class="cv-logo" style="{{ b.logoStyle }}"></div>
+                <div class="cv-bname">{{ b.name }}</div>
+                <sc-if value="{{ b.tagX }}" hint-placeholder-val="{{ false }}"><span class="cv-tag cv-tagx">{{ b.tag }}</span></sc-if>
+                <sc-if value="{{ b.tagO }}" hint-placeholder-val="{{ false }}"><span class="cv-tag cv-tago">{{ b.tag }}</span></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div class="cv-wrap cv-band cv-proc">
           <div class="cv-prochead"><span class="cv-kick">PROCESS</span><span class="cv-proct">{{ cv.procTitle }}</span></div>
           <div class="cv-steps">
             <sc-for list="{{ cvSteps }}" as="p" hint-placeholder-count="5">
@@ -406,41 +399,32 @@
         </div>
       </section>
 
-      <section class="cv-sec cv-about" style="border-top: 1px solid #dcdcdc;">
-        <div class="cv-wrap">
+      <section class="cv-sec cv-grey cv-info">
+        <div class="cv-wrap cv-infogrid">
           <div>
             <div class="cv-kick">ABOUT</div>
             <h2 class="cv-h2">{{ cv.aboutTitle }}</h2>
-          </div>
-          <div>
             <p class="cv-p">{{ cv.about1 }}</p>
             <p class="cv-p">{{ cv.about2 }}</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="cv-sec cv-grey">
-        <div class="cv-wrap">
-          <div class="cv-head">
-            <div>
-              <div class="cv-kick">SERVICES</div>
-              <h2 class="cv-h2">{{ cv.svcTitle }}</h2>
+            <div class="cv-certs">
+              <span class="cv-certl">{{ cv.certTitle }}</span>
+              <sc-for list="{{ cvCerts }}" as="c" hint-placeholder-count="2">
+                <a class="cv-cert" href="{{ c.href }}" target="_blank">{{ c.label }}<span>↗</span></a>
+              </sc-for>
             </div>
           </div>
-          <div class="cv-svcs">
-            <sc-for list="{{ cvServices }}" as="v" hint-placeholder-count="4">
-              <div class="cv-svc">
-                <div class="cv-svcn">{{ v.num }}</div>
-                <h3>{{ v.title }}</h3>
-                <p>{{ v.text }}</p>
-              </div>
-            </sc-for>
-          </div>
-          <div class="cv-certs">
-            <span class="cv-certl">{{ cv.certTitle }}</span>
-            <sc-for list="{{ cvCerts }}" as="c" hint-placeholder-count="2">
-              <a class="cv-cert" href="{{ c.href }}" target="_blank">{{ c.label }}<span>↗</span></a>
-            </sc-for>
+          <div>
+            <div class="cv-kick">SERVICES</div>
+            <h2 class="cv-h2">{{ cv.svcTitle }}</h2>
+            <div class="cv-svcs">
+              <sc-for list="{{ cvServices }}" as="v" hint-placeholder-count="4">
+                <div class="cv-svc">
+                  <div class="cv-svcn">{{ v.num }}</div>
+                  <h3>{{ v.title }}</h3>
+                  <p>{{ v.text }}</p>
+                </div>
+              </sc-for>
+            </div>
           </div>
         </div>
       </section>
