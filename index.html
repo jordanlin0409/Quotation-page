@@ -165,13 +165,16 @@
   .cv-prochead .cv-kick { margin: 0; }
   .cv-proct { font-size: 20px; font-weight: 900; }
 
-  .cv-baskets { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 3fr); gap: 16px; }
-  .cv-basket { background: #fff; border: 1px solid #dcdcdc; min-width: 0; }
-  .cv-bhead { padding: 12px 18px; border-bottom: 1px solid #ececec; font-size: 14px; font-weight: 900; letter-spacing: 0.02em; }
-  .cv-blogos { display: grid; padding: 4px 8px 6px; }
-  .cv-basket-edu .cv-blogos { grid-template-columns: repeat(7, 1fr); }
-  .cv-basket-llm .cv-blogos { grid-template-columns: repeat(3, 1fr); }
-  .cv-tile { height: 96px; padding: 0 10px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-width: 0; }
+  .cv-baskets { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 3fr); gap: 28px; }
+  .cv-basket { min-width: 0; }
+  .cv-bhead { display: flex; align-items: center; gap: 8px; padding-bottom: 10px; font-size: 14px; font-weight: 900; letter-spacing: 0.02em; }
+  .cv-bhead::before { content: ""; width: 4px; height: 14px; background: #101010; }
+  .cv-blogos { display: grid; gap: 10px; }
+  .cv-basket-edu .cv-blogos { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+  .cv-basket-llm .cv-blogos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .cv-tile { height: 100px; padding: 0 10px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-width: 0;
+    background: #fff; border: 1px solid #dcdcdc; transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease; }
+  .cv-tile:hover { border-color: #101010; transform: translate(-2px, -2px); box-shadow: 4px 4px 0 #101010; }
   .cv-logo { height: 32px; width: 100%; display: flex; align-items: center; justify-content: center; }
   .cv-logoimg { display: block; max-width: 100%; background-position: center; background-size: contain; background-repeat: no-repeat; }
   .cv-tagrow { height: 20px; display: flex; align-items: center; justify-content: center; }
@@ -231,7 +234,8 @@
   .cv-foot .cv-copy { display: block; font-size: 12px; color: #949494; margin-top: 28px; padding-top: 16px; border-top: 1px solid #dcdcdc; }
 
   @media screen and (max-width: 1180px) {
-    .cv-baskets { grid-template-columns: 1fr; gap: 12px; }
+    .cv-baskets { grid-template-columns: 1fr; gap: 18px; }
+    .cv-basket-llm .cv-blogos { grid-template-columns: repeat(7, minmax(0, 1fr)); }
   }
   @media screen and (max-width: 1080px) {
     .cv-herotop { grid-template-columns: 1fr; gap: 32px; }
@@ -261,8 +265,7 @@
     .cv-statl { font-size: 12px; line-height: 1.4; }
     .cv-band { padding-bottom: 28px; }
     .cv-proc { padding-bottom: 40px; }
-    .cv-basket-edu .cv-blogos, .cv-basket-llm .cv-blogos { grid-template-columns: repeat(3, 1fr); padding: 4px 4px 6px; }
-    .cv-bhead { padding: 10px 14px; }
+    .cv-basket-edu .cv-blogos, .cv-basket-llm .cv-blogos { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
     .cv-tile { height: 84px; padding: 0 6px; gap: 10px; }
     .cv-tag { font-size: 10.5px; padding: 3px 5px; }
     .cv-steps { grid-template-columns: 1fr; gap: 10px; }
