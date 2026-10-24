@@ -119,6 +119,153 @@
     .m-modalbox { padding: 20px !important; }
     .m-qr { flex-wrap: wrap !important; gap: 12px !important; }
   }
+  /* ===== cover-v3 2026-10-24：全版面封面（只作用在 .cv 底下，選購頁／報價單不受影響） ===== */
+  html { scroll-behavior: smooth; }
+  .cv { color: #101010; }
+  .cv a { text-decoration: none; }
+  .cv-wrap { max-width: 1280px; margin: 0 auto; padding: 0 40px; box-sizing: border-box; }
+
+  .cv-nav { position: sticky; top: 0; z-index: 40; background: rgba(255,255,255,0.96); backdrop-filter: blur(8px); border-bottom: 1px solid #e6e6e6; }
+  .cv-nav .cv-wrap { display: flex; align-items: center; gap: 16px; height: 76px; }
+  .cv-brand { font-weight: 900; font-size: 16px; line-height: 1.15; }
+  .cv-brand small { display: block; font-size: 10px; letter-spacing: 0.12em; color: #8a8a8a; font-weight: 700; margin-top: 3px; text-transform: uppercase; }
+  .cv-short { display: none; }
+  .cv-navr { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .cv-cbtn { display: inline-flex; align-items: center; gap: 9px; height: 46px; padding: 0 18px 0 13px; font-size: 15px; font-weight: 900; white-space: nowrap; box-sizing: border-box; }
+  .cv-cbtn, .cv-cbtn:hover { color: #fff; }
+  .cv-ico { width: 26px; height: 26px; flex: none; background-position: center; background-size: contain; background-repeat: no-repeat; }
+  .cv-line { background: #06C755; } .cv-line:hover { background: #05b34c; }
+  .cv-wa { background: #25D366; } .cv-wa:hover { background: #1fbf5b; }
+  .cv-mail { background: #101010; } .cv-mail:hover { background: #333; }
+  .cv-mailw { background: #101010; } .cv-mailw:hover { background: #333; }
+  .cv-lang { display: flex; border: 1.5px solid #101010; margin-left: 8px; }
+  .cv-lang button { font-family: inherit; font-size: 13.5px; font-weight: 900; padding: 0 14px; height: 43px; border: 0; cursor: pointer; }
+
+  .cv-hero { background: #f4f4f4; color: #101010; border-bottom: 1px solid #dcdcdc; }
+  .cv-hero .cv-wrap { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 72px; align-items: end; padding-top: 96px; padding-bottom: 64px; }
+  .cv-hero .cv-proc { display: block; padding-top: 0; padding-bottom: 72px; }
+  .cv-prochead { display: flex; align-items: baseline; gap: 14px; border-top: 1px solid #cfcfcf; padding-top: 28px; margin-bottom: 20px; }
+  .cv-prochead .cv-kick { margin: 0; }
+  .cv-proct { font-size: 20px; font-weight: 900; }
+  .cv-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+  .cv-step { position: relative; background: #fff; border: 1px solid #dcdcdc; padding: 20px 18px 22px; display: flex; flex-direction: column; gap: 14px; }
+  .cv-step::after { content: "→"; position: absolute; top: 22px; right: -14px; width: 14px; text-align: center; font-size: 15px; font-weight: 900; color: #101010; }
+  .cv-step:last-child::after { content: none; }
+  .cv-stepn { align-self: flex-start; font-size: 12px; font-weight: 900; letter-spacing: 0.16em; padding: 4px 8px; background: #101010; color: #fff; }
+  .cv-stept { font-size: 17px; font-weight: 900; }
+  .cv-stepd { font-size: 13.5px; line-height: 1.65; color: #4f4f4f; margin-top: 6px; text-wrap: pretty; }
+  .cv-eyebrow { font-size: 12px; font-weight: 900; letter-spacing: 0.22em; color: #6e6e6e; margin-bottom: 22px; text-transform: uppercase; }
+  .cv-h1 { font-size: clamp(40px, 4.4vw, 60px); line-height: 1.1; letter-spacing: -0.035em; margin: 0 0 26px; font-weight: 900; color: #101010; text-wrap: balance; }
+  .cv-h1b { display: block; color: #6e6e6e; word-break: keep-all; }
+  .cv-lead { font-size: 18px; line-height: 1.8; color: #4f4f4f; margin: 0 0 36px; max-width: 36em; text-wrap: pretty; }
+  .cv-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+  .cv-btn-w, .cv-btn-o { display: inline-flex; align-items: center; height: 52px; padding: 0 24px; font-size: 15px; font-weight: 900; box-sizing: border-box; }
+  .cv-btn-w, .cv-btn-w:hover { background: #101010; color: #fff; }
+  .cv-btn-w:hover { background: #000; }
+  .cv-btn-o, .cv-btn-o:hover { border: 1.5px solid #101010; color: #101010; background: #fff; }
+  .cv-btn-o:hover { background: #ebebeb; }
+  .cv-stats { display: grid; grid-template-columns: 1fr 1fr; }
+  .cv-stat { border-top: 1px solid #cfcfcf; padding: 22px 0 26px; }
+  .cv-num { font-size: 52px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; }
+  .cv-statl { font-size: 13.5px; color: #6e6e6e; margin-top: 10px; font-weight: 700; }
+
+  .cv-sec { padding: 88px 0; background: #fff; }
+  .cv-grey { background: #f4f4f4; }
+  #cv-regions { scroll-margin-top: 76px; }
+  .cv-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 36px; flex-wrap: wrap; }
+  .cv-kick { font-size: 11.5px; font-weight: 900; letter-spacing: 0.22em; color: #8a8a8a; margin-bottom: 12px; }
+  .cv-h2 { font-size: 40px; line-height: 1.15; letter-spacing: -0.03em; margin: 0; font-weight: 900; }
+  .cv-headp { font-size: 15.5px; font-weight: 700; color: #4f4f4f; margin: 0; }
+
+  .cv-regions { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+  .cv-rcard { display: flex; flex-direction: column; align-items: flex-start; text-align: left; font-family: inherit; cursor: pointer;
+    background: #fff; color: #101010; border: 1.5px solid #101010; padding: 26px 22px 22px; min-height: 230px; box-sizing: border-box;
+    transition: transform 0.15s ease, box-shadow 0.15s ease; }
+  .cv-rcard:hover { transform: translate(-3px, -3px); box-shadow: 7px 7px 0 #101010; }
+  .cv-flag { display: block; width: 58px; height: 39px; border: 1px solid #dcdcdc; background-size: cover; background-position: center; }
+  .cv-rname { font-size: 22px; font-weight: 900; letter-spacing: -0.02em; margin-top: 22px; }
+  .cv-rsub { font-size: 13px; color: #8a8a8a; font-weight: 700; margin-top: 4px; min-height: 1em; }
+  .cv-rfoot { margin-top: auto; padding-top: 20px; width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .cv-rcur { font-size: 11.5px; font-weight: 900; letter-spacing: 0.1em; padding: 3px 7px; border: 1px solid #cfcfcf; }
+  .cv-rcta { font-size: 13px; font-weight: 900; white-space: nowrap; }
+
+  .cv-brands { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: #e2e2e2; border: 1px solid #e2e2e2; }
+  .cv-tile { background: #fff; padding: 30px 26px 26px; min-height: 160px; box-sizing: border-box; display: flex; flex-direction: column; align-items: flex-start; transition: background 0.15s ease; }
+  .cv-tile:hover { background: #fafafa; }
+  .cv-logo { height: 34px; width: 100%; background-position: left center; background-repeat: no-repeat; }
+  .cv-bname { font-size: 15.5px; font-weight: 900; margin-top: 20px; }
+  .cv-tag { display: inline-block; font-size: 11.5px; font-weight: 900; padding: 3px 7px; margin-top: 8px; white-space: nowrap; }
+  .cv-tagx { background: #101010; color: #fff; }
+  .cv-tago { border: 1px solid #d0d0d0; color: #4f4f4f; }
+
+  .cv-about .cv-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 72px; }
+  .cv-p { font-size: 18px; line-height: 1.85; margin: 0 0 16px; color: #333; text-wrap: pretty; }
+
+  .cv-svcs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: #dcdcdc; border: 1px solid #dcdcdc; }
+  .cv-svc { background: #fff; padding: 30px 26px 32px; }
+  .cv-svcn { font-size: 44px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: #101010; }
+  .cv-svc h3 { font-size: 18px; margin: 22px 0 10px; font-weight: 900; }
+  .cv-svc p { font-size: 15px; line-height: 1.75; margin: 0; color: #4f4f4f; }
+  .cv-certs { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 36px; }
+  .cv-certl { font-size: 13px; font-weight: 900; letter-spacing: 0.06em; margin-right: 6px; }
+  .cv-cert, .cv-cert:hover { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 900; padding: 12px 16px; border: 1.5px solid #101010; color: #101010; background: #fff; }
+  .cv-cert:hover { background: #101010; color: #fff; }
+
+  .cv-foot { background: #fff; color: #101010; padding: 56px 0 28px; border-top: 2px solid #101010; }
+  .cv-foot .cv-wrap { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .cv-fname { font-size: 22px; font-weight: 900; letter-spacing: -0.01em; }
+  .cv-fsub { font-size: 13px; color: #6e6e6e; margin-top: 8px; }
+  .cv-fmail, .cv-fmail:hover { display: inline-block; font-size: 14px; color: #101010; margin-top: 6px; border-bottom: 1px solid #bdbdbd; }
+  .cv-fbtns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .cv-foot .cv-copy { display: block; font-size: 12px; color: #949494; margin-top: 40px; padding-top: 20px; border-top: 1px solid #dcdcdc; }
+
+  @media screen and (max-width: 1080px) {
+    .cv-regions { grid-template-columns: repeat(3, 1fr); }
+    .cv-brands { grid-template-columns: repeat(4, 1fr); }
+    .cv-svcs { grid-template-columns: repeat(2, 1fr); }
+    .cv-hero .cv-wrap { grid-template-columns: 1fr; gap: 48px; }
+    .cv-steps { grid-template-columns: repeat(3, 1fr); }
+    .cv-step::after { content: none; }
+  }
+  @media screen and (max-width: 768px) {
+    .cv-wrap { padding: 0 16px; }
+    .cv-nav .cv-wrap { height: 66px; gap: 10px; }
+    .cv-full, .cv-brand small, .cv-lbl { display: none; }
+    .cv-short { display: inline; }
+    .cv-brand { font-size: 15px; white-space: nowrap; flex: none; }
+    .cv-navr { gap: 5px; }
+    .cv-nav .cv-cbtn { width: 40px; height: 40px; padding: 0; justify-content: center; flex: none; }
+    .cv-nav .cv-ico { width: 24px; height: 24px; }
+    .cv-lang { margin-left: 2px; flex: none; }
+    .cv-lang button { padding: 0 9px; height: 37px; font-size: 13px; }
+    .cv-hero .cv-wrap { padding-top: 56px; padding-bottom: 44px; gap: 36px; }
+    .cv-hero .cv-proc { padding-top: 0; padding-bottom: 52px; }
+    .cv-steps { grid-template-columns: 1fr; gap: 10px; }
+    .cv-step { flex-direction: row; align-items: flex-start; padding: 16px 16px 18px; }
+    .cv-h1 { font-size: 36px; }
+    .cv-lead { font-size: 16px; }
+    .cv-btn-w, .cv-btn-o { flex: 1 1 100%; justify-content: center; }
+    .cv-num { font-size: 40px; }
+    .cv-sec { padding: 56px 0; }
+    #cv-regions { scroll-margin-top: 66px; }
+    .cv-h2 { font-size: 30px; }
+    .cv-head { margin-bottom: 24px; }
+    .cv-regions { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .cv-rcard { min-height: 190px; padding: 20px 16px 16px; }
+    .cv-rname { font-size: 19px; margin-top: 16px; }
+    .cv-brands { grid-template-columns: 1fr 1fr; }
+    .cv-tile { padding: 22px 16px 18px; min-height: 136px; }
+    .cv-about .cv-wrap { grid-template-columns: 1fr; gap: 20px; }
+    .cv-p { font-size: 16px; }
+    .cv-svcs { grid-template-columns: 1fr; }
+    .cv-foot .cv-wrap { flex-direction: column; align-items: flex-start; }
+  }
+  @media screen and (max-width: 359px) {
+    .cv-brand { font-size: 14px; }
+    .cv-nav .cv-cbtn { width: 34px; height: 34px; }
+    .cv-nav .cv-ico { width: 20px; height: 20px; }
+    .cv-lang button { padding: 0 7px; height: 31px; font-size: 12px; }
+  }
 </style>
 </helmet>
 
@@ -155,246 +302,153 @@
   </sc-if>
 
   <sc-if value="{{ atIntro }}" hint-placeholder-val="{{ true }}">
-    <section class="m-sec" style="max-width: 1080px; margin: 0 auto; padding: 0 40px;">
-      <div class="m-band" style="background: var(--color-surface); margin: 0 -40px; padding: 44px 40px 36px;">
-        <div class="m-hero" style="display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: start;">
-        <div>
-        <h1 style="font-size: 44px; line-height: 1.2; letter-spacing: -0.03em; margin: 0 0 14px;">經典人文教育股份有限公司</h1>
-        <p style="font-size: 19px; line-height: 1.7; margin: 0; max-width: 40em; text-wrap: pretty; color: var(--color-neutral-700);">深耕教育三十年，以辦學者的視角協助學校導入 AI 教學。以最好的服務，提供一站式教育軟體採購；最優惠的價格，可匹配市場上任何價格，歡迎比價，買貴退差價。</p>
-        </div>
-        <div class="m-contact" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end;">
-          <a href="https://lin.ee/luo4Dgq" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px 0 12px; color: #fff; font-size: 14.5px; font-weight: 900; white-space: nowrap; background: #06C755;" style-hover="background: #05b34c"><span style="width: 22px; height: 22px; flex: none; background: url(images/icon-line.svg) center / contain no-repeat;"></span>LINE</a>
-          <a href="https://api.whatsapp.com/message/OOAOI3R5DAQVJ1?autoload=1&amp;app_absent=0" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px 0 12px; color: #fff; font-size: 14.5px; font-weight: 900; white-space: nowrap; background: #25D366;" style-hover="background: #1fbf5b"><span style="width: 22px; height: 22px; flex: none; background: url(images/icon-whatsapp.svg) center / contain no-repeat;"></span>WhatsApp</a>
-          <a href="mailto:jordanlin@futurekn.com" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px 0 12px; color: #fff; font-size: 14.5px; font-weight: 900; white-space: nowrap; background: #101010;" style-hover="background: #333333"><span style="width: 22px; height: 22px; flex: none; background: url(images/icon-mail.svg) center / contain no-repeat;"></span>Email</a>
-        </div>
-        </div>
-
-      <div style="padding: 26px 0 6px;">
-        <h2 style="font-size: 18px; margin: 0;">代理軟體與平台</h2>
-      </div>
-      <div class="m-brands" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; padding-bottom: 8px;">
-        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
-          <div style="height: 30px; margin-bottom: 12px; background: url(images/edcafe-logo-3x.png) left center / auto 22px no-repeat;"></div>
-          <div style="font-size: 14.5px; font-weight: 900;">Edcafe AI</div>
-          <div style="display: inline-block; font-size: 11.5px; font-weight: 900; padding: 2px 6px; margin-top: 6px; background: var(--color-accent); color: #fff; white-space: nowrap;">官方獨家代理商</div>
-        </div>
-        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
-          <div style="height: 30px; margin-bottom: 12px; background: url(images/classpoint-logo.svg) left center / auto 20px no-repeat;"></div>
-          <div style="font-size: 14.5px; font-weight: 900;">ClassPoint</div>
-          <div style="display: inline-block; font-size: 11.5px; font-weight: 900; padding: 2px 6px; margin-top: 6px; background: var(--color-accent); color: #fff; white-space: nowrap;">官方獨家代理商</div>
-        </div>
-        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
-          <div style="height: 30px; margin-bottom: 12px; background: url(images/kahoot-logo-3x.png) left center / auto 24px no-repeat;"></div>
-          <div style="font-size: 14.5px; font-weight: 900;">Kahoot!</div>
-          <div style="display: inline-block; font-size: 11.5px; font-weight: 900; padding: 2px 6px; margin-top: 6px; border: 1px solid var(--color-divider); color: var(--color-neutral-700); white-space: nowrap;">官方代理商</div>
-        </div>
-        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
-          <div style="height: 30px; margin-bottom: 12px; background: url(images/wordwall-logo-3x.png) left center / auto 20px no-repeat;"></div>
-          <div style="font-size: 14.5px; font-weight: 900;">Wordwall</div>
-          <div style="display: inline-block; font-size: 11.5px; font-weight: 900; padding: 2px 6px; margin-top: 6px; border: 1px solid var(--color-divider); color: var(--color-neutral-700); white-space: nowrap;">官方代理商</div>
-        </div>
-        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
-          <div style="height: 30px; margin-bottom: 12px; background: url(images/padlet-logo-3x.png) left center / auto 22px no-repeat;"></div>
-          <div style="font-size: 14.5px; font-weight: 900;">Padlet</div>
-          <div style="display: inline-block; font-size: 11.5px; font-weight: 900; padding: 2px 6px; margin-top: 6px; border: 1px solid var(--color-divider); color: var(--color-neutral-700); white-space: nowrap;">官方代理商</div>
-        </div>
-        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
-          <div style="height: 30px; margin-bottom: 12px; background: url(images/kami-logo-3x.png) left center / auto 22px no-repeat;"></div>
-          <div style="font-size: 14.5px; font-weight: 900;">Kami</div>
-        </div>
-        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
-          <div style="height: 30px; margin-bottom: 12px; background: url(images/chatgpt-logo-3x.png) left center / auto 22px no-repeat;"></div>
-          <div style="font-size: 14.5px; font-weight: 900;">ChatGPT</div>
-        </div>
-        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
-          <div style="height: 30px; margin-bottom: 12px; background: url(images/claude-logo-3x.png) left center / auto 22px no-repeat;"></div>
-          <div style="font-size: 14.5px; font-weight: 900;">Claude</div>
-        </div>
-        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
-          <div style="height: 30px; margin-bottom: 12px; background: url(images/gemini-logo-3x.png) left center / auto 24px no-repeat;"></div>
-          <div style="font-size: 14.5px; font-weight: 900;">Gemini</div>
-          <div style="display: inline-block; font-size: 11.5px; font-weight: 900; padding: 2px 6px; margin-top: 6px; border: 1px solid var(--color-divider); color: var(--color-neutral-700); white-space: nowrap;">官方代理商</div>
-        </div>
-        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
-          <div style="height: 30px; margin-bottom: 12px; background: url(images/quizlet-logo-3x.png) left center / auto 18px no-repeat;"></div>
-          <div style="font-size: 14.5px; font-weight: 900;">Quizlet</div>
-        </div>
-      </div>
-
-      <div style="padding: 22px 0 12px;">
-        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-          <span style="font-size: 11px; font-weight: 900; letter-spacing: 0.18em; padding: 4px 8px; background: var(--color-accent); color: #fff;">STEP 01</span>
-          <h2 style="font-size: 18px; margin: 0;">選擇地區</h2>
-        </div>
-        <p style="font-size: 14.5px; font-weight: 700; color: var(--color-neutral-700); margin: 8px 0 0;">點選下方地區，即可進入選購頁 ↓</p>
-      </div>
-      <div class="m-regions" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;">
-        <sc-for list="{{ regions }}" as="r" hint-placeholder-count="5">
-          <button onClick="{{ r.select }}" style="{{ r.cellStyle }}" style-hover="{{ r.hover }}">
-            <span style="{{ r.flagStyleLg }}"></span>
-            <span style="font-size: 16.5px; font-weight: 900; line-height: 1.25; margin-top: 12px;">{{ r.en }}</span>
-            <span style="{{ r.currencyStyle }}">{{ r.currency }}</span>
-            <span style="{{ r.ctaStyle }}">{{ r.ctaZh }}</span>
-          </button>
-        </sc-for>
-      </div>
-      </div>
-
-      <div class="m-split" style="border-top: 2px solid var(--color-divider); display: grid; grid-template-columns: 150px 1fr; gap: 40px; padding: 26px 0;">
-        <div style="font-size: 13.5px; font-weight: 900; letter-spacing: 0.14em;">關於我們</div>
-        <div>
-          <p style="font-size: 16.5px; line-height: 1.75; margin: 0 0 12px; max-width: 46em; text-wrap: pretty;">經典人文教育根植於台灣中部，自營辦學逾三十年，熟悉招生、教學、行政與家長溝通的每一個環節，理解學校真正的需求與現場限制。</p>
-          <p style="font-size: 16.5px; line-height: 1.75; margin: 0; max-width: 46em; text-wrap: pretty;">2024 年正式跨足教育科技，代理國際主流教學平台與 AI 工具，協助台灣與香港的學校導入 AI 教學。三十年的辦學實務，是我們與校方溝通的共同語言。</p>
-        </div>
-      </div>
-
-      <div class="m-split" style="border-top: 2px solid var(--color-divider); display: grid; grid-template-columns: 150px 1fr; gap: 40px; padding: 26px 0;">
-        <div style="font-size: 13.5px; font-weight: 900; letter-spacing: 0.14em;">服務內容</div>
-        <div class="m-svc" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px 40px;">
-          <div>
-            <h3 style="font-size: 16.5px; margin: 0 0 6px;"><span style="color: var(--color-accent); margin-right: 8px;">01</span>專業研習</h3>
-            <p style="font-size: 15.5px; line-height: 1.7; margin: 0; color: var(--color-neutral-800);">為合作學校與教師安排定期研習，涵蓋 AI 教學實務、平台操作與課程設計。</p>
-          </div>
-          <div>
-            <h3 style="font-size: 16.5px; margin: 0 0 6px;"><span style="color: var(--color-accent); margin-right: 8px;">02</span>真人客服</h3>
-            <p style="font-size: 15.5px; line-height: 1.7; margin: 0; color: var(--color-neutral-800);">熟悉學校運作的專責團隊提供一對一諮詢與售後支援，即時處理導入與行政問題。</p>
-          </div>
-          <div>
-            <h3 style="font-size: 16.5px; margin: 0 0 6px;"><span style="color: var(--color-accent); margin-right: 8px;">03</span>具競爭力的價格</h3>
-            <p style="font-size: 15.5px; line-height: 1.7; margin: 0; color: var(--color-neutral-800);">直接與國際品牌合作，提供最具競爭力的授權與採購方案，讓教育預算發揮最大效益。</p>
-          </div>
-          <div>
-            <h3 style="font-size: 16.5px; margin: 0 0 6px;"><span style="color: var(--color-accent); margin-right: 8px;">04</span>長期穩定的服務</h3>
-            <p style="font-size: 15.5px; line-height: 1.7; margin: 0; color: var(--color-neutral-800);">以長期夥伴關係為原則，持續提供產品更新、教師訓練與客戶支援。</p>
+    <div class="cv">
+      <nav class="cv-nav">
+        <div class="cv-wrap">
+          <div class="cv-brand"><span class="cv-full">{{ cv.brand }}</span><span class="cv-short">{{ cv.brandShort }}</span><small>{{ cv.brandSub }}</small></div>
+          <div class="cv-navr">
+            <a class="cv-cbtn cv-line" href="https://lin.ee/luo4Dgq" target="_blank" title="LINE"><span class="cv-ico" style="background-image: url(images/icon-line.svg);"></span><span class="cv-lbl">LINE</span></a>
+            <a class="cv-cbtn cv-wa" href="https://api.whatsapp.com/message/OOAOI3R5DAQVJ1?autoload=1&amp;app_absent=0" target="_blank" title="WhatsApp"><span class="cv-ico" style="background-image: url(images/icon-whatsapp.svg);"></span><span class="cv-lbl">WhatsApp</span></a>
+            <a class="cv-cbtn cv-mail" href="mailto:jordanlin@futurekn.com" title="Email"><span class="cv-ico" style="background-image: url(images/icon-mail.svg);"></span><span class="cv-lbl">Email</span></a>
+            <div class="cv-lang">
+              <button onClick="{{ setLangZh }}" style="{{ cvLangZhStyle }}">中文</button>
+              <button onClick="{{ setLangEn }}" style="{{ cvLangEnStyle }}">EN</button>
+            </div>
           </div>
         </div>
-      </div>
+      </nav>
 
-      <div class="m-band" style="background: var(--color-surface); margin: 34px -40px 0; padding: 40px 40px 36px;">
-        <div class="m-hero" style="display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: start;">
-        <div>
-          <h2 style="font-size: 34px; line-height: 1.2; letter-spacing: -0.03em; margin: 0 0 12px;">Classic Humanities Education Co., Ltd.</h2>
-          <p style="font-size: 17.5px; line-height: 1.7; margin: 0; max-width: 44em; text-wrap: pretty; color: var(--color-neutral-700);">Thirty years in education, guiding schools into AI teaching from an operator's perspective. One-stop educational software with the best service and the most competitive pricing — we match any price on the market, price comparison welcome.</p>
-        </div>
-        <div class="m-contact" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end;">
-          <a href="https://lin.ee/luo4Dgq" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px 0 12px; color: #fff; font-size: 14.5px; font-weight: 900; white-space: nowrap; background: #06C755;" style-hover="background: #05b34c"><span style="width: 22px; height: 22px; flex: none; background: url(images/icon-line.svg) center / contain no-repeat;"></span>LINE</a>
-          <a href="https://api.whatsapp.com/message/OOAOI3R5DAQVJ1?autoload=1&amp;app_absent=0" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px 0 12px; color: #fff; font-size: 14.5px; font-weight: 900; white-space: nowrap; background: #25D366;" style-hover="background: #1fbf5b"><span style="width: 22px; height: 22px; flex: none; background: url(images/icon-whatsapp.svg) center / contain no-repeat;"></span>WhatsApp</a>
-          <a href="mailto:jordanlin@futurekn.com" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px 0 12px; color: #fff; font-size: 14.5px; font-weight: 900; white-space: nowrap; background: #101010;" style-hover="background: #333333"><span style="width: 22px; height: 22px; flex: none; background: url(images/icon-mail.svg) center / contain no-repeat;"></span>Email</a>
-        </div>
-        </div>
-
-      <div style="padding: 26px 0 6px; display: flex; align-items: baseline; gap: 14px;">
-        <h2 style="font-size: 18px; margin: 0;">Software we represent</h2>
-      </div>
-      <div class="m-brands" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; padding-bottom: 8px;">
-        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
-          <div style="height: 30px; margin-bottom: 12px; background: url(images/edcafe-logo-3x.png) left center / auto 22px no-repeat;"></div>
-          <div style="font-size: 14.5px; font-weight: 900;">Edcafe AI</div>
-          <div style="display: inline-block; font-size: 11.5px; font-weight: 900; padding: 2px 6px; margin-top: 6px; background: var(--color-accent); color: #fff; white-space: nowrap;">Exclusive distributor</div>
-        </div>
-        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
-          <div style="height: 30px; margin-bottom: 12px; background: url(images/classpoint-logo.svg) left center / auto 20px no-repeat;"></div>
-          <div style="font-size: 14.5px; font-weight: 900;">ClassPoint</div>
-          <div style="display: inline-block; font-size: 11.5px; font-weight: 900; padding: 2px 6px; margin-top: 6px; background: var(--color-accent); color: #fff; white-space: nowrap;">Exclusive distributor</div>
-        </div>
-        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
-          <div style="height: 30px; margin-bottom: 12px; background: url(images/kahoot-logo-3x.png) left center / auto 24px no-repeat;"></div>
-          <div style="font-size: 14.5px; font-weight: 900;">Kahoot!</div>
-          <div style="display: inline-block; font-size: 11.5px; font-weight: 900; padding: 2px 6px; margin-top: 6px; border: 1px solid var(--color-divider); color: var(--color-neutral-700); white-space: nowrap;">Authorised distributor</div>
-        </div>
-        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
-          <div style="height: 30px; margin-bottom: 12px; background: url(images/wordwall-logo-3x.png) left center / auto 20px no-repeat;"></div>
-          <div style="font-size: 14.5px; font-weight: 900;">Wordwall</div>
-          <div style="display: inline-block; font-size: 11.5px; font-weight: 900; padding: 2px 6px; margin-top: 6px; border: 1px solid var(--color-divider); color: var(--color-neutral-700); white-space: nowrap;">Authorised distributor</div>
-        </div>
-        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
-          <div style="height: 30px; margin-bottom: 12px; background: url(images/padlet-logo-3x.png) left center / auto 22px no-repeat;"></div>
-          <div style="font-size: 14.5px; font-weight: 900;">Padlet</div>
-          <div style="display: inline-block; font-size: 11.5px; font-weight: 900; padding: 2px 6px; margin-top: 6px; border: 1px solid var(--color-divider); color: var(--color-neutral-700); white-space: nowrap;">Authorised distributor</div>
-        </div>
-        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
-          <div style="height: 30px; margin-bottom: 12px; background: url(images/kami-logo-3x.png) left center / auto 22px no-repeat;"></div>
-          <div style="font-size: 14.5px; font-weight: 900;">Kami</div>
-        </div>
-        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
-          <div style="height: 30px; margin-bottom: 12px; background: url(images/chatgpt-logo-3x.png) left center / auto 22px no-repeat;"></div>
-          <div style="font-size: 14.5px; font-weight: 900;">ChatGPT</div>
-        </div>
-        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
-          <div style="height: 30px; margin-bottom: 12px; background: url(images/claude-logo-3x.png) left center / auto 22px no-repeat;"></div>
-          <div style="font-size: 14.5px; font-weight: 900;">Claude</div>
-        </div>
-        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
-          <div style="height: 30px; margin-bottom: 12px; background: url(images/gemini-logo-3x.png) left center / auto 24px no-repeat;"></div>
-          <div style="font-size: 14.5px; font-weight: 900;">Gemini</div>
-          <div style="display: inline-block; font-size: 11.5px; font-weight: 900; padding: 2px 6px; margin-top: 6px; border: 1px solid var(--color-divider); color: var(--color-neutral-700); white-space: nowrap;">Authorised distributor</div>
-        </div>
-        <div style="border: 1px solid var(--color-divider); padding: 14px; background: #fff;">
-          <div style="height: 30px; margin-bottom: 12px; background: url(images/quizlet-logo-3x.png) left center / auto 18px no-repeat;"></div>
-          <div style="font-size: 14.5px; font-weight: 900;">Quizlet</div>
-        </div>
-      </div>
-
-      <div style="padding: 22px 0 12px;">
-        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-          <span style="font-size: 11px; font-weight: 900; letter-spacing: 0.18em; padding: 4px 8px; background: var(--color-accent); color: #fff;">STEP 01</span>
-          <h2 style="font-size: 18px; margin: 0;">Select your region</h2>
-        </div>
-        <p style="font-size: 14.5px; font-weight: 700; color: var(--color-neutral-700); margin: 8px 0 0;">Tap a region below to start building your quote ↓</p>
-      </div>
-      <div class="m-regions" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;">
-        <sc-for list="{{ regions }}" as="r" hint-placeholder-count="5">
-          <button onClick="{{ r.select }}" style="{{ r.cellStyle }}" style-hover="{{ r.hover }}">
-            <span style="{{ r.flagStyleLg }}"></span>
-            <span style="font-size: 16.5px; font-weight: 900; line-height: 1.25; margin-top: 12px;">{{ r.en }}</span>
-            <span style="{{ r.currencyStyle }}">{{ r.currency }}</span>
-            <span style="{{ r.ctaStyle }}">{{ r.ctaEn }}</span>
-          </button>
-        </sc-for>
-      </div>
-      </div>
-
-      <div class="m-split" style="border-top: 2px solid var(--color-divider); display: grid; grid-template-columns: 150px 1fr; gap: 40px; padding: 26px 0;">
-        <div style="font-size: 13.5px; font-weight: 900; letter-spacing: 0.14em; text-transform: uppercase;">About us</div>
-        <div>
-          <p style="font-size: 16px; line-height: 1.7; margin: 0 0 12px; max-width: 46em; text-wrap: pretty;">Classic Humanities Education has operated its own schools in Central Taiwan for over thirty years — across admissions, instruction, administration and parent communication. We understand what schools need because we have run them.</p>
-          <p style="font-size: 16px; line-height: 1.7; margin: 0; max-width: 46em; text-wrap: pretty;">In 2024 we expanded into educational technology as an authorised partner of leading international teaching platforms and AI tools, helping schools integrate AI into their classrooms.</p>
-        </div>
-      </div>
-
-      <div class="m-split" style="border-top: 2px solid var(--color-divider); display: grid; grid-template-columns: 150px 1fr; gap: 40px; padding: 26px 0;">
-        <div style="font-size: 13.5px; font-weight: 900; letter-spacing: 0.14em; text-transform: uppercase;">Services</div>
-        <div class="m-svc" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px 40px;">
+      <header class="cv-hero">
+        <div class="cv-wrap">
           <div>
-            <h4 style="font-size: 16px; margin: 0 0 6px;"><span style="color: var(--color-accent); margin-right: 8px;">01</span>Professional workshops</h4>
-            <p style="font-size: 15px; line-height: 1.65; margin: 0; color: var(--color-neutral-800);">Regular training for partner schools and teachers on AI teaching practice, platform operation and lesson design.</p>
+            <div class="cv-eyebrow">{{ cv.eyebrow }}</div>
+            <h1 class="cv-h1">{{ cv.h1 }}<span class="cv-h1b">{{ cv.h1b }}</span></h1>
+            <p class="cv-lead">{{ cv.lead }}</p>
+            <div class="cv-ctas">
+              <a class="cv-btn-w" href="#cv-regions">{{ cv.cta1 }}</a>
+              <a class="cv-btn-o" href="{{ cv.cta2Href }}" target="_blank">{{ cv.cta2 }}</a>
+            </div>
           </div>
-          <div>
-            <h4 style="font-size: 16px; margin: 0 0 6px;"><span style="color: var(--color-accent); margin-right: 8px;">02</span>Real human support</h4>
-            <p style="font-size: 15px; line-height: 1.65; margin: 0; color: var(--color-neutral-800);">Specialists experienced in school environments give one-to-one consultation and after-sales support.</p>
-          </div>
-          <div>
-            <h4 style="font-size: 16px; margin: 0 0 6px;"><span style="color: var(--color-accent); margin-right: 8px;">03</span>Competitive pricing</h4>
-            <p style="font-size: 15px; line-height: 1.65; margin: 0; color: var(--color-neutral-800);">Direct partnerships with international brands mean sharper licensing and procurement terms for schools.</p>
-          </div>
-          <div>
-            <h4 style="font-size: 16px; margin: 0 0 6px;"><span style="color: var(--color-accent); margin-right: 8px;">04</span>Long-term service</h4>
-            <p style="font-size: 15px; line-height: 1.65; margin: 0; color: var(--color-neutral-800);">Ongoing product updates, teacher training and dedicated support under a long-term partnership.</p>
+          <div class="cv-stats">
+            <sc-for list="{{ cvStats }}" as="s" hint-placeholder-count="4">
+              <div class="cv-stat"><div class="cv-num">{{ s.num }}</div><div class="cv-statl">{{ s.label }}</div></div>
+            </sc-for>
           </div>
         </div>
-      </div>
-
-      <div style="border-top: 2px solid var(--color-text); padding: 28px 0 60px;">
-        <h2 style="font-size: 18px; margin: 0 0 14px;">Authorisation certificates</h2>
-        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-          <a href="https://drive.google.com/file/d/19j5OQetvZ1VD7KhiuGn2lHN9jPkTQeRu/view?usp=sharing" target="_blank" style="font-size: 14px; font-weight: 900; padding: 12px 16px; border: 1px solid var(--color-divider); color: var(--color-text); background: #fff;" style-hover="background: var(--color-neutral-200)">Edcafe AI · Exclusive distributor certificate</a>
-          <a href="https://drive.google.com/file/d/1-HQh_Bibnm_c0WrxHjkyI_CR6vPaq8-6/view?usp=sharing" target="_blank" style="font-size: 14px; font-weight: 900; padding: 12px 16px; border: 1px solid var(--color-divider); color: var(--color-text); background: #fff;" style-hover="background: var(--color-neutral-200)">Kahoot · Authorised distributor certificate</a>
+        <div class="cv-wrap cv-proc">
+          <div class="cv-prochead"><span class="cv-kick">PROCESS</span><span class="cv-proct">{{ cv.procTitle }}</span></div>
+          <div class="cv-steps">
+            <sc-for list="{{ cvSteps }}" as="p" hint-placeholder-count="5">
+              <div class="cv-step">
+                <span class="cv-stepn">{{ p.num }}</span>
+                <div>
+                  <div class="cv-stept">{{ p.title }}</div>
+                  <div class="cv-stepd">{{ p.text }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
         </div>
-      </div>
+      </header>
 
-      <div style="padding-bottom: 20px;"></div>
+      <section class="cv-sec" id="cv-regions">
+        <div class="cv-wrap">
+          <div class="cv-head">
+            <div>
+              <div class="cv-kick">START HERE</div>
+              <h2 class="cv-h2">{{ cv.regionTitle }}</h2>
+            </div>
+            <p class="cv-headp">{{ cv.regionHint }}</p>
+          </div>
+          <div class="cv-regions">
+            <sc-for list="{{ cvRegions }}" as="r" hint-placeholder-count="5">
+              <button class="cv-rcard" onClick="{{ r.select }}" style="{{ r.cardStyle }}">
+                <span class="cv-flag" style="{{ r.flagStyle }}"></span>
+                <span class="cv-rname">{{ r.label }}</span>
+                <span class="cv-rsub">{{ r.sub }}</span>
+                <span class="cv-rfoot"><span class="cv-rcur" style="{{ r.curStyle }}">{{ r.currency }}</span><span class="cv-rcta">{{ r.cta }}</span></span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </section>
 
-    </section>
+      <section class="cv-sec cv-grey">
+        <div class="cv-wrap">
+          <div class="cv-head">
+            <div>
+              <div class="cv-kick">PARTNERS</div>
+              <h2 class="cv-h2">{{ cv.brandsTitle }}</h2>
+            </div>
+          </div>
+          <div class="cv-brands">
+            <sc-for list="{{ cvBrands }}" as="b" hint-placeholder-count="10">
+              <div class="cv-tile">
+                <div class="cv-logo" style="{{ b.logoStyle }}"></div>
+                <div class="cv-bname">{{ b.name }}</div>
+                <sc-if value="{{ b.tagX }}" hint-placeholder-val="{{ false }}"><span class="cv-tag cv-tagx">{{ b.tag }}</span></sc-if>
+                <sc-if value="{{ b.tagO }}" hint-placeholder-val="{{ false }}"><span class="cv-tag cv-tago">{{ b.tag }}</span></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+
+      <section class="cv-sec cv-about" style="border-top: 1px solid #dcdcdc;">
+        <div class="cv-wrap">
+          <div>
+            <div class="cv-kick">ABOUT</div>
+            <h2 class="cv-h2">{{ cv.aboutTitle }}</h2>
+          </div>
+          <div>
+            <p class="cv-p">{{ cv.about1 }}</p>
+            <p class="cv-p">{{ cv.about2 }}</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="cv-sec cv-grey">
+        <div class="cv-wrap">
+          <div class="cv-head">
+            <div>
+              <div class="cv-kick">SERVICES</div>
+              <h2 class="cv-h2">{{ cv.svcTitle }}</h2>
+            </div>
+          </div>
+          <div class="cv-svcs">
+            <sc-for list="{{ cvServices }}" as="v" hint-placeholder-count="4">
+              <div class="cv-svc">
+                <div class="cv-svcn">{{ v.num }}</div>
+                <h3>{{ v.title }}</h3>
+                <p>{{ v.text }}</p>
+              </div>
+            </sc-for>
+          </div>
+          <div class="cv-certs">
+            <span class="cv-certl">{{ cv.certTitle }}</span>
+            <sc-for list="{{ cvCerts }}" as="c" hint-placeholder-count="2">
+              <a class="cv-cert" href="{{ c.href }}" target="_blank">{{ c.label }}<span>↗</span></a>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+
+      <footer class="cv-foot">
+        <div class="cv-wrap">
+          <div>
+            <div class="cv-fname">{{ cv.brand }}</div>
+            <div class="cv-fsub">{{ cv.taxId }}</div>
+            <a class="cv-fmail" href="mailto:jordanlin@futurekn.com">jordanlin@futurekn.com</a>
+          </div>
+          <div class="cv-fbtns">
+            <a class="cv-cbtn cv-line" href="https://lin.ee/luo4Dgq" target="_blank"><span class="cv-ico" style="background-image: url(images/icon-line.svg);"></span>LINE</a>
+            <a class="cv-cbtn cv-wa" href="https://api.whatsapp.com/message/OOAOI3R5DAQVJ1?autoload=1&amp;app_absent=0" target="_blank"><span class="cv-ico" style="background-image: url(images/icon-whatsapp.svg);"></span>WhatsApp</a>
+            <a class="cv-cbtn cv-mailw" href="mailto:jordanlin@futurekn.com"><span class="cv-ico" style="background-image: url(images/icon-mail.svg);"></span>Email</a>
+          </div>
+        </div>
+        <div class="cv-wrap cv-copy">{{ cv.copyright }}</div>
+      </footer>
+    </div>
   </sc-if>
 
   <sc-if value="{{ atProducts }}" hint-placeholder-val="{{ false }}">
@@ -722,7 +776,7 @@
 class Component extends DCLogic {
   state = {
     step: 0, region: '', referral: '', showConfirm: false, flipped: {}, tier: {},
-    cart: {}, customPrice: {}, customName: {},
+    cart: {}, customPrice: {}, customName: {}, introLang: (() => { try { const s = localStorage.getItem('chq_lang'); if (s === 'zh' || s === 'en') return s; return /^zh/i.test(navigator.language || '') ? 'zh' : 'en'; } catch (e) { return 'zh'; } })(),
     form: { name: '', email: '', title: '', taxId: '', date: new Date().toISOString().split('T')[0], note: '' }
   };
 
@@ -1684,6 +1738,132 @@ class Component extends DCLogic {
     }
   }
 
+  // ===== cover-v3 2026-10-24：封面全版面＋中英切換 =====
+  // 只決定「封面」用哪個語言；進選購頁後語言仍照地區走（this.zh 只看 region），報價邏輯完全不受影響
+  COVER_BRANDS = [
+    ['edcafe-logo-3x.png', 25, 'Edcafe AI', 'x'],
+    ['classpoint-logo.svg', 23, 'ClassPoint', 'x'],
+    ['kahoot-logo-3x.png', 28, 'Kahoot!', 'o'],
+    ['wordwall-logo-3x.png', 23, 'Wordwall', 'o'],
+    ['padlet-logo-3x.png', 25, 'Padlet', 'o'],
+    ['kami-logo-3x.png', 25, 'Kami', ''],
+    ['chatgpt-logo-3x.png', 25, 'ChatGPT', ''],
+    ['claude-logo-3x.png', 25, 'Claude', ''],
+    ['gemini-logo-3x.png', 28, 'Gemini', 'o'],
+    ['quizlet-logo-3x.png', 21, 'Quizlet', '']
+  ];
+
+  COVER_TEXT = {
+    zh: {
+      brand: '經典人文教育股份有限公司', brandShort: '經典人文教育', brandSub: 'Classic Humanities Education',
+      eyebrow: 'Classic Humanities Education',
+      h1: '一站式教育軟體採購', h1b: '最優惠的價格，買貴退差價',
+      lead: '深耕教育三十年，以辦學者的視角協助學校導入 AI 教學。以最好的服務，提供一站式教育軟體採購；最優惠的價格，可匹配市場上任何價格，歡迎比價，買貴退差價。',
+      cta1: '選擇地區，開始選購 ↓', cta2: 'LINE 洽詢', cta2Href: 'https://lin.ee/luo4Dgq',
+      stats: [['30+', '年辦學經驗'], ['10', '個代理品牌'], ['2', '項官方獨家代理'], ['5', '個服務地區']],
+      procTitle: '採購流程',
+      steps: [
+        ['選購方案', '調整數量即可即時試算；輸入代理或推薦代碼可套用專屬價格。'],
+        ['填寫資料', '填寫聯絡人、公司／學校抬頭與統一編號。'],
+        ['產出報價單', '線上預覽並下載 PDF，報價後 14 天內有效。'],
+        ['用印回傳客服', '請將報價單用印後回傳給真人客服。'],
+        ['客服授權開通', '真人客服與您做最後確認，並開通授權。']
+      ],
+      regionTitle: '選擇地區', regionHint: '點選下方地區，即可進入選購頁 ↓', cta: '開始選購 →', ctaOn: '已選擇 ✓',
+      brandsTitle: '代理軟體與平台', tagX: '官方獨家代理商', tagO: '官方代理商',
+      aboutTitle: '關於我們',
+      about1: '經典人文教育根植於台灣中部，自營辦學逾三十年，熟悉招生、教學、行政與家長溝通的每一個環節，理解學校真正的需求與現場限制。',
+      about2: '2024 年正式跨足教育科技，代理國際主流教學平台與 AI 工具，協助台灣與香港的學校導入 AI 教學。三十年的辦學實務，是我們與校方溝通的共同語言。',
+      svcTitle: '服務內容',
+      services: [
+        ['專業研習', '為合作學校與教師安排定期研習，涵蓋 AI 教學實務、平台操作與課程設計。'],
+        ['真人客服', '熟悉學校運作的專責團隊提供一對一諮詢與售後支援，即時處理導入與行政問題。'],
+        ['具競爭力的價格', '直接與國際品牌合作，提供最具競爭力的授權與採購方案，讓教育預算發揮最大效益。'],
+        ['長期穩定的服務', '以長期夥伴關係為原則，持續提供產品更新、教師訓練與客戶支援。']
+      ],
+      certTitle: '授權證書', certs: ['Edcafe AI · 獨家代理授權書', 'Kahoot · 官方代理授權書'],
+      taxId: '統一編號 89187632'
+    },
+    en: {
+      brand: 'Classic Humanities Education Co., Ltd.', brandShort: 'Classic Humanities', brandSub: '經典人文教育股份有限公司',
+      eyebrow: 'Classic Humanities Education',
+      h1: 'One-stop educational software', h1b: 'We match any price',
+      lead: "Thirty years in education, guiding schools into AI teaching from an operator's perspective. One-stop educational software with the best service and the most competitive pricing — we match any price on the market, price comparison welcome.",
+      cta1: 'Choose your region ↓', cta2: 'WhatsApp us', cta2Href: 'https://api.whatsapp.com/message/OOAOI3R5DAQVJ1?autoload=1&app_absent=0',
+      stats: [['30+', 'years running schools'], ['10', 'software brands'], ['2', 'exclusive distributorships'], ['5', 'regions served']],
+      procTitle: 'How to order',
+      steps: [
+        ['Choose plan', 'Adjust quantities to build your quote. Enter a referral or reseller code to apply your pricing.'],
+        ['Fill details', 'Enter your contact name, school or company and tax ID.'],
+        ['Generate quote', 'Preview and download your quote as a PDF. Valid for 14 days from the issue date.'],
+        ['Sign & return', 'Sign or stamp the quotation and return it to our team.'],
+        ['Activation', 'Our team confirms the order and activates your licences.']
+      ],
+      regionTitle: 'Select your region', regionHint: 'Tap a region below to start building your quote ↓', cta: 'Start →', ctaOn: 'Selected ✓',
+      brandsTitle: 'Software we represent', tagX: 'Exclusive distributor', tagO: 'Authorised distributor',
+      aboutTitle: 'About us',
+      about1: 'Classic Humanities Education has operated its own schools in Central Taiwan for over thirty years — across admissions, instruction, administration and parent communication. We understand what schools need because we have run them.',
+      about2: 'In 2024 we expanded into educational technology as an authorised partner of leading international teaching platforms and AI tools, helping schools integrate AI into their classrooms.',
+      svcTitle: 'Services',
+      services: [
+        ['Professional workshops', 'Regular training for partner schools and teachers on AI teaching practice, platform operation and lesson design.'],
+        ['Real human support', 'Specialists experienced in school environments give one-to-one consultation and after-sales support.'],
+        ['Competitive pricing', 'Direct partnerships with international brands mean sharper licensing and procurement terms for schools.'],
+        ['Long-term service', 'Ongoing product updates, teacher training and dedicated support under a long-term partnership.']
+      ],
+      certTitle: 'Authorisation certificates', certs: ['Edcafe AI · Exclusive distributor certificate', 'Kahoot · Authorised distributor certificate'],
+      taxId: 'Tax ID 89187632'
+    }
+  };
+
+  COVER_CERT_LINKS = [
+    'https://drive.google.com/file/d/19j5OQetvZ1VD7KhiuGn2lHN9jPkTQeRu/view?usp=sharing',
+    'https://drive.google.com/file/d/1-HQh_Bibnm_c0WrxHjkyI_CR6vPaq8-6/view?usp=sharing'
+  ];
+
+  setIntroLang(lang) {
+    try { localStorage.setItem('chq_lang', lang); } catch (e) {}
+    this.setState({ introLang: lang });
+  }
+
+  coverVals() {
+    const st = this.state;
+    const en = st.introLang === 'en';
+    const T = this.COVER_TEXT[en ? 'en' : 'zh'];
+    const langBtn = on => ({ background: on ? '#101010' : '#fff', color: on ? '#fff' : '#101010' });
+    return {
+      cv: { ...T, copyright: '© ' + new Date().getFullYear() + ' ' + T.brand },
+      cvLangZhStyle: langBtn(!en),
+      cvLangEnStyle: langBtn(en),
+      setLangZh: () => this.setIntroLang('zh'),
+      setLangEn: () => this.setIntroLang('en'),
+      cvStats: T.stats.map(s => ({ num: s[0], label: s[1] })),
+      cvSteps: T.steps.map((s, i) => ({ num: '0' + (i + 1), title: s[0], text: s[1] })),
+      cvRegions: Object.keys(this.REGIONS).map(code => {
+        const cfg = this.REGIONS[code];
+        const on = st.region === code;
+        return {
+          label: en ? cfg.en : cfg.zh,
+          sub: en ? '' : cfg.en,
+          currency: cfg.currency,
+          cta: on ? T.ctaOn : T.cta,
+          select: () => this.setState({ step: 1, region: code }),
+          flagStyle: { backgroundImage: 'url(https://flagcdn.com/w160/' + cfg.cc + '.png)' },
+          cardStyle: on ? { background: '#101010', color: '#fff' } : {},
+          curStyle: on ? { borderColor: '#555' } : {}
+        };
+      }),
+      cvBrands: this.COVER_BRANDS.map(b => ({
+        name: b[2],
+        logoStyle: { backgroundImage: 'url(images/' + b[0] + ')', backgroundSize: 'auto ' + b[1] + 'px' },
+        tagX: b[3] === 'x', tagO: b[3] === 'o',
+        tag: b[3] === 'x' ? T.tagX : b[3] === 'o' ? T.tagO : ''
+      })),
+      cvServices: T.services.map((s, i) => ({ num: '0' + (i + 1), title: s[0], text: s[1] })),
+      cvCerts: T.certs.map((label, i) => ({ label, href: this.COVER_CERT_LINKS[i] }))
+    };
+  }
+
   renderVals() {
     this.ensurePricing();
     const st = this.state, tot = this.totals(), r = this.REGIONS[st.region], t = this.dict();
@@ -1946,6 +2126,7 @@ class Component extends DCLogic {
       currency: this.currency,
       regionLabel: r ? r.en : '—',
       regions: regionCells,
+      ...this.coverVals(),
       regionsZh: regionCells.filter(x => x.en === 'Taiwan'),
       regionsEn: regionCells.filter(x => x.en !== 'Taiwan'),
 
