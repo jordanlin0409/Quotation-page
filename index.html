@@ -165,11 +165,15 @@
   .cv-prochead .cv-kick { margin: 0; }
   .cv-proct { font-size: 20px; font-weight: 900; }
 
-  .cv-brands { display: grid; grid-template-columns: repeat(10, 1fr); gap: 1px; background: #e2e2e2; border: 1px solid #e2e2e2; }
-  .cv-tile { background: #fff; height: 108px; padding: 0 12px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-width: 0; transition: background 0.15s ease; }
-  .cv-tile:hover { background: #fafafa; }
+  .cv-baskets { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 3fr); gap: 16px; }
+  .cv-basket { background: #fff; border: 1px solid #dcdcdc; min-width: 0; }
+  .cv-bhead { padding: 12px 18px; border-bottom: 1px solid #ececec; font-size: 14px; font-weight: 900; letter-spacing: 0.02em; }
+  .cv-blogos { display: grid; padding: 4px 8px 6px; }
+  .cv-basket-edu .cv-blogos { grid-template-columns: repeat(7, 1fr); }
+  .cv-basket-llm .cv-blogos { grid-template-columns: repeat(3, 1fr); }
+  .cv-tile { height: 96px; padding: 0 10px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-width: 0; }
   .cv-logo { height: 32px; width: 100%; display: flex; align-items: center; justify-content: center; }
-  .cv-logo img { display: block; width: auto; max-width: 100%; object-fit: contain; }
+  .cv-logoimg { display: block; max-width: 100%; background-position: center; background-size: contain; background-repeat: no-repeat; }
   .cv-tagrow { height: 20px; display: flex; align-items: center; justify-content: center; }
   .cv-tag { display: inline-block; font-size: 11px; font-weight: 900; line-height: 1; padding: 4px 7px; white-space: nowrap; letter-spacing: 0.02em; }
   .cv-tagx { background: #101010; color: #fff; }
@@ -226,8 +230,8 @@
   .cv-fbtns { display: flex; gap: 8px; flex-wrap: wrap; }
   .cv-foot .cv-copy { display: block; font-size: 12px; color: #949494; margin-top: 28px; padding-top: 16px; border-top: 1px solid #dcdcdc; }
 
-  @media screen and (max-width: 1360px) {
-    .cv-brands { grid-template-columns: repeat(5, 1fr); }
+  @media screen and (max-width: 1180px) {
+    .cv-baskets { grid-template-columns: 1fr; gap: 12px; }
   }
   @media screen and (max-width: 1080px) {
     .cv-herotop { grid-template-columns: 1fr; gap: 32px; }
@@ -257,8 +261,10 @@
     .cv-statl { font-size: 12px; line-height: 1.4; }
     .cv-band { padding-bottom: 28px; }
     .cv-proc { padding-bottom: 40px; }
-    .cv-brands { grid-template-columns: 1fr 1fr; }
-    .cv-tile { height: 96px; }
+    .cv-basket-edu .cv-blogos, .cv-basket-llm .cv-blogos { grid-template-columns: repeat(3, 1fr); padding: 4px 4px 6px; }
+    .cv-bhead { padding: 10px 14px; }
+    .cv-tile { height: 84px; padding: 0 6px; gap: 10px; }
+    .cv-tag { font-size: 10.5px; padding: 3px 5px; }
     .cv-steps { grid-template-columns: 1fr; gap: 10px; }
     .cv-step { flex-direction: row; align-items: flex-start; padding: 14px 16px 16px; }
     .cv-sec { padding: 44px 0; }
@@ -349,16 +355,35 @@
         </div>
         <div class="cv-wrap cv-band">
           <div class="cv-prochead"><span class="cv-kick">PARTNERS</span><span class="cv-proct">{{ cv.brandsTitle }}</span></div>
-          <div class="cv-brands">
-            <sc-for list="{{ cvBrands }}" as="b" hint-placeholder-count="10">
-              <div class="cv-tile" title="{{ b.name }}">
-                <div class="cv-logo"><img src="{{ b.src }}" alt="{{ b.name }}" style="{{ b.imgStyle }}"></div>
-                <div class="cv-tagrow">
-                  <sc-if value="{{ b.tagX }}" hint-placeholder-val="{{ false }}"><span class="cv-tag cv-tagx">{{ b.tag }}</span></sc-if>
-                  <sc-if value="{{ b.tagO }}" hint-placeholder-val="{{ false }}"><span class="cv-tag cv-tago">{{ b.tag }}</span></sc-if>
-                </div>
+          <div class="cv-baskets">
+            <div class="cv-basket cv-basket-edu">
+              <div class="cv-bhead">{{ cv.groupEdu }}</div>
+              <div class="cv-blogos">
+                <sc-for list="{{ cvBrandsEdu }}" as="b" hint-placeholder-count="7">
+                  <div class="cv-tile" title="{{ b.name }}">
+                    <div class="cv-logo"><span class="cv-logoimg" role="img" aria-label="{{ b.name }}" style="{{ b.imgStyle }}"></span></div>
+                    <div class="cv-tagrow">
+                      <sc-if value="{{ b.tagX }}" hint-placeholder-val="{{ false }}"><span class="cv-tag cv-tagx">{{ b.tag }}</span></sc-if>
+                      <sc-if value="{{ b.tagO }}" hint-placeholder-val="{{ false }}"><span class="cv-tag cv-tago">{{ b.tag }}</span></sc-if>
+                    </div>
+                  </div>
+                </sc-for>
               </div>
-            </sc-for>
+            </div>
+            <div class="cv-basket cv-basket-llm">
+              <div class="cv-bhead">{{ cv.groupLlm }}</div>
+              <div class="cv-blogos">
+                <sc-for list="{{ cvBrandsLlm }}" as="b" hint-placeholder-count="3">
+                  <div class="cv-tile" title="{{ b.name }}">
+                    <div class="cv-logo"><span class="cv-logoimg" role="img" aria-label="{{ b.name }}" style="{{ b.imgStyle }}"></span></div>
+                    <div class="cv-tagrow">
+                      <sc-if value="{{ b.tagX }}" hint-placeholder-val="{{ false }}"><span class="cv-tag cv-tagx">{{ b.tag }}</span></sc-if>
+                      <sc-if value="{{ b.tagO }}" hint-placeholder-val="{{ false }}"><span class="cv-tag cv-tago">{{ b.tag }}</span></sc-if>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
           </div>
         </div>
         <div class="cv-wrap cv-band cv-proc">
@@ -1736,18 +1761,19 @@ class Component extends DCLogic {
 
   // ===== cover-v3 2026-10-24：封面全版面＋中英切換 =====
   // 只決定「封面」用哪個語言；進選購頁後語言仍照地區走（this.zh 只看 region），報價邏輯完全不受影響
-  // 第二欄＝logo 顯示高度（px），依各 logo 長寬比調成視覺上一樣大
+  // 第二欄＝logo 顯示高度（px），依各 logo 長寬比調成視覺上一樣大；第五欄＝分籃（edu 教育科技軟體／llm 大語言模型，同選購頁分區）；
+  // 第六欄＝圖檔長寬比。logo 用背景圖不用 <img src="{{ }}">：瀏覽器會在模板渲染前先去抓字面網址而 404
   COVER_BRANDS = [
-    ['edcafe-logo-3x.png', 25, 'Edcafe AI', 'x'],
-    ['classpoint-logo.svg', 24, 'ClassPoint', 'x'],
-    ['kahoot-logo-3x.png', 28, 'Kahoot!', 'o'],
-    ['wordwall-logo-3x.png', 20, 'Wordwall', 'o'],
-    ['padlet-logo-3x.png', 27, 'Padlet', 'o'],
-    ['kami-logo-3x.png', 24, 'Kami', ''],
-    ['chatgpt-logo-3x.png', 24, 'ChatGPT', ''],
-    ['claude-logo-3x.png', 23, 'Claude', ''],
-    ['gemini-logo-3x.png', 28, 'Gemini', 'o'],
-    ['quizlet-logo-3x.png', 21, 'Quizlet', '']
+    ['edcafe-logo-3x.png', 25, 'Edcafe AI', 'x', 'edu', 4.36],
+    ['classpoint-logo.svg', 24, 'ClassPoint', 'x', 'edu', 4.85],
+    ['kahoot-logo-3x.png', 28, 'Kahoot!', 'o', 'edu', 2.90],
+    ['wordwall-logo-3x.png', 20, 'Wordwall', 'o', 'edu', 5.95],
+    ['padlet-logo-3x.png', 27, 'Padlet', 'o', 'edu', 3.23],
+    ['kami-logo-3x.png', 25, 'Kami', '', 'edu', 2.05],
+    ['quizlet-logo-3x.png', 21, 'Quizlet', '', 'edu', 4.30],
+    ['chatgpt-logo-3x.png', 24, 'ChatGPT', '', 'llm', 4.35],
+    ['claude-logo-3x.png', 23, 'Claude', '', 'llm', 4.65],
+    ['gemini-logo-3x.png', 28, 'Gemini', 'o', 'llm', 2.69]
   ];
 
   COVER_TEXT = {
@@ -1768,6 +1794,7 @@ class Component extends DCLogic {
       ],
       regionTitle: '選擇地區', regionHint: '點選下方地區，即可進入選購頁 ↓', cta: '開始選購 →', ctaOn: '已選擇 ✓',
       brandsTitle: '代理軟體與平台', tileTagX: '官方獨家代理', tileTagO: '官方代理',
+      groupEdu: '教育科技軟體', groupLlm: 'AI 大語言模型',
       aboutTitle: '關於我們',
       about1: '經典人文教育根植於台灣中部，自營辦學逾三十年，熟悉招生、教學、行政與家長溝通的每一個環節，理解學校真正的需求與現場限制。',
       about2: '2024 年正式跨足教育科技，代理國際主流教學平台與 AI 工具，協助台灣與香港的學校導入 AI 教學。三十年的辦學實務，是我們與校方溝通的共同語言。',
@@ -1798,6 +1825,7 @@ class Component extends DCLogic {
       ],
       regionTitle: 'Select your region', regionHint: 'Tap a region below to start building your quote ↓', cta: 'Start →', ctaOn: 'Selected ✓',
       brandsTitle: 'Software we represent', tileTagX: 'Exclusive', tileTagO: 'Authorised',
+      groupEdu: 'EdTech software', groupLlm: 'AI language models',
       aboutTitle: 'About us',
       about1: 'Classic Humanities Education has operated its own schools in Central Taiwan for over thirty years — across admissions, instruction, administration and parent communication. We understand what schools need because we have run them.',
       about2: 'In 2024 we expanded into educational technology as an authorised partner of leading international teaching platforms and AI tools, helping schools integrate AI into their classrooms.',
@@ -1850,13 +1878,18 @@ class Component extends DCLogic {
           curStyle: on ? { borderColor: '#555' } : {}
         };
       }),
-      cvBrands: this.COVER_BRANDS.map(b => ({
-        name: b[2],
-        src: 'images/' + b[0],
-        imgStyle: { height: b[1] + 'px' },
-        tagX: b[3] === 'x', tagO: b[3] === 'o',
-        tag: b[3] === 'x' ? T.tileTagX : b[3] === 'o' ? T.tileTagO : ''
-      })),
+      ...(() => {
+        const tile = b => ({
+          name: b[2],
+          imgStyle: { width: Math.round(b[1] * b[5]) + 'px', height: b[1] + 'px', backgroundImage: 'url(images/' + b[0] + ')' },
+          tagX: b[3] === 'x', tagO: b[3] === 'o',
+          tag: b[3] === 'x' ? T.tileTagX : b[3] === 'o' ? T.tileTagO : ''
+        });
+        return {
+          cvBrandsEdu: this.COVER_BRANDS.filter(b => b[4] === 'edu').map(tile),
+          cvBrandsLlm: this.COVER_BRANDS.filter(b => b[4] === 'llm').map(tile)
+        };
+      })(),
       cvServices: T.services.map((s, i) => ({ num: '0' + (i + 1), title: s[0], text: s[1] })),
       cvCerts: T.certs.map((label, i) => ({ label, href: this.COVER_CERT_LINKS[i] }))
     };
