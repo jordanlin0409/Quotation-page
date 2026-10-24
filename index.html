@@ -166,13 +166,14 @@
   .cv-proct { font-size: 20px; font-weight: 900; }
 
   .cv-brands { display: grid; grid-template-columns: repeat(10, 1fr); gap: 1px; background: #e2e2e2; border: 1px solid #e2e2e2; }
-  .cv-tile { background: #fff; padding: 18px 14px 16px; box-sizing: border-box; display: flex; flex-direction: column; align-items: flex-start; min-width: 0; transition: background 0.15s ease; }
+  .cv-tile { background: #fff; height: 108px; padding: 0 12px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-width: 0; transition: background 0.15s ease; }
   .cv-tile:hover { background: #fafafa; }
-  .cv-logo { height: 26px; width: 100%; background-position: left center; background-repeat: no-repeat; background-size: contain !important; }
-  .cv-bname { font-size: 14px; font-weight: 900; margin-top: 12px; }
-  .cv-tag { display: inline-block; font-size: 11px; font-weight: 900; line-height: 1.35; padding: 3px 6px; margin-top: 6px; }
+  .cv-logo { height: 32px; width: 100%; display: flex; align-items: center; justify-content: center; }
+  .cv-logo img { display: block; width: auto; max-width: 100%; object-fit: contain; }
+  .cv-tagrow { height: 20px; display: flex; align-items: center; justify-content: center; }
+  .cv-tag { display: inline-block; font-size: 11px; font-weight: 900; line-height: 1; padding: 4px 7px; white-space: nowrap; letter-spacing: 0.02em; }
   .cv-tagx { background: #101010; color: #fff; }
-  .cv-tago { border: 1px solid #d0d0d0; color: #4f4f4f; }
+  .cv-tago { border: 1px solid #d0d0d0; color: #6e6e6e; padding: 3px 6px; }
 
   .cv-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
   .cv-step { position: relative; background: #fff; border: 1px solid #dcdcdc; padding: 18px 16px 20px; display: flex; flex-direction: column; gap: 12px; }
@@ -257,9 +258,7 @@
     .cv-band { padding-bottom: 28px; }
     .cv-proc { padding-bottom: 40px; }
     .cv-brands { grid-template-columns: 1fr 1fr; }
-    .cv-tile { padding: 14px 14px 12px; }
-    .cv-logo { height: 26px; }
-    .cv-bname { margin-top: 10px; font-size: 14px; }
+    .cv-tile { height: 96px; }
     .cv-steps { grid-template-columns: 1fr; gap: 10px; }
     .cv-step { flex-direction: row; align-items: flex-start; padding: 14px 16px 16px; }
     .cv-sec { padding: 44px 0; }
@@ -352,11 +351,12 @@
           <div class="cv-prochead"><span class="cv-kick">PARTNERS</span><span class="cv-proct">{{ cv.brandsTitle }}</span></div>
           <div class="cv-brands">
             <sc-for list="{{ cvBrands }}" as="b" hint-placeholder-count="10">
-              <div class="cv-tile">
-                <div class="cv-logo" style="{{ b.logoStyle }}"></div>
-                <div class="cv-bname">{{ b.name }}</div>
-                <sc-if value="{{ b.tagX }}" hint-placeholder-val="{{ false }}"><span class="cv-tag cv-tagx">{{ b.tag }}</span></sc-if>
-                <sc-if value="{{ b.tagO }}" hint-placeholder-val="{{ false }}"><span class="cv-tag cv-tago">{{ b.tag }}</span></sc-if>
+              <div class="cv-tile" title="{{ b.name }}">
+                <div class="cv-logo"><img src="{{ b.src }}" alt="{{ b.name }}" style="{{ b.imgStyle }}"></div>
+                <div class="cv-tagrow">
+                  <sc-if value="{{ b.tagX }}" hint-placeholder-val="{{ false }}"><span class="cv-tag cv-tagx">{{ b.tag }}</span></sc-if>
+                  <sc-if value="{{ b.tagO }}" hint-placeholder-val="{{ false }}"><span class="cv-tag cv-tago">{{ b.tag }}</span></sc-if>
+                </div>
               </div>
             </sc-for>
           </div>
@@ -1736,15 +1736,16 @@ class Component extends DCLogic {
 
   // ===== cover-v3 2026-10-24：封面全版面＋中英切換 =====
   // 只決定「封面」用哪個語言；進選購頁後語言仍照地區走（this.zh 只看 region），報價邏輯完全不受影響
+  // 第二欄＝logo 顯示高度（px），依各 logo 長寬比調成視覺上一樣大
   COVER_BRANDS = [
     ['edcafe-logo-3x.png', 25, 'Edcafe AI', 'x'],
-    ['classpoint-logo.svg', 23, 'ClassPoint', 'x'],
+    ['classpoint-logo.svg', 24, 'ClassPoint', 'x'],
     ['kahoot-logo-3x.png', 28, 'Kahoot!', 'o'],
-    ['wordwall-logo-3x.png', 23, 'Wordwall', 'o'],
-    ['padlet-logo-3x.png', 25, 'Padlet', 'o'],
-    ['kami-logo-3x.png', 25, 'Kami', ''],
-    ['chatgpt-logo-3x.png', 25, 'ChatGPT', ''],
-    ['claude-logo-3x.png', 25, 'Claude', ''],
+    ['wordwall-logo-3x.png', 20, 'Wordwall', 'o'],
+    ['padlet-logo-3x.png', 27, 'Padlet', 'o'],
+    ['kami-logo-3x.png', 24, 'Kami', ''],
+    ['chatgpt-logo-3x.png', 24, 'ChatGPT', ''],
+    ['claude-logo-3x.png', 23, 'Claude', ''],
     ['gemini-logo-3x.png', 28, 'Gemini', 'o'],
     ['quizlet-logo-3x.png', 21, 'Quizlet', '']
   ];
@@ -1766,7 +1767,7 @@ class Component extends DCLogic {
         ['客服授權開通', '真人客服與您做最後確認，並開通授權。']
       ],
       regionTitle: '選擇地區', regionHint: '點選下方地區，即可進入選購頁 ↓', cta: '開始選購 →', ctaOn: '已選擇 ✓',
-      brandsTitle: '代理軟體與平台', tagX: '官方獨家代理商', tagO: '官方代理商',
+      brandsTitle: '代理軟體與平台', tileTagX: '官方獨家代理', tileTagO: '官方代理',
       aboutTitle: '關於我們',
       about1: '經典人文教育根植於台灣中部，自營辦學逾三十年，熟悉招生、教學、行政與家長溝通的每一個環節，理解學校真正的需求與現場限制。',
       about2: '2024 年正式跨足教育科技，代理國際主流教學平台與 AI 工具，協助台灣與香港的學校導入 AI 教學。三十年的辦學實務，是我們與校方溝通的共同語言。',
@@ -1796,7 +1797,7 @@ class Component extends DCLogic {
         ['Activation', 'Our team confirms the order and activates your licences.']
       ],
       regionTitle: 'Select your region', regionHint: 'Tap a region below to start building your quote ↓', cta: 'Start →', ctaOn: 'Selected ✓',
-      brandsTitle: 'Software we represent', tagX: 'Exclusive distributor', tagO: 'Authorised distributor',
+      brandsTitle: 'Software we represent', tileTagX: 'Exclusive', tileTagO: 'Authorised',
       aboutTitle: 'About us',
       about1: 'Classic Humanities Education has operated its own schools in Central Taiwan for over thirty years — across admissions, instruction, administration and parent communication. We understand what schools need because we have run them.',
       about2: 'In 2024 we expanded into educational technology as an authorised partner of leading international teaching platforms and AI tools, helping schools integrate AI into their classrooms.',
@@ -1851,9 +1852,10 @@ class Component extends DCLogic {
       }),
       cvBrands: this.COVER_BRANDS.map(b => ({
         name: b[2],
-        logoStyle: { backgroundImage: 'url(images/' + b[0] + ')', backgroundSize: 'auto ' + b[1] + 'px' },
+        src: 'images/' + b[0],
+        imgStyle: { height: b[1] + 'px' },
         tagX: b[3] === 'x', tagO: b[3] === 'o',
-        tag: b[3] === 'x' ? T.tagX : b[3] === 'o' ? T.tagO : ''
+        tag: b[3] === 'x' ? T.tileTagX : b[3] === 'o' ? T.tileTagO : ''
       })),
       cvServices: T.services.map((s, i) => ({ num: '0' + (i + 1), title: s[0], text: s[1] })),
       cvCerts: T.certs.map((label, i) => ({ label, href: this.COVER_CERT_LINKS[i] }))
