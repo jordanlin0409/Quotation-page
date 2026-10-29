@@ -315,6 +315,8 @@
     .cv-step::after { top: 13px; }
     .cv-stept { font-size: 15px; }
     .cv-stepd { font-size: 13px; line-height: 1.5; margin-top: 3px; }
+    .cv-proc { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 20px; align-items: center; border-top: 1px solid #cfcfcf; padding-top: 12px; }
+    .cv-proc .cv-prochead { flex-direction: column; align-items: flex-start; gap: 4px; border-top: 0; padding-top: 0; margin-bottom: 0; }
 
     /* 選擇地區：標題一行、卡片橫排 */
     .cv-sec { padding: 16px 0 18px; }
@@ -2255,6 +2257,39 @@ class Component extends DCLogic {
   }
 }
 
+</script>
+<script>
+/* 一屏版 2026-10-29：桌機（≥1081px）封面自動放大到剛好填滿視窗高度；最小 1 倍（放不下就照常捲動）、最大 1.6 倍；展開「看全文」時維持原倍率 */
+(function () {
+  var wide = window.matchMedia('(min-width: 1081px)');
+  var queued = false;
+  function fit() {
+    queued = false;
+    var cv = document.querySelector('.cv');
+    if (!cv) return;
+    if (!wide.matches) { cv.style.zoom = ''; return; }
+    var more = document.getElementById('cv-more');
+    if (more && more.checked) return;
+    var vh = window.innerHeight, z = 1;
+    cv.style.zoom = 1;
+    for (var i = 0; i < 4; i++) {
+      var h = cv.getBoundingClientRect().height;
+      if (!h) return;
+      z = Math.max(1, Math.min(1.6, z * vh / h));
+      cv.style.zoom = z;
+    }
+    if (cv.getBoundingClientRect().height > vh + 1) {
+      z = Math.max(1, z * vh / cv.getBoundingClientRect().height - 0.005);
+      cv.style.zoom = z;
+    }
+  }
+  function queue() { if (!queued) { queued = true; setTimeout(fit, 30); } }
+  window.addEventListener('resize', queue);
+  window.addEventListener('load', queue);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(queue);
+  new MutationObserver(queue).observe(document.body, { childList: true, subtree: true, characterData: true });
+  queue();
+})();
 </script>
 </body>
 </html>
