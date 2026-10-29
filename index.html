@@ -338,6 +338,22 @@
     .cv-fname { font-size: 15px; }
     .cv-fsub { margin-top: 0; }
     .cv-fmail, .cv-fbtns, .cv-foot .cv-copy { display: none; }
+    /* v3 拉高：倍率照 v2 算，再加回上下空間 */
+    .cv-tall .cv-titlebar { padding-top: 26px; }
+    .cv-tall .cv-herotop { padding-bottom: 20px; }
+    .cv-tall .cv-moreck:not(:checked) ~ .cv-info .cv-infogrid { padding-top: 18px; }
+    .cv-tall .cv-moreck:not(:checked) ~ .cv-info .cv-svc { padding: 9px 12px; }
+    .cv-tall .cv-band { padding-bottom: 22px; }
+    .cv-tall .cv-groups { gap: 11px; }
+    .cv-tall .cv-tile { height: 86px; }
+    .cv-tall .cv-logoimg { transform: scale(0.82); }
+    .cv-tall .cv-proc { padding-top: 18px; padding-bottom: 24px; }
+    .cv-tall .cv-step { padding: 15px 14px 17px; }
+    .cv-tall .cv-step::after { top: 17px; }
+    .cv-tall .cv-sec { padding: 22px 0 26px; }
+    .cv-tall .cv-head { margin-bottom: 15px; }
+    .cv-tall .cv-rcard { padding: 17px 16px; }
+    .cv-tall .cv-foot { padding: 15px 0; }
   }
 </style>
 </helmet>
@@ -2267,14 +2283,15 @@ class Component extends DCLogic {
     queued = false;
     var cv = document.querySelector('.cv');
     if (!cv) return;
-    if (!wide.matches) { cv.style.zoom = ''; return; }
+    if (!wide.matches) { cv.style.zoom = ''; cv.classList.remove('cv-tall'); return; }
     var more = document.getElementById('cv-more');
     if (more && more.checked) return;
     var vh = window.innerHeight, z = 1;
+    cv.classList.remove('cv-tall');
     cv.style.zoom = 1;
     for (var i = 0; i < 4; i++) {
       var h = cv.getBoundingClientRect().height;
-      if (!h) return;
+      if (!h) { cv.classList.add('cv-tall'); return; }
       z = Math.max(1, Math.min(1.6, z * vh / h));
       cv.style.zoom = z;
     }
@@ -2282,6 +2299,7 @@ class Component extends DCLogic {
       z = Math.max(1, z * vh / cv.getBoundingClientRect().height - 0.005);
       cv.style.zoom = z;
     }
+    cv.classList.add('cv-tall');
   }
   function queue() { if (!queued) { queued = true; setTimeout(fit, 30); } }
   window.addEventListener('resize', queue);
