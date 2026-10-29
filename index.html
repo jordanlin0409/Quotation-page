@@ -271,6 +271,72 @@
     .cv-titlebar .cv-ico { width: 21px; height: 21px; }
     .cv-lang button { padding: 0 7px; height: 31px; font-size: 12px; }
   }
+  /* ===== 一屏版 2026-10-29：≥1081px 桌機整頁壓進一個畫面（≤1080 平板／手機完全不受影響）；關於＋服務預設收合，點「看全文」展開 ===== */
+  .cv-moreck, .cv-morebtn, .cv-more-c { display: none; }
+  @media screen and (min-width: 1081px) {
+    .cv-titlebar { padding-top: 18px; }
+    .cv-h1 { font-size: 46px; }
+    .cv-herotop { padding-top: 4px; padding-bottom: 14px; }
+    .cv-sub { font-size: 26px; margin-bottom: 4px; }
+    .cv-lead { font-size: 15px; line-height: 1.65; max-width: none; }
+    .cv-band { padding-bottom: 14px; }
+    .cv-proc { padding-bottom: 18px; }
+    .cv-prochead { padding-top: 12px; margin-bottom: 10px; }
+    .cv-proct { font-size: 17px; }
+
+    /* 關於＋服務：收合時各一行 */
+    .cv-morebtn { display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 900; padding: 9px 14px; border: 1.5px solid #101010; background: #fff; color: #101010; cursor: pointer; white-space: nowrap; user-select: none; }
+    .cv-morebtn:hover { background: #101010; color: #fff; }
+    .cv-moreck:not(:checked) ~ .cv-info .cv-infogrid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) auto; gap: 32px; padding-top: 12px; align-items: end; }
+    .cv-moreck:not(:checked) ~ .cv-info .cv-kick { display: inline-block; margin: 0 12px 0 0; }
+    .cv-moreck:not(:checked) ~ .cv-info .cv-h2 { display: inline-block; font-size: 17px; margin: 0 0 8px; }
+    .cv-moreck:not(:checked) ~ .cv-info .cv-p { font-size: 14.5px; line-height: 1.6; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cv-moreck:not(:checked) ~ .cv-info .cv-p + .cv-p,
+    .cv-moreck:not(:checked) ~ .cv-info .cv-certs,
+    .cv-moreck:not(:checked) ~ .cv-info .cv-svc p { display: none; }
+    .cv-moreck:not(:checked) ~ .cv-info .cv-svcs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .cv-moreck:not(:checked) ~ .cv-info .cv-svc { display: flex; align-items: baseline; gap: 8px; padding: 6px 12px; }
+    .cv-moreck:not(:checked) ~ .cv-info .cv-svcn { font-size: 15px; letter-spacing: 0; }
+    .cv-moreck:not(:checked) ~ .cv-info .cv-svc h3 { font-size: 14px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cv-moreck:checked ~ .cv-info .cv-morebtn { grid-column: 1 / -1; justify-self: start; }
+    .cv-moreck:checked ~ .cv-info .cv-more-o { display: none; }
+    .cv-moreck:checked ~ .cv-info .cv-more-c { display: inline; }
+
+    /* 品牌卡 120→72px，logo 等比縮 75% */
+    .cv-groups { gap: 8px; }
+    .cv-gcards { gap: 10px; }
+    .cv-tile { height: 72px; }
+    .cv-logoimg { transform: scale(0.75); }
+    .cv-tile:has(.cv-tag) .cv-logoimg { margin-bottom: 12px; }
+    .cv-tag { bottom: 5px; font-size: 10.5px; padding: 2px 6px; }
+
+    /* 採購流程：編號與文字並排 */
+    .cv-step { flex-direction: row; align-items: flex-start; gap: 10px; padding: 11px 14px 12px; }
+    .cv-step::after { top: 13px; }
+    .cv-stept { font-size: 15px; }
+    .cv-stepd { font-size: 13px; line-height: 1.5; margin-top: 3px; }
+
+    /* 選擇地區：標題一行、卡片橫排 */
+    .cv-sec { padding: 16px 0 18px; }
+    .cv-head { margin-bottom: 12px; align-items: center; }
+    .cv-head > div { display: flex; align-items: baseline; gap: 14px; }
+    .cv-head .cv-kick { margin: 0; }
+    .cv-h2 { font-size: 24px; }
+    .cv-headp { font-size: 14px; }
+    .cv-regions { gap: 12px; }
+    .cv-rcard { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; column-gap: 12px; align-items: center; min-height: 0; padding: 12px 14px; }
+    .cv-flag { grid-row: 1 / span 2; width: 40px; height: 27px; }
+    .cv-rname { grid-column: 2; font-size: 18px; margin-top: 0; line-height: 1.2; }
+    .cv-rsub { grid-column: 2; font-size: 12px; margin-top: 2px; }
+    .cv-rfoot { grid-column: 3; grid-row: 1 / span 2; width: auto; margin-top: 0; padding-top: 0; flex-direction: column; align-items: flex-end; gap: 6px; }
+
+    /* 頁尾一行：公司名＋統編 */
+    .cv-foot { padding: 12px 0; }
+    .cv-foot .cv-wrap > div:first-child { display: flex; align-items: baseline; gap: 14px; }
+    .cv-fname { font-size: 15px; }
+    .cv-fsub { margin-top: 0; }
+    .cv-fmail, .cv-fbtns, .cv-foot .cv-copy { display: none; }
+  }
 </style>
 </helmet>
 
@@ -309,6 +375,7 @@
   <sc-if value="{{ atIntro }}" hint-placeholder-val="{{ true }}">
     <div class="cv">
       <header class="cv-hero">
+        <input type="checkbox" id="cv-more" class="cv-moreck">
         <div class="cv-wrap cv-titlebar">
           <h1 class="cv-h1">{{ cv.h1 }}</h1>
           <div class="cv-navr">
@@ -352,6 +419,7 @@
                 </sc-for>
               </div>
             </div>
+            <label class="cv-morebtn" for="cv-more"><span class="cv-more-o">{{ cv.moreOpen }}</span><span class="cv-more-c">{{ cv.moreClose }}</span></label>
           </div>
         </div>
         <div class="cv-wrap cv-band">
@@ -1748,13 +1816,13 @@ class Component extends DCLogic {
         ['用印回傳客服', '請將報價單用印後回傳給真人客服。'],
         ['客服授權開通', '真人客服與您做最後確認，並開通授權。']
       ],
-      regionTitle: '選擇地區', regionHint: '點選下方地區，即可進入選購頁 ↓', cta: '開始選購 →', ctaOn: '已選擇 ✓',
+      regionTitle: '選擇地區開始購買吧', regionHint: '點選下方地區，即可進入選購頁 ↓', cta: '開始選購 →', ctaOn: '已選擇 ✓',
       brandsTitle: '代理軟體與平台', tileTagX: '官方獨家代理', tileTagO: '官方代理',
       groupExcl: '官方獨家代理', groupEdu: '教育科技軟體', groupLlm: '大語言模型',
       aboutTitle: '關於我們',
       about1: '經典人文教育根植於台灣中部，自營辦學逾三十年，熟悉招生、教學、行政與家長溝通的每一個環節，理解學校真正的需求與現場限制。',
       about2: '2024 年正式跨足教育科技，代理國際主流教學平台與 AI 工具，協助台灣與香港的學校導入 AI 教學。三十年的辦學實務，是我們與校方溝通的共同語言。',
-      svcTitle: '服務內容',
+      svcTitle: '服務內容', moreOpen: '看全文 ＋', moreClose: '收合 －',
       services: [
         ['專業研習', '為合作學校與教師安排定期研習，涵蓋 AI 教學實務、平台操作與課程設計。'],
         ['真人客服', '熟悉學校運作的專責團隊提供一對一諮詢與售後支援，即時處理導入與行政問題。'],
@@ -1784,7 +1852,7 @@ class Component extends DCLogic {
       aboutTitle: 'About us',
       about1: 'Classic Humanities Education has operated its own schools in Central Taiwan for over thirty years — across admissions, instruction, administration and parent communication. We understand what schools need because we have run them.',
       about2: 'In 2024 we expanded into educational technology as an authorised partner of leading international teaching platforms and AI tools, helping schools integrate AI into their classrooms.',
-      svcTitle: 'Services',
+      svcTitle: 'Services', moreOpen: 'Read more +', moreClose: 'Collapse −',
       services: [
         ['Professional workshops', 'Regular training for partner schools and teachers on AI teaching practice, platform operation and lesson design.'],
         ['Real human support', 'Specialists experienced in school environments give one-to-one consultation and after-sales support.'],
