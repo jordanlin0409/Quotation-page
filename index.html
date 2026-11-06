@@ -1809,7 +1809,7 @@ class Component extends DCLogic {
   COVER_BRANDS = [
     ['edcafe-logo-3x.png', 34, 'Edcafe AI', '', 'excl', 4.36],
     ['classpoint-logo.svg', 32, 'ClassPoint', '', 'excl', 4.85],
-    ['kahoot-logo-3x.png', 38, 'Kahoot!', 'o', 'edu', 2.90],
+    ['kahoot-logo-3x.png', 38, 'Kahoot!', 'r', 'edu', 2.90],
     ['wordwall-logo-3x.png', 27, 'Wordwall', 'o', 'edu', 5.95],
     ['padlet-logo-3x.png', 36, 'Padlet', '', 'edu', 3.23],
     ['kami-logo-3x.png', 34, 'Kami', '', 'edu', 2.05],
@@ -1835,7 +1835,7 @@ class Component extends DCLogic {
         ['客服授權開通', '真人客服與您做最後確認，並開通授權。']
       ],
       regionTitle: '選擇地區開始購買吧', regionHint: '點選下方地區，即可進入選購頁 ↓', cta: '開始選購 →', ctaOn: '已選擇 ✓',
-      brandsTitle: '代理軟體與平台', tileTagX: '官方獨家代理', tileTagO: '官方代理',
+      brandsTitle: '代理軟體與平台', tileTagX: '官方獨家代理', tileTagO: '官方代理', tileTagR: '官方授權經銷商',
       groupExcl: '官方獨家代理', groupEdu: '教育科技軟體', groupLlm: '大語言模型',
       aboutTitle: '關於我們',
       about1: '經典人文教育根植於台灣中部，自營辦學逾三十年，熟悉招生、教學、行政與家長溝通的每一個環節，理解學校真正的需求與現場限制。',
@@ -1847,7 +1847,7 @@ class Component extends DCLogic {
         ['具競爭力的價格', '直接與國際品牌合作，提供最具競爭力的授權與採購方案，讓教育預算發揮最大效益。'],
         ['長期穩定的服務', '以長期夥伴關係為原則，持續提供產品更新、教師訓練與客戶支援。']
       ],
-      certTitle: '授權證書', certs: ['Edcafe AI · 獨家代理授權書', 'Kahoot · 官方代理授權書'],
+      certTitle: '授權證書', certs: ['Edcafe AI · 獨家代理授權書', 'Kahoot · 官方授權經銷商授權書'],
       taxId: '統一編號 89187632'
     },
     en: {
@@ -1865,7 +1865,7 @@ class Component extends DCLogic {
         ['Activation', 'Our team confirms the order and activates your licences.']
       ],
       regionTitle: 'Select your region', regionHint: 'Tap a region below to start building your quote ↓', cta: 'Start →', ctaOn: 'Selected ✓',
-      brandsTitle: 'Software we represent', tileTagX: 'Exclusive', tileTagO: 'Authorised',
+      brandsTitle: 'Software we represent', tileTagX: 'Exclusive', tileTagO: 'Authorised', tileTagR: 'Authorised',
       groupExcl: 'Exclusive distributor', groupEdu: 'EdTech software', groupLlm: 'AI language models',
       aboutTitle: 'About us',
       about1: 'Classic Humanities Education has operated its own schools in Central Taiwan for over thirty years — across admissions, instruction, administration and parent communication. We understand what schools need because we have run them.',
@@ -1923,8 +1923,8 @@ class Component extends DCLogic {
         const tile = b => ({
           name: b[2],
           imgStyle: { width: Math.round(b[1] * b[5]) + 'px', height: b[1] + 'px', backgroundImage: 'url(images/' + b[0] + ')' },
-          tagX: b[3] === 'x', tagO: b[3] === 'o',
-          tag: b[3] === 'x' ? T.tileTagX : b[3] === 'o' ? T.tileTagO : ''
+          tagX: b[3] === 'x', tagO: b[3] === 'o' || b[3] === 'r',
+          tag: b[3] === 'x' ? T.tileTagX : b[3] === 'o' ? T.tileTagO : b[3] === 'r' ? T.tileTagR : ''
         });
         return {
           cvBrandGroups: [['excl', T.groupExcl], ['edu', T.groupEdu], ['llm', T.groupLlm]].map(g => ({
